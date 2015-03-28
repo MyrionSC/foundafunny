@@ -19,6 +19,9 @@ app.all('*',function(req,res,next)
 
     if ('OPTIONS' == req.method) return res.send(200);
 
+
+
+
     next();
 });
 
@@ -53,10 +56,12 @@ app.get('/get/latestinput', function (request, response) {
         success: function(ParseObj) {
             //response.type('json');
             var input = ParseObj.get("Input");
-            response.send(input);
+            var obj = '{"input": "'+ input + '"}';
+            //var obj = "{input: " + input + "}";
+            response.send(obj);
         },
         error: function() {
-            response.send("error");
+            response.send("error getting latest input");
         }
     });
 });
