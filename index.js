@@ -1,10 +1,15 @@
 var express = require('express');
 var app = express();
 var Parse = require('parse').Parse;
+var bodyParser = require('body-parser');
 
 Parse.initialize("tddpZ4wQt9lFdynC5u5WcjU9RG2HunQl5epfPZKp", "rtWeegY0PM1YMKGOdFNcP9F1d8ri2zNJvfUn7Rht");
+// keys for sdm-testdb
 
 var SDM_Current_Input = Parse.Object.extend("SDM_Current_Input");
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
@@ -13,14 +18,11 @@ app.all('*',function(req,res,next)
 {
     if (!req.get('Origin')) return next();
 
-    res.set('Access-Control-Allow-Origin','*');
+    res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests
     res.set('Access-Control-Allow-Methods','GET,POST');
     res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
 
-    if ('OPTIONS' == req.method) return res.send(200);
-
-
-
+    if ('OPTIONS' == req.method) return res.status(200).end();
 
     next();
 });
@@ -65,6 +67,16 @@ app.get('/get/latestinput', function (request, response) {
         }
     });
 });
+app.post('/post/newinput', function (request, res) {
+    var newtext = new SDM_Current_Input();
+    var Text = request.body.text;
+    newtext.save({Input: Text}).then(function(object) {
+        res.send("Success");
+    });
+});
+
+
+
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
