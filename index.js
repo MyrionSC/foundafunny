@@ -49,7 +49,7 @@ app.all('*',function(req,res,next)
 //});
 
 app.get('/get/latestinput', function (request, response) {
-    console.log("im trying le get");
+    console.log("im trying le get latest input");
 
     var query = new Parse.Query(SDM_Current_Input);
     query.limit(1);
@@ -67,6 +67,34 @@ app.get('/get/latestinput', function (request, response) {
         }
     });
 });
+app.get('/get/history', function (request, response) { // params: skip, limit
+    console.log("im trying le get history");
+
+    var skip = request.param('skip');
+    var limit = request.param('limit');
+
+    var query = new Parse.Query(SDM_Current_Input);
+    query.skip(skip);
+    query.limit(limit);
+    query.descending("createdAt");
+    query.find({
+        success: function(ParseObjArray) {
+            var ContentArray = [];
+            for (var i = 0; i < ParseObjArray.length; i++) {
+                var pao = ParseObjArray[i];
+                ContentArray.push(pao.get('Input'));
+            }
+            response.send(ContentArray);
+        },
+        error: function() {
+            response.send("error getting history");
+        }
+    });
+});
+
+
+
+
 app.post('/post/newinput', function (request, res) {
     var newtext = new SDM_Current_Input();
     var Text = request.body.text;
