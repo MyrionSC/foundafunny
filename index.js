@@ -1,7 +1,10 @@
-var express = require('express');
-var app = express();
-var Parse = require('parse').Parse;
-var bodyParser = require('body-parser');
+var express = require('express'),
+app = express(),
+Parse = require('parse').Parse,
+bodyParser = require('body-parser'),
+http = require('http'),
+socket = require('socket.io');
+
 
 // keys for sdm-testdb on parse
 Parse.initialize("tddpZ4wQt9lFdynC5u5WcjU9RG2HunQl5epfPZKp", "rtWeegY0PM1YMKGOdFNcP9F1d8ri2zNJvfUn7Rht");
@@ -18,14 +21,30 @@ app.all('*',function(req,res,next)
 {
     if (!req.get('Origin')) return next();
 
-    res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests
+    res.set('Access-Control-Allow-Origin','http://localhost:63342'); // allows everyone to send requests
+    //res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests
     res.set('Access-Control-Allow-Methods','GET,POST');
     res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
+    res.set('Access-Control-Allow-Credentials','true');
 
     if ('OPTIONS' == req.method) return res.status(200).end();
 
     next();
 });
+
+var server = http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+});
+
+var io = socket.listen(server);
+io.sockets.on('connection', function (socket) {
+    console.log('Hello world japer daper duh');
+    socket.emit('news', { hello: 'world' });
+});
+
+//app.listen(app.get('port'), function() {
+//    console.log("Node app is running at localhost:" + app.get('port'));
+//});
 
 // get
 app.get('/get/latestinput', function (request, response) {
@@ -72,8 +91,6 @@ app.get('/get/history', function (request, response) { // params: skip, limit
     });
 });
 
-
-
 //post
 app.post('/post/newinput', function (request, res) {
     var newtext = new SDM_Current_Input();
@@ -83,9 +100,10 @@ app.post('/post/newinput', function (request, res) {
     });
 });
 
-
-
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'));
-});
+// socket.io
+//io.on('connection', function(socket) {
+//    socket.emit('news', {hello: 'world'});
+//    socket.on('event2', function (data) {
+//        console.log(data);
+//    });
+//});

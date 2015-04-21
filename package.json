@@ -1,7 +1,4 @@
 {
-  "name": "sdm-backend",
-  "version": "0.1.2",
-  "description": "backend for ShowDatMeme",
   "name": "node-js-getting-started",
   "version": "0.1.3",
   "description": "A sample Node.js app using Express 4",
@@ -10,9 +7,10 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "body-parser": "*",
     "express": "~4.9.x",
-	"parse": "*",
-	"body-parser": "*"
+    "parse": "*",
+    "socket.io": "^1.3.5"
   },
   "engines": {
     "node": "0.12.2"
