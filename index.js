@@ -2,8 +2,8 @@ var express = require('express'),
 app = express(),
 Parse = require('parse').Parse,
 bodyParser = require('body-parser'),
-http = require('http'),
-socket = require('socket.io');
+http = require('http');
+//socket = require('socket.io');
 
 
 // keys for sdm-testdb on parse
@@ -21,8 +21,8 @@ app.all('*',function(req,res,next)
 {
     if (!req.get('Origin')) return next();
 
-    res.set('Access-Control-Allow-Origin','http://localhost:63342'); // allows everyone to send requests
-    //res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests
+    //res.set('Access-Control-Allow-Origin','http://localhost:63342');
+    res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests
     res.set('Access-Control-Allow-Methods','GET,POST');
     res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
     res.set('Access-Control-Allow-Credentials','true');
@@ -36,11 +36,11 @@ var server = http.createServer(app).listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));
 });
 
-var io = socket.listen(server);
-io.sockets.on('connection', function (socket) {
-    console.log('Hello world japer daper duh');
-    socket.emit('news', { hello: 'world' });
-});
+//var io = socket.listen(server);
+//io.sockets.on('connection', function (socket) {
+//    console.log('Hello world japer daper duh');
+//    socket.emit('news', { hello: 'world' });
+//});
 
 //app.listen(app.get('port'), function() {
 //    console.log("Node app is running at localhost:" + app.get('port'));
