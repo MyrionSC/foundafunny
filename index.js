@@ -66,6 +66,7 @@ app.get('/get/latestinput', function (request, response) {
         }
     });
 });
+
 app.get('/get/history', function (request, response) { // params: skip, limit
     console.log("im trying le get history");
 
