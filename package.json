@@ -7,10 +7,9 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "body-parser": "*",
     "express": "~4.9.x",
-    "parse": "*",
-    "socket.io": "^1.3.5"
+    "socket.io": "^1.3.5",
+    "parse": "*"
   },
   "engines": {
     "node": "0.12.2"
