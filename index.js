@@ -41,6 +41,7 @@ mongoose.connect(uristring, function (err, res) {
 // create sdm page schema
 var sdmSchema = new mongoose.Schema({
     name: String,
+    CurrentContent: String,
     ContentArray: Array,
     Favorites: Array,
     Settings: {
@@ -49,65 +50,6 @@ var sdmSchema = new mongoose.Schema({
     Timers: Array
 });
 var sdmPage = mongoose.model("sdmpage", sdmSchema);
-
-
-
-
-
-
-
-//PUser.findOne({ 'name.first': 'Jane' }, function(err, obj) {
-//    if (err) return console.error(err);
-//    console.dir(obj);
-//});
-
-//
-//// This is the schema.  Note the types, validation and trim
-//// statements.  They enforce useful constraints on the data.
-//var userSchema = new mongoose.Schema({
-//    name: {
-//        first: String,
-//        last: { type: String, trim: true }
-//    },
-//    age: { type: Number, min: 0}
-//});
-//
-//// Compiles the schema into a model, opening (or creating, if
-//// nonexistent) the 'PowerUsers' collection in the MongoDB database
-//var PUser = mongoose.model('PowerUsers', userSchema);
-//
-//// Clear out old data
-//PUser.remove({}, function(err) {
-//    if (err) {
-//        console.log ('error deleting old data.');
-//    }
-//});
-//
-////// Creating one user.
-//var johndoe = new PUser ({
-//    name: { first: 'John', last: '  Doe   ' },
-//    age: 25
-//});
-//// Saving it to the database.
-//johndoe.save(function (err) {if (err) console.log ('Error on save!')});
-
-// Find a single movie by name.
-//Movie.findOne({ title: 'Thor' }, function(err, thor) {
-//    if (err) return console.error(err);
-//    console.dir(thor);
-//});
-
-//// Find all movies.
-//Movie.find(function(err, movies) {
-//    if (err) return console.error(err);
-//    console.dir(movies);
-//});
-//
-//// Find all movies that have a credit cookie.
-//Movie.find({ hasCreditCookie: true }, function(err, movies) {
-//    if (err) return console.error(err);
-//    console.dir(movies);
-//});
 
 
 // ----------|
@@ -122,14 +64,49 @@ io.sockets.on('connection', function (socket) {
     connectedSockets.push(socket);
     console.log("client connected. Now online: " + online);
 
-    for (var i = 0; i < connectedSockets.length; i++) {
-        var s = connectedSockets[i];
-        s.emit('news', {'online': online});
-    }
+    //for (var i = 0; i < connectedSockets.length; i++) {
+    //    var s = connectedSockets[i];
+    //    s.emit('init', {'online': online});
+    //}
 
-    //socket.on('event2', function (data) {
-    //    console.log(data);
-    //});
+    // sends the currentcontent on init
+    sdmPage.findOne({ name: 'first' }, function(err, page) { // TODO: this is hardcoded
+        if (err) return console.error(err);
+        console.log(page.ContentArray[page.ContentArray.length - 1]); // TODO: only the last element of contentarray should be returned from db find
+        socket.emit('contentupdate', {'CurrentContent': page.ContentArray[page.ContentArray.length - 1]})
+    });
+
+
+
+
+    //// if a client pushes new content, update db and other clients
+    socket.on('pushcontent', function (newcontent) {
+        console.log("New content received: " + newcontent);
+
+        // pushes data onto contentarray
+        sdmPage.update(
+            { name: 'first' }, // TODO: this is hardcoded
+            {
+                $push: {
+                    'ContentArray': newcontent }
+            }, function(err, obj) {
+                if (err) return console.error(err);
+                console.log("data pushed");
+            }
+        );
+
+        // notify other clients
+        for (var i = 0; i < connectedSockets.length; i++) {
+            var s = connectedSockets[i];
+            if (s != socket) {
+                s.emit('contentupdate', {'CurrentContent': newcontent});
+                console.log("another client notified: " + i);
+            }
+        }
+    });
+
+
+
 
     socket.on('disconnect', function () {
         online--;
