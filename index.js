@@ -64,34 +64,29 @@ io.sockets.on('connection', function (socket) {
     connectedSockets.push(socket);
     console.log("client connected. Now online: " + online);
 
-    //for (var i = 0; i < connectedSockets.length; i++) {
-    //    var s = connectedSockets[i];
-    //    s.emit('init', {'online': online});
-    //}
-
     // sends the currentcontent on init
-    sdmPage.findOne({ name: 'first' }, function(err, page) { // TODO: this is hardcoded
+    sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: -1 },// TODO: name is hardcoded
+        name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
         if (err) return console.error(err);
-        console.log(page.ContentArray[page.ContentArray.length - 1]); // TODO: only the last element of contentarray should be returned from db find
-        socket.emit('contentupdate', {'CurrentContent': page.ContentArray[page.ContentArray.length - 1]})
+        console.log(obj);
+        console.log("sent init content to client: " + obj.ContentArray[0]);
+        socket.emit('contentupdate', {'CurrentContent': obj.ContentArray[0]})
     });
 
 
-
-
-    //// if a client pushes new content, update db and other clients
+    // if a client pushes new content, update db and other clients
     socket.on('pushcontent', function (newcontent) {
         console.log("New content received: " + newcontent);
 
-        // pushes data onto contentarray
+        // pushes new content onto the end of contentarray
         sdmPage.update(
-            { name: 'first' }, // TODO: this is hardcoded
+            { name: 'first' }, // TODO: name is hardcoded
             {
                 $push: {
                     'ContentArray': newcontent }
             }, function(err, obj) {
                 if (err) return console.error(err);
-                console.log("data pushed");
+                //console.log(newcontent + " pushed to database");
             }
         );
 
@@ -106,8 +101,6 @@ io.sockets.on('connection', function (socket) {
     });
 
 
-
-
     socket.on('disconnect', function () {
         online--;
         connectedSockets.splice(connectedSockets.indexOf(socket), 1);
@@ -120,60 +113,50 @@ io.sockets.on('connection', function (socket) {
 // Express |
 // --------|
 
-app.get('/get/updatepage', function (req, res) { // params: pagename
-    console.log("sending latest page data");
+//app.get('/get/updatepage', function (req, res) { // params: pagename
+//    console.log("sending latest page data");
+//
+//    sdmPage.findOne({ name: 'first' }, function(err, page) {
+//        if (err) return console.error(err);
+//        res.send(page);
+//    });
+//});
 
-    sdmPage.findOne({ name: 'first' }, function(err, page) {
+//app.get('/get/latestinput', function (req, res) {
+//    console.log("im trying le get latest input");
+//
+//    res.send("not implemented");
+//});
+
+app.get('/get/history', function (request, response) { // params: skip, limit
+    var skip = parseInt(request.param('skip'));
+    var limit = parseInt(request.param('limit'));
+    sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: [skip, limit] }, // TODO: name is hardcoded
+            name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
         if (err) return console.error(err);
-        res.send(page);
+        console.log("Got history:");
+        console.log(obj.ContentArray);
+        response.send(obj.ContentArray);
     });
 });
 
-app.get('/get/latestinput', function (req, res) {
-    console.log("im trying le get latest input");
-
-
-
-    res.send("not implemented");
-});
-
-app.get('/get/history', function (request, response) { // params: skip, limit
-    console.log("im trying le get history");
-
-    var skip = request.param('skip');
-    var limit = request.param('limit');
-
-    var ContentArray = [];
-    for (var i = 0; i < limit; i++) {
-        var j = parseInt(skip) + i;
-        //console.log("skip: " + parseInt(skip));
-        //console.log("limit: " + parseInt(limit));
-        //console.log("skip + i: " + j);
-        ContentArray.push(j + " not implemented");
-    }
-    response.send(ContentArray);
-});
-
 //post
-app.post('/post/newinput', function (request, res) {
-    console.log("I'm trying le push input");
-
-    res.send("not implemented");
-});
-
-server.listen(app.get('port'), function () {
-    console.log("server started. Listening on port " + app.get('port'));
-});
+//app.post('/post/newinput', function (request, res) {
+//    res.send("not implemented");
+//});
 
 // ----------|
 // Functions |
 // ----------|
 
 // generate new sdm instance
-var initMongoDB = function (Name) {
-    var newmongo = new sdmPage({
-        name: Name
-    });
-    newmongo.save(function (err) {if (err) console.log('Error on save of db: ' + Name)});
-};
+//var initMongoDB = function (Name) {
+//    var newmongo = new sdmPage({
+//        name: Name
+//    });
+//    newmongo.save(function (err) {if (err) console.log('Error on save of db: ' + Name)});
+//};
 
+server.listen(app.get('port'), function () {
+    console.log("server started. Listening on port " + app.get('port'));
+});
