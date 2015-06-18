@@ -78,12 +78,12 @@ io.sockets.on('connection', function (socket) {
     socket.on('pushcontent', function (newcontent) {
         console.log("New content received: " + newcontent);
 
-        // pushes new content onto the end of contentarray
+        // unshifts newcontent into ContentArray
         sdmPage.update(
             { name: 'first' }, // TODO: name is hardcoded
             {
                 $push: {
-                    'ContentArray': newcontent }
+                    'ContentArray': { $each: [newcontent], $position: 0 } } // unshift
             }, function(err, obj) {
                 if (err) return console.error(err);
                 //console.log(newcontent + " pushed to database");
@@ -134,16 +134,12 @@ app.get('/get/history', function (request, response) { // params: skip, limit
     sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: [skip, limit] }, // TODO: name is hardcoded
             name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
         if (err) return console.error(err);
+
         console.log("Got history:");
         console.log(obj.ContentArray);
         response.send(obj.ContentArray);
     });
 });
-
-//post
-//app.post('/post/newinput', function (request, res) {
-//    res.send("not implemented");
-//});
 
 // ----------|
 // Functions |
