@@ -65,11 +65,11 @@ io.sockets.on('connection', function (socket) {
     console.log("client connected. Now online: " + online);
 
     // sends the currentcontent on init
-    sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: -1 },// TODO: name is hardcoded
+    sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: 1 },// TODO: name is hardcoded
         name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
         if (err) return console.error(err);
+        console.log("sent init content to client:");
         console.log(obj);
-        console.log("sent init content to client: " + obj.ContentArray[0]);
         socket.emit('contentupdate', {'CurrentContent': obj.ContentArray[0]})
     });
 
