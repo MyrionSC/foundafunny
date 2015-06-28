@@ -58,6 +58,7 @@ var sdmPage = mongoose.model("sdmpage", sdmSchema);
 
 var online = 0;
 var connectedSockets = [];
+var tempName = "first";
 
 io.sockets.on('connection', function (socket) {
     online++;
@@ -65,12 +66,12 @@ io.sockets.on('connection', function (socket) {
     console.log("client connected. Now online: " + online);
 
     // sends the currentcontent on init
-    sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: 1 },// TODO: name is hardcoded
-        name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
+    sdmPage.findOne({ name: tempName }, { ContentArray: { $slice: 1 },// TODO: name is hardcoded
+        name: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
         if (err) return console.error(err);
         console.log("sent init content to client:");
         console.log(obj);
-        socket.emit('contentupdate', {'CurrentContent': obj.ContentArray[0]})
+        socket.emit('pageinit', obj);
     });
 
 
@@ -80,7 +81,7 @@ io.sockets.on('connection', function (socket) {
 
         // unshifts newcontent into ContentArray
         sdmPage.update(
-            { name: 'first' }, // TODO: name is hardcoded
+            { name: tempName }, // TODO: name is hardcoded
             {
                 $push: {
                     'ContentArray': { $each: [newcontent], $position: 0 } } // unshift
@@ -99,6 +100,31 @@ io.sockets.on('connection', function (socket) {
             }
         }
     });
+
+    // if a client pushes new timer, update db and notify other clients
+    socket.on('savetimer', function (newtimer) {
+        console.log("new timer received:");
+        console.log(newtimer);
+
+        sdmPage.update(
+            { name: tempName }, // TODO: name is hardcoded
+            {
+                $push: { 'Timers': newtimer }
+            }, function(err, obj) {
+                if (err) return console.error(err);
+            }
+        );
+
+        // notify other clients
+        for (var i = 0; i < connectedSockets.length; i++) {
+            var s = connectedSockets[i];
+            if (s != socket) {
+                s.emit('timerupdate', newtimer);
+                console.log("sent new timer to client: " + i);
+            }
+        }
+    });
+
 
 
     socket.on('disconnect', function () {
