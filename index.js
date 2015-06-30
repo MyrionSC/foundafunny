@@ -74,8 +74,8 @@ io.sockets.on('connection', function (socket) {
 
         // determine local page time
         var utc = Date.now();
-        var ClientDate = new Date(utc);
-        //var ClientDate = new Date(utc + (-60) * 60000);
+        //var ClientDate = new Date(utc);
+        var ClientDate = new Date(utc + (-120) * 60000);
         console.log("local page time:");
         console.log(ClientDate);
 
@@ -87,6 +87,7 @@ io.sockets.on('connection', function (socket) {
 
             var d = new Date(t.ActivationTime);
             console.log(d);
+
             if (d < ClientDate) {
                 console.log("timer removed:");
                 console.log(t.ActivationTime);
