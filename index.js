@@ -2,10 +2,11 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mongoose = require ("mongoose");
-//bodyParser = require('body-parser');
+var scribe = require('scribe-js')();
 
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded());
+var console = process.console;
+app.use('\logs', scribe.webPanel());
+console.info("does this work");
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -13,7 +14,7 @@ app.all('*',function(req,res,next)
 {
     if (!req.get('Origin')) return next();
 
-    res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests
+    res.set('Access-Control-Allow-Origin','*'); // allows everyone to send requests. Should be switched with single ip later
     res.set('Access-Control-Allow-Methods','GET,POST');
     res.set('Access-Control-Allow-Headers','X-Requested-With,Content-Type');
     res.set('Access-Control-Allow-Credentials','true');
@@ -44,8 +45,10 @@ var sdmSchema = new mongoose.Schema({
     CurrentContent: String,
     ContentArray: Array,
     Favorites: Array,
-    Settings: {
-        bg_color: String // TODO: add some youtube settings and such later
+    Settings: { // TODO: add some youtube settings and such later
+        bg_color: String,
+        Timezone: String,
+        TimeDiff: Number // difference from localtime to utc in minutes
     },
     Timers: Array
 });
@@ -58,20 +61,45 @@ var sdmPage = mongoose.model("sdmpage", sdmSchema);
 
 var online = 0;
 var connectedSockets = [];
-var tempName = "first";
+var tempName = "third";
 
 io.sockets.on('connection', function (socket) {
     online++;
     connectedSockets.push(socket);
     console.log("client connected. Now online: " + online);
 
-    // sends the currentcontent on init
+    // sends the Page info on init
     sdmPage.findOne({ name: tempName }, { ContentArray: { $slice: 1 },// TODO: name is hardcoded
-        name: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
+        _id: 0 },  function(err, page) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
         if (err) return console.error(err);
+
+        // check if any timers has gotten outdated
+
+        // determine local page time
+        var utc = Date.now();
+        var ClientDate = new Date(utc);
+        //var ClientDate = new Date(utc + (-60) * 60000);
+        console.log("local page time:");
+        console.log(ClientDate);
+
+        // check for each OneTime timer, if it has already passed
+        for (var i = 0; i < page.Timers.length; i++) {
+            var t = page.Timers[i];
+            console.log();
+            console.log("checking against timer:");
+
+            var d = new Date(t.ActivationTime);
+            console.log(d);
+            if (d < ClientDate) {
+                console.log("timer removed:");
+                console.log(t.ActivationTime);
+                // remove timer
+            }
+        }
+
         console.log("sent init content to client:");
-        console.log(obj);
-        socket.emit('pageinit', obj);
+        console.log(page);
+        socket.emit('pageinit', page);
     });
 
 
@@ -157,7 +185,7 @@ io.sockets.on('connection', function (socket) {
 app.get('/get/history', function (request, response) { // params: skip, limit
     var skip = parseInt(request.param('skip'));
     var limit = parseInt(request.param('limit'));
-    sdmPage.findOne({ name: 'first' }, { ContentArray: { $slice: [skip, limit] }, // TODO: name is hardcoded
+    sdmPage.findOne({ name: tempName }, { ContentArray: { $slice: [skip, limit] }, // TODO: name is hardcoded
             name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
         if (err) return console.error(err);
 
@@ -174,10 +202,16 @@ app.get('/get/history', function (request, response) { // params: skip, limit
 // generate new sdm instance
 //var initMongoDB = function (Name) {
 //    var newmongo = new sdmPage({
-//        name: Name
+//        name: Name,
+//        Settings: {
+//            bg_color: "#ffffff",
+//            Timezone: "GMT+0200 (CEST)",
+//            TimeDiff: -120
+//        }
 //    });
 //    newmongo.save(function (err) {if (err) console.log('Error on save of db: ' + Name)});
 //};
+//initMongoDB("third");
 
 server.listen(app.get('port'), function () {
     console.log("server started. Listening on port " + app.get('port'));
