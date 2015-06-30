@@ -3,10 +3,7 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mongoose = require ("mongoose");
 var scribe = require('scribe-js')();
-
 var console = process.console;
-app.use('\logs', scribe.webPanel());
-console.info("does this work");
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -167,20 +164,20 @@ io.sockets.on('connection', function (socket) {
 // Express |
 // --------|
 
-//app.get('/get/updatepage', function (req, res) { // params: pagename
-//    console.log("sending latest page data");
-//
-//    sdmPage.findOne({ name: 'first' }, function(err, page) {
-//        if (err) return console.error(err);
-//        res.send(page);
-//    });
-//});
+app.get('/', function(req, res) {
+    res.send('Hello world, see you at /logs');
+});
+app.use('/logs', scribe.webPanel());
 
-//app.get('/get/latestinput', function (req, res) {
-//    console.log("im trying le get latest input");
-//
-//    res.send("not implemented");
-//});
+console.addLogger('debug', 'red');
+console.addLogger('fun', 'red');
+
+console.time().fun('hello world');
+console.tag('This is a test').debug('A test');
+console.tag('An object').log({
+    a: 'b',
+    c: [1, 2, 3]
+});
 
 app.get('/get/history', function (request, response) { // params: skip, limit
     var skip = parseInt(request.param('skip'));
