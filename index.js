@@ -1,9 +1,9 @@
 var app = require('express')();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var mongoose = require ("mongoose");
-var scribe = require('scribe-js')();
-var console = process.console;
+//var io = require('socket.io')(server);
+//var mongoose = require ("mongoose");
+//var scribe = require('scribe-js')();
+//var console = process.console;
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -167,7 +167,7 @@ app.set('port', (process.env.PORT || 5000));
 app.get('/', function(req, res) {
     res.send('Hello world, see you at /logs');
 });
-app.use('/logs', scribe.webPanel());
+//app.use('/logs', scribe.webPanel());
 //
 //console.addLogger('debug', 'red');
 //console.addLogger('fun', 'red');
