@@ -75,7 +75,7 @@ io.sockets.on('connection', function (socket) {
         // determine local page time
         var utc = Date.now();
         //var ClientDate = new Date(utc);
-        var ClientDate = new Date(utc + (-120) * 60000);
+        var ClientDate = new Date(utc + 120 * 60000);
         console.log("local page time:");
         console.log(ClientDate);
 
