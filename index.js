@@ -2,8 +2,8 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var mongoose = require ("mongoose");
-var scribe = require('scribe-js')();
-var console = process.console;
+var scribe = require('scribe-js')(); // for logging
+var console = process.console; // for logging
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -59,6 +59,7 @@ var sdmPage = mongoose.model("sdmpage", sdmSchema);
 var online = 0;
 var connectedSockets = [];
 var tempName = "third";
+var tempTimeDiff = 120;
 
 io.sockets.on('connection', function (socket) {
     online++;
@@ -66,38 +67,48 @@ io.sockets.on('connection', function (socket) {
     console.log("client connected. Now online: " + online);
 
     // sends the Page info on init
-    sdmPage.findOne({ name: tempName }, { ContentArray: { $slice: 1 },// TODO: name is hardcoded
-        _id: 0 },  function(err, page) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
+    var page = sdmPage.findOne({ name: tempName }, { ContentArray: { $slice: 1 }
+        , _id: 0, Timers: 0, Favorites: 0},// TODO: name is hardcoded
+            function(err, page) { // TODO: check if Timers, Favorites and Settings still return when they are not empty
         if (err) return console.error(err);
 
-        // check if any timers has gotten outdated
-
         // determine local page time
-        var utc = Date.now();
-        //var ClientDate = new Date(utc);
-        var ClientDate = new Date(utc + 120 * 60000);
-        console.log("local page time:");
-        console.log(ClientDate);
+        //var utc = Date.now();
+        //var ClientDate = new Date(utc + page.Settings.TimeDiff * 60000);
+        //console.log("page time:");
+        //console.log(ClientDate);
+        //
+        //// check for each OneTime timer, if it has already passed
+        //for (var i = 0; i < page.Timers.length; i++) {
+        //    var t = page.Timers[i];
+        //
+        //    if (t.Type === "OneTime") {
+        //        console.log();
+        //        console.log("checking against timer:");
+        //
+        //        var timerdate = new Date(t.ActivationTime);
+        //        console.log(timerdate);
+        //
+        //        if (timerdate < ClientDate) {
+        //            console.log("timer removed:");
+        //            console.log(t.ActivationTime);
+        //
+        //            page.Timers.splice(page.Timers.indexOf(t), 1);
+        //            i--;
+        //        }
+        //    }
+        //}
 
-        // check for each OneTime timer, if it has already passed
-        for (var i = 0; i < page.Timers.length; i++) {
-            var t = page.Timers[i];
-            console.log();
-            console.log("checking against timer:");
-
-            var d = new Date(t.ActivationTime);
-            console.log(d);
-
-            if (d < ClientDate) {
-                console.log("timer removed:");
-                console.log(t.ActivationTime);
-                // remove timer
-            }
-        }
-
+        console.log();
         console.log("sent init content to client:");
         console.log(page);
         socket.emit('pageinit', page);
+
+        // updates page with deleted timers
+        //page.save(function(err, obj) {
+        //    if (err) console.error(err);
+        //    //else console.log(obj);
+        //});
     });
 
 
@@ -127,27 +138,31 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
-    // if a client pushes new timer, update db and notify other clients
-    socket.on('savetimer', function (newtimer) {
+    // if a client pushes new timer, update db and and start setTimeout
+    socket.on('savetimer', function (timer) {
         console.log("new timer received:");
-        console.log(newtimer);
+        console.log(timer);
 
         sdmPage.update(
             { name: tempName }, // TODO: name is hardcoded
             {
-                $push: { 'Timers': newtimer }
+                $push: { 'Timers': timer }
             }, function(err, obj) {
                 if (err) return console.error(err);
             }
         );
 
-        // notify other clients
-        for (var i = 0; i < connectedSockets.length; i++) {
-            var s = connectedSockets[i];
-            if (s != socket) {
-                s.emit('timerupdate', newtimer);
-                console.log("sent new timer to client: " + i);
-            }
+        // determine current page time
+        var utc = Date.now();
+        var PageDate = new Date(utc + tempTimeDiff * 60000); // todo: tempTimeDiff hardcoded, should be sent along with request
+        console.log(PageDate.toTimeString());
+
+        // start settimeout
+        if (timer.Type === "OneTime") {
+            StartOneTimeTimer(socket, timer, PageDate);
+        }
+        else {
+            StartWeeklyTimer(socket, timer, PageDate);
         }
     });
 
@@ -165,20 +180,13 @@ io.sockets.on('connection', function (socket) {
 // Express |
 // --------|
 
+// todo: at some point, the page name should be sent along with the request.
+
 app.get('/', function(req, res) {
-    res.send('Hello world, see you at /logs');
+    res.send('Logging at /logs');
 });
+// logging
 app.use('/logs', scribe.webPanel());
-
-console.addLogger('debug', 'red');
-console.addLogger('fun', 'red');
-
-console.time().fun('hello world');
-console.tag('This is a test').debug('A test');
-console.tag('An object').log({
-    a: 'b',
-    c: [1, 2, 3]
-});
 
 app.get('/get/history', function (request, response) { // params: skip, limit
     var skip = parseInt(request.param('skip'));
@@ -193,6 +201,10 @@ app.get('/get/history', function (request, response) { // params: skip, limit
     });
 });
 
+app.get('/get/timers', function (request, response) { // params: skip, limit
+    // get timers associated with the page
+});
+
 // ----------|
 // Functions |
 // ----------|
@@ -204,12 +216,132 @@ app.get('/get/history', function (request, response) { // params: skip, limit
 //        Settings: {
 //            bg_color: "#ffffff",
 //            Timezone: "GMT+0200 (CEST)",
-//            TimeDiff: -120
+//            TimeDiff: 120
 //        }
 //    });
 //    newmongo.save(function (err) {if (err) console.log('Error on save of db: ' + Name)});
 //};
 //initMongoDB("third");
+
+// timer functions
+var StartOneTimeTimer = function(socket, timer, pagedate) {
+    //console.log(timer.ActivationTime);
+    var timerdate = new Date(timer.ActivationTime);
+    //console.log(timerdate.toTimeString());
+
+    // find difference between timer and page date in milliseconds
+    var diff = timerdate.getTime() - pagedate.getTime();
+
+    console.log("Milliseconds until activation: " + diff);
+
+    // Start setTimeout
+    timer.TimeoutVar = setTimeout(function() {
+        console.log("timeout hit!");
+        if (timer.EndContent == "") {
+            // delete timer from db
+            sdmPage.findOne({'name': tempName}, function(err, page) {
+                if (err) return console.log(err);
+
+                console.log("timer:");
+                console.log("Startcontent: " + timer.StartContent);
+                console.log("ActivationTime " + timer.ActivationTime);
+
+
+                // find the timers index. Could probably be done better but w/e
+                var index = -1;
+                console.log();
+                for (var i = 0; i < page.Timers.length; i++) {
+                    var t = page.Timers[i];
+                    console.log("timer index " + i);
+                    console.log("Startcontent: " + t.StartContent);
+                    console.log("ActivationTime " + t.ActivationTime);
+                    if (t.StartContent === timer.StartContent && t.ActivationTime === t.ActivationTime) {
+                        index = i;
+                        break;
+                    }
+                    console.log();
+                }
+
+                console.log("timer index:" + index);
+
+                if (index > -1) {
+                    page.Timers.splice(index, 1);
+                    page.ContentArray.unshift(timer.StartContent);
+
+                    page.save(function(err, obj) {
+                        if (err) return console.error(err);
+                        console.log("Timer removed from Array:");
+                        console.log(timer);
+                    });
+                }
+                else {
+                    console.error("Timer could not be removed from array:");
+                    console.error(timer);
+                }
+            });
+
+            // create a package for the users <3
+            var timerpackage = {
+                'content': timer.StartContent
+                // at some time, more should be added
+            };
+
+            // emit content to users
+            for (var i = 0; i < connectedSockets.length; i++) {
+                var s = connectedSockets[i];
+
+                s.emit('timerfire', timerpackage);
+            }
+            console.log("users notified of timer update: " + connectedSockets.length);
+        }
+        else {
+            // modify timer in db
+            sdmPage.findOne({'name': tempName}, function(err, page) {
+                if (err) return console.log(err);
+
+                console.log("timer:");
+                console.log("Startcontent: " + timer.StartContent);
+                console.log("ActivationTime " + timer.ActivationTime);
+
+
+                // find the timers index. Could probably be done better but w/e
+                var index = -1;
+                console.log();
+                for (var i = 0; i < page.Timers.length; i++) {
+                    var t = page.Timers[i];
+                    console.log("timer index " + i);
+                    console.log("Startcontent: " + t.StartContent);
+                    console.log("ActivationTime " + t.ActivationTime);
+                    if (t.StartContent === timer.StartContent && t.ActivationTime === t.ActivationTime) {
+                        index = i;
+                        break;
+                    }
+                    console.log();
+                }
+
+                console.log("timer index:" + index);
+
+                if (index > -1) {
+                    page.Timers.splice(index, 1);
+                    page.ContentArray.unshift(timer.StartContent);
+
+                    page.save(function(err, obj) {
+                        if (err) return console.error(err);
+                        console.log("Timer removed from Array:");
+                        console.log(timer);
+                    });
+                }
+                else {
+                    console.error("Timer could not be removed from array:");
+                    console.error(timer);
+                }
+            });
+        }
+    }, diff);
+};
+var StartWeeklyTimer = function(socket, timer, pagedate) {
+
+};
 
 server.listen(app.get('port'), function () {
     console.log("server started. Listening on port " + app.get('port'));
