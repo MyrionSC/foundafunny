@@ -196,7 +196,6 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
 
     // find difference between timer and page date in milliseconds
     var diff = timerdate.getTime() - pagedate.getTime();
-
     console.log("Milliseconds until activation: " + diff);
 
     // Start setTimeout
