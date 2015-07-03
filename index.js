@@ -168,8 +168,18 @@ app.get('/get/history', function (request, response) { // params: skip, limit
     });
 });
 
-app.get('/get/timers', function (request, response) { // params: skip, limit
+app.get('/get/timers', function (request, response) {
     // get timers associated with the page
+    sdmPage.findOne({ name: tempName }, { Timers: { $slice: 10 }, // TODO: name is hardcoded
+        name: 0, ContentArray: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
+        if (err) return console.error(err);
+
+
+
+        console.log("Got Timers:");
+        console.log(obj.Timers);
+        response.send(obj.Timers);
+    });
 });
 
 // ----------|
