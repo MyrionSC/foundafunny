@@ -213,11 +213,10 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
             console.log("timer index:" + index);
 
             if (index > -1) {
-
+                page.ContentArray.unshift(timer.StartContent);
                 // if no endcontent, remove timer from array, else modify it
                 if (!EndContentFlag) {
                     page.Timers.splice(index, 1);
-                    page.ContentArray.unshift(timer.StartContent);
                 }
                 else {
                     page.Timers[index].Active = true;
@@ -252,7 +251,7 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
         // if there is endcontent, start a new timer of Activation Length
         if (EndContentFlag) {
             console.log("End content timer startet:");
-            console.log("Activation in: " + timer.ActivationTime + " seconds\n");
+            console.log("Activation in: " + timer.ActivationLength + " seconds\n");
             // start new timer for endcontent
             timer.TimeoutVar = setTimeout(function () {
                 // find page in db
@@ -265,11 +264,10 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
 
                         page.save(function(err, obj) {
                             if (err) return console.error(err);
-
                         });
                     }
                     else {
-                        console.error("Timer could not be located in page array:");
+                        console.error("Timer could not be located in page timer array:");
                         console.error(timer);
                     }
                 });
@@ -290,6 +288,7 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
         }
     }, diff);
 };
+
 var StartWeeklyTimer = function(socket, timer, pagedate) {
 
 };
