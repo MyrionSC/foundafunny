@@ -208,10 +208,6 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
         sdmPage.findOne({'name': tempName}, function(err, page) {
             if (err) return console.log(err);
 
-            console.log("timer:");
-            console.log("Startcontent: " + timer.StartContent);
-            console.log("ActivationTime " + timer.ActivationTime);
-
             // find the timers index.
             var index = timerIndex(page, timer);
             console.log("timer index:" + index);
@@ -250,10 +246,13 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
             var s = connectedSockets[i];
             s.emit('timerfire', timerpackage);
         }
+        console.log("Content pushed to users: " + timerpackage.content);
         console.log("users notified of timer update: " + connectedSockets.length);
 
         // if there is endcontent, start a new timer of Activation Length
         if (EndContentFlag) {
+            console.log("End content timer startet:");
+            console.log("Activation in: " + timer.ActivationTime + " seconds\n");
             // start new timer for endcontent
             timer.TimeoutVar = setTimeout(function () {
                 // find page in db
@@ -266,6 +265,7 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
 
                         page.save(function(err, obj) {
                             if (err) return console.error(err);
+
                         });
                     }
                     else {
@@ -276,7 +276,7 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
 
                 // create a package for the users <3
                 var timerpackage = {
-                    'content': timer.StartContent
+                    'content': timer.EndContent
                     // at some time, more should be added
                 };
                 // emit content to users
@@ -284,6 +284,8 @@ var StartOneTimeTimer = function(socket, timer, pagedate) {
                     var s = connectedSockets[i];
                     s.emit('timerfire', timerpackage);
                 }
+                console.log("Content pushed to users: " + timerpackage.content);
+                console.log("users notified of timer update: " + connectedSockets.length);
             }, timer.ActivationLength * 1000);
         }
     }, diff);
@@ -295,17 +297,13 @@ var StartWeeklyTimer = function(socket, timer, pagedate) {
 // returns timers index in page array of timers
 var timerIndex = function (page, timer) {
     var res = -1;
-    console.log();
     for (var i = 0; i < page.Timers.length; i++) {
         var t = page.Timers[i];
-        console.log("timer index " + i);
-        console.log("Startcontent: " + t.StartContent);
-        console.log("ActivationTime " + t.ActivationTime);
         if (t.StartContent === timer.StartContent && t.ActivationTime === timer.ActivationTime) {
             res = i;
+            console.log("Timer located in page array at index: " + i);
             break;
         }
-        console.log();
     }
     return res;
 };
