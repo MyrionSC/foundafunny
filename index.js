@@ -120,16 +120,16 @@ io.sockets.on('connection', function (socket) {
         );
 
         // determine current page time
-        var utc = Date.now();
-        var PageDate = new Date(utc + tempTimeDiff * 60000); // todo: tempTimeDiff hardcoded, should be sent along with request
-        console.log(PageDate.toTimeString());
+        //var utc = Date.now();
+        //var PageDate = new Date(utc + tempTimeDiff * 60000); // todo: tempTimeDiff hardcoded, should be sent along with request
+        //console.log(PageDate.toTimeString());
 
         // start settimeout
         if (timer.Type === "OneTime") {
-            StartOneTimeTimer(socket, timer, PageDate);
+            StartOneTimeTimer(socket, timer);
         }
         else {
-            StartWeeklyTimer(socket, timer, PageDate);
+            StartWeeklyTimer(socket, timer);
         }
     });
 
@@ -201,11 +201,13 @@ app.get('/get/timers', function (request, response) {
 //initMongoDB("third");
 
 // timer functions
-var StartOneTimeTimer = function(socket, timer, pagedate) {
-    var timerdate = new Date(timer.ActivationTime);
+var StartOneTimeTimer = function(socket, timer) {
+    //var timerdate = new Date(timer.ActivationTime);
+    //var now = Date.now();
 
     // find difference between timer and page date in milliseconds
-    var diff = timerdate.getTime() - pagedate.getTime();
+    var diff = timer.ActivationTime - Date.now();
+    //var diff = timerdate.getTime() - pagedate.getTime();
     console.log("Milliseconds until activation: " + diff);
 
     // Start setTimeout
