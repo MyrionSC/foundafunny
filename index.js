@@ -282,9 +282,13 @@ var StartWeeklyTimer = function(socket, timer) {
     var dayInMilliSecCONST = 86400000;
     var today = new Date(Date.now()); // current date in utc
     console.log(today);
+    //console.log(timer.ActivationTime);
     var timerdate = new Date(timer.ActivationTime);
-    console.log(timerdate);
-    timerdate.setDate(today.getDate()); // probably not necessary
+    //console.log(timerdate);
+    // as date, month and year isn't specified from the client site, it is done here
+    timerdate.setDate(today.getDate());
+    timerdate.setMonth(today.getMonth());
+    timerdate.setFullYear(today.getFullYear());
     console.log(timerdate);
     var diff = 0;
 
