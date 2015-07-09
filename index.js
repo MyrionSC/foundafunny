@@ -281,22 +281,30 @@ var StartWeeklyTimer = function(socket, timer) {
     // find milliseconds to first activation
     var dayInMilliSecCONST = 86400000;
     var today = new Date(Date.now()); // current date in utc
+    console.log(today);
     var timerdate = new Date(timer.ActivationTime);
+    console.log(timerdate);
     timerdate.setDate(today.getDate()); // probably not necessary
+    console.log(timerdate);
     var diff = 0;
 
     if (today.getTime() < timerdate.getTime()) {
         if (timer.ActivationDays[today.getDay()].Selected === true) {
+            console.log("1");
             diff = today.getTime() - timerdate.getTime();
             StartFirstWeeklyTimer(timer, diff);
         }
         else {
+            console.log("2");
+            console.log(FindDaysUntilNextActivation(timer));
             diff = today.getTime() - timerdate.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
             StartFirstWeeklyTimer(timer, diff);
         }
     }
     else {
         // current time is more than timer activation time, so look for next activation day
+        console.log("3");
+        console.log(FindDaysUntilNextActivation(timer));
         diff = timerdate.getTime() - today.getTime() + FindDaysUntilNextActivation * dayInMilliSecCONST;
         StartFirstWeeklyTimer(timer, diff);
     }
