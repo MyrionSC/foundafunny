@@ -315,7 +315,7 @@ var StartWeeklyTimer = function(socket, timer) {
     else {
         // current time is more than timer activation time, so look for next activation day
         console.log("3");
-        diff =  FindDaysUntilNextActivation(timer) * dayInMilliSecCONST - today.getTime() - timerdate.getTime();
+        diff =  today.getTime() - timerdate.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
         console.log(diff);
         StartFirstWeeklyTimer(timer, diff);
     }
