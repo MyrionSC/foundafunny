@@ -293,8 +293,11 @@ var StartWeeklyTimer = function(socket, timer) {
     var diff = 0;
 
     if (today.getTime() < timerdate.getTime()) {
+        console.log("day number:");
         console.log(today.getDay());
+        console.log("Activation Day:");
         console.log(timer.ActivationDays[today.getDay()].Day);
+        console.log("Selected:");
         console.log(timer.ActivationDays[today.getDay()].Selected);
         if (timer.ActivationDays[today.getDay()].Selected === true) {
             console.log("1");
