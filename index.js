@@ -119,11 +119,6 @@ io.sockets.on('connection', function (socket) {
             }
         );
 
-        // determine current page time
-        //var utc = Date.now();
-        //var PageDate = new Date(utc + tempTimeDiff * 60000); // todo: tempTimeDiff hardcoded, should be sent along with request
-        //console.log(PageDate.toTimeString());
-
         // start settimeout
         if (timer.Type === "OneTime") {
             StartOneTimeTimer(socket, timer);
@@ -174,7 +169,7 @@ app.get('/get/timers', function (request, response) {
         name: 0, ContentArray: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
         if (err) return console.error(err);
 
-
+        // todo: sort timers by closest to activation
 
         console.log("Got Timers:");
         console.log(obj.Timers);
@@ -186,28 +181,10 @@ app.get('/get/timers', function (request, response) {
 // Functions |
 // ----------|
 
-// generate new sdm instance
-//var initMongoDB = function (Name) {
-//    var newmongo = new sdmPage({
-//        name: Name,
-//        Settings: {
-//            bg_color: "#ffffff",
-//            Timezone: "GMT+0200 (CEST)",
-//            TimeDiff: 120
-//        }
-//    });
-//    newmongo.save(function (err) {if (err) console.log('Error on save of db: ' + Name)});
-//};
-//initMongoDB("third");
-
 // timer functions
 var StartOneTimeTimer = function(socket, timer) {
-    //var timerdate = new Date(timer.ActivationTime);
-    //var now = Date.now();
-
     // find difference between timer and page date in milliseconds
     var diff = timer.ActivationTime - Date.now();
-    //var diff = timerdate.getTime() - pagedate.getTime();
     console.log("Milliseconds until activation: " + diff);
 
     // Start setTimeout
@@ -300,8 +277,42 @@ var StartOneTimeTimer = function(socket, timer) {
     }, diff);
 };
 
-var StartWeeklyTimer = function(socket, timer, pagedate) {
+var StartWeeklyTimer = function(socket, timer) {
+    // find milliseconds to first activation
+    var dayInMilliSecCONST = 86400000;
+    var today = new Date(Date.now()); // current date in utc
+    var timerdate = new Date(timer.ActivationTime);
+    timerdate.setDate(today.getDate()); // probably not necessary
+    var diff = 0;
 
+    if (today.getTime() < timerdate.getTime()) {
+        if (timer.ActivationDays[today.getDay()].Selected === true) {
+            diff = today.getTime() - timerdate.getTime();
+            StartFirstWeeklyTimer(timer, diff);
+        }
+        else {
+            diff = today.getTime() - timerdate.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
+            StartFirstWeeklyTimer(timer, diff);
+        }
+    }
+    else {
+        // current time is more than timer activation time, so look for next activation day
+        diff = timerdate.getTime() - today.getTime() + FindDaysUntilNextActivation * dayInMilliSecCONST;
+        StartFirstWeeklyTimer(timer, diff);
+    }
+
+
+};
+
+var StartFirstWeeklyTimer = function (timer, diff) {
+    console.log("First weekly timer activating in " + diff + " milliseconds");
+    //timer.TimeoutVar = setTimeout(function () {
+    //    // db shit
+    //
+    //    // push content
+    //
+    //    // set next weekly timer
+    //}, diff);
 };
 
 // returns timers index in page array of timers
@@ -309,6 +320,7 @@ var timerIndex = function (page, timer) {
     var res = -1;
     for (var i = 0; i < page.Timers.length; i++) {
         var t = page.Timers[i];
+        // this comparison might not be sufficient at some point
         if (t.StartContent === timer.StartContent && t.ActivationTime === timer.ActivationTime) {
             res = i;
             console.log("Timer located in page array at index: " + i);
@@ -322,6 +334,22 @@ var timerIndex = function (page, timer) {
 //    var utc = Date.now();
 //    return new Date(utc + page.Settings.TimeDiff * 60000);
 //};
+
+var FindDaysUntilNextActivation = function (timer) {
+    var today = new Date();
+    var todayWeekday = today.getDay();
+
+    var res = 1;
+    for (var i = 0; i < timer.ActivationDays.length; i++) {
+        var index = ((todayWeekday + 1 + i) % 7);
+        var obj = timer.ActivationDays[index];
+
+        if (obj.Selected === true)
+            return res;
+        // else
+        res++;
+    }
+};
 
 
 server.listen(app.get('port'), function () {
