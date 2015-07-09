@@ -296,7 +296,7 @@ var StartWeeklyTimer = function(socket, timer) {
         console.log("day number:");
         console.log(today.getDay());
         console.log("Activation Day:");
-        console.log(timer.ActivationDays[today.getDay()].Day);
+        console.log(timer.ActivationDays[today.getDay() - 1].Day);
         console.log("Selected:");
         console.log(timer.ActivationDays[today.getDay()].Selected);
         if (timer.ActivationDays[today.getDay()].Selected === true) {
@@ -321,8 +321,6 @@ var StartWeeklyTimer = function(socket, timer) {
         console.log(diff);
         StartFirstWeeklyTimer(timer, diff);
     }
-
-
 };
 
 var StartFirstWeeklyTimer = function (timer, diff) {
@@ -358,7 +356,7 @@ var timerIndex = function (page, timer) {
 
 var FindDaysUntilNextActivation = function (timer) {
     var today = new Date();
-    var todayWeekday = today.getDay();
+    var todayWeekday = today.getDay() - 1;
 
     var res = 1;
     for (var i = 0; i < timer.ActivationDays.length; i++) {
