@@ -294,12 +294,12 @@ var StartWeeklyTimer = function(socket, timer) {
 
     if (today.getTime() < timerdate.getTime()) {
         console.log("day number:");
-        console.log(today.getDay());
+        console.log(today.getDay() - 1);
         console.log("Activation Day:");
         console.log(timer.ActivationDays[today.getDay() - 1].Day);
         console.log("Selected:");
-        console.log(timer.ActivationDays[today.getDay()].Selected);
-        if (timer.ActivationDays[today.getDay()].Selected === true) {
+        console.log(timer.ActivationDays[today.getDay() - 1].Selected);
+        if (timer.ActivationDays[today.getDay() - 1].Selected === true) {
             console.log("1");
             diff = timerdate.getTime() - today.getTime();
             console.log(diff);
@@ -307,7 +307,6 @@ var StartWeeklyTimer = function(socket, timer) {
         }
         else {
             console.log("2");
-            console.log(FindDaysUntilNextActivation(timer));
             diff = timerdate.getTime() - today.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
             console.log(diff);
             StartFirstWeeklyTimer(timer, diff);
@@ -316,7 +315,6 @@ var StartWeeklyTimer = function(socket, timer) {
     else {
         // current time is more than timer activation time, so look for next activation day
         console.log("3");
-        console.log(FindDaysUntilNextActivation(timer));
         diff =  today.getTime() - timerdate.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
         console.log(diff);
         StartFirstWeeklyTimer(timer, diff);
@@ -363,8 +361,10 @@ var FindDaysUntilNextActivation = function (timer) {
         var index = ((todayWeekday + 1 + i) % 7);
         var obj = timer.ActivationDays[index];
 
-        if (obj.Selected === true)
+        if (obj.Selected === true) {
+            console.log("Next Activation time in " + res + " days");
             return res;
+        }
         // else
         res++;
     }
