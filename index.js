@@ -301,14 +301,14 @@ var StartWeeklyTimer = function(socket, timer) {
         console.log(timer.ActivationDays[today.getDay()].Selected);
         if (timer.ActivationDays[today.getDay()].Selected === true) {
             console.log("1");
-            diff = today.getTime() - timerdate.getTime();
+            diff = timerdate.getTime() - today.getTime();
             console.log(diff);
             StartFirstWeeklyTimer(timer, diff);
         }
         else {
             console.log("2");
             console.log(FindDaysUntilNextActivation(timer));
-            diff = today.getTime() - timerdate.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
+            diff = timerdate.getTime() - today.getTime() + FindDaysUntilNextActivation(timer) * dayInMilliSecCONST;
             console.log(diff);
             StartFirstWeeklyTimer(timer, diff);
         }
@@ -317,7 +317,7 @@ var StartWeeklyTimer = function(socket, timer) {
         // current time is more than timer activation time, so look for next activation day
         console.log("3");
         console.log(FindDaysUntilNextActivation(timer));
-        diff = timerdate.getTime() - today.getTime() + FindDaysUntilNextActivation * dayInMilliSecCONST;
+        diff =  today.getTime() - timerdate.getTime() + FindDaysUntilNextActivation * dayInMilliSecCONST;
         console.log(diff);
         StartFirstWeeklyTimer(timer, diff);
     }
