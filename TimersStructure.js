@@ -8,6 +8,8 @@ var io, db; // are filled after handshake from socket.js
 var timers = [];
 
 exports.SocketHandshake = function(IO) {
+    console.log("Starting socket handshake");
+
     io = IO;
     db = IO.db;
 
