@@ -47,7 +47,7 @@ var sdmTimer = mongoose.model("sdmtimer", timerSchema);
 
 
 // db methods
-db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content) {
+db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback) {
     sdmPage.findOne({'name': Name}, function(err, page) {
         if (err) return console.log(err);
 
@@ -57,12 +57,16 @@ db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content) {
         timer.Active = true;
 
         page.save(function(err, obj) {
-            if (err) return console.error(err);
-            console.log("timer with id set to active: " + timer.id);
+            if (err) {
+                console.error("SetPageTimerActiveAndSaveContent operation failed with error:");
+                return console.error(err);
+            }
+            console.log("timer with id set to active: " + timer._id);
+            callback();
         });
     });
 };
-db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content) {
+db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content, callback) {
     sdmPage.findOne({'name': Name}, function(err, page) {
         if (err) return console.log(err);
 
@@ -72,12 +76,16 @@ db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content) {
         timer.Active = false;
 
         page.save(function(err, obj) {
-            if (err) return console.error(err);
-            console.log("timer with id set to inactive: " + timer.id);
+            if (err) {
+                console.error("SetPageTimerInactiveAndSaveContent operation failed with error:");
+                return console.error(err);
+            }
+            console.log("timer with id set to inactive: " + timer._id);
+            callback();
         });
     });
 };
-db.DeletePageTimerAndSaveContent = function (Name, timerid, content) {
+db.DeletePageTimerAndSaveContent = function (Name, timerid, content, callback) {
     // todo: see if timer id can be used instead
     sdmPage.findOne({'name': Name}, function(err, page) {
         if (err) return console.error(err);
@@ -86,21 +94,30 @@ db.DeletePageTimerAndSaveContent = function (Name, timerid, content) {
         page.ContentArray.unshift(content);
 
         page.save(function(err, obj) {
-            if (err) return console.error(err);
+            if (err) {
+                console.error("DeletePageTimerAndSaveContent operation failed with error:");
+                return console.error(err);
+            }
             console.log("timer with id deleted from db: " + timerid);
+            callback();
         });
     });
 };
-db.DeletePageTimer = function (Name, timerid) {
-    // todo: see if timer id can be used instead
+db.DeletePageTimer = function (Name, timerid, callback) {
+    console.log("Trying to remove timer with id " + timerid + " from " +
+        "page: " + Name);
     sdmPage.findOne({'name': Name}, function(err, page) {
         if (err) return console.error(err);
 
         page.Timers.id(timerid).remove();
 
         page.save(function(err, obj) {
-            if (err) return console.error(err);
+            if (err) {
+                console.error("DeletePageTimer operation failed with error:");
+                return console.error(err);
+            }
             console.log("timer with id deleted from db: " + timerid);
+            callback();
         });
     });
 };
@@ -113,19 +130,27 @@ db.UpdatePageTimerActivationTime = function (Name, timerid, actitime) {
         timer.ActivationTime = actitime;
 
         page.save(function(err, obj) {
-            if (err) return console.error(err);
-            console.log("timer with id's activation time updated: " + timer.id);
+            if (err) {
+                console.error("UpdatePageTimerActivation operation failed with error:");
+                return console.error(err);
+            }
+            console.log("timer with id's activation time updated: " + timer._id);
         });
     });
 };
-db.SaveContent = function (Name, content) {
+db.SaveContent = function (Name, content, callback) {
     sdmPage.update(
         { name: Name }, // TODO: name is hardcoded
         {
             $push: {
                 'ContentArray': { $each: [content], $position: 0 } } // unshift
         }, function(err, obj) {
-            if (err) return console.error(err);
+            if (err) {
+                console.error("SaveContent failed with error:");
+                return console.error(err);
+            }
+            console.log("Content save to db: " + content);
+            callback();
         }
     );
 };
@@ -136,7 +161,7 @@ db.GetInitPage = function(Name, callback) {
             callback(err, page);
         });
 };
-db.AddNewTimer = function(Name, timer) {
+db.AddNewTimer = function(Name, timer, callback) {
     var newtimer = new sdmTimer({
         PageName: timer.PageName,
         Name: timer.Name,
@@ -156,12 +181,14 @@ db.AddNewTimer = function(Name, timer) {
         {
             $push: { 'Timers': newtimer }
         }, function(err, obj) {
-            if (err) return console.error(err);
+            if (err) {
+                console.log("AddNewTimer operation failed");
+                console.log("Error object:");
+                return console.error(err);
+            }
+            callback(newtimer);
         }
     );
-
-    console.log("Timer with id added to db: " + newtimer._id);
-    return newtimer._id;
 };
 db.getHistory = function(Name, skip, limit, callback) {
     sdmPage.findOne({ name: Name }, { ContentArray: { $slice: [skip, limit] }, // TODO: name is hardcoded
@@ -177,7 +204,7 @@ db.getTimers = function(Name, callback) {
 };
 db.getAllTimers = function(callback) {
     sdmPage.find({}, { name: 0, ContentArray: 0, // TODO: name is hardcoded
-         Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
+         Favorites: 0, Settings: 0 },  function(err, obj) {
         callback(err, obj);
     });
 };

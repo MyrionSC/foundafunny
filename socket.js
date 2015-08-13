@@ -21,7 +21,10 @@ io.sockets.on('connection', function (socket) {
 
     // sends the Page info to new client on init
     db.GetInitPage(tempName, function(err, page) {
-        if (err) return console.error(err);
+        if (err) {
+            console.error("GetInitPage operation failed with error:");
+            return console.error(err);
+        }
         console.log();
         console.log("sent init content to client:");
         console.log(page);
@@ -33,30 +36,41 @@ io.sockets.on('connection', function (socket) {
         console.log("New content received: " + newcontent);
 
         // unshifts newcontent into ContentArray
-        db.SaveContent(tempName, newcontent);
-
-        // notify other clients
-        for (var i = 0; i < Page.ConnectedSockets.length; i++) {
-            var s = Page.ConnectedSockets[i];
-            if (s != socket) {
-                s.emit('contentupdate', {'CurrentContent': newcontent});
-                console.log("another client notified: " + i);
-            }
-        }
+        db.SaveContent(tempName, newcontent, function() {
+            NotifyClients(Page, socket, "contentupdate", {
+                content: newcontent
+            }, false);
+        });
     });
 
-    // if a client pushes new timer, update db and and add it to timerstructure
+    // if a client pushes new timer, update db, add it to timerstructure and notify clients
     socket.on('savetimer', function (timer) {
+        console.log("new timer received:");
+        console.log(timer);
 
         if (timer.Type === "Weekly")
             timerStruct.UpdateActivationTime(timer, false);
 
-        timer.id = db.AddNewTimer(tempName, timer);
+        db.AddNewTimer(tempName, timer, function(newtimer) {
+            console.log("Timer with id inserted into db: " + newtimer._id);
+            timerStruct.insertTimerInStruct(newtimer);
+            NotifyClients(Page, socket, "timerupdate", {}, false);
+        });
+    });
 
-        timerStruct.insertTimerInStruct(timer);
-
-        console.log("new timer received:");
+    // if a client pushes a timer delete, update db and delete it from timerstructure
+    socket.on('deletetimer', function (timer) {
+        console.log("Timer deletion requested from page: " + timer.PageName);
         console.log(timer);
+
+        // delete timer in db and timerstructure, and push timer deletion to clients when done
+        db.DeletePageTimer(timer.PageName, timer._id, function() {
+            if (timerStruct.removeTimerFromStructById(timer._id) != -1) {
+
+                // if timerstruct remove succesfull, notify other clients
+                NotifyClients(Page, socket, "timerupdate", {}, false);
+            }
+        });
     });
 
     socket.on('disconnect', function () {
@@ -76,12 +90,17 @@ exports.PushTimerPackage = function(pagename, content) {
     };
     // emit content to connected page sockets
     var page = getPage(pagename);
-    for (var i = 0; i < page.ConnectedSockets.length; i++) {
-        var s = page.ConnectedSockets[i];
-        s.emit('timerfire', timerpackage);
+    if (page === undefined || page.ConnectedSockets.length === 0) {
+        console.log("No users are connected to receive timer package. Where is everyone? :(");
     }
-    console.log("Content pushed to users: " + content);
-    console.log("users notified of timer update: " + page.ConnectedSockets.length);
+    else {
+        for (var i = 0; i < page.ConnectedSockets.length; i++) {
+            var s = page.ConnectedSockets[i];
+            s.emit('timerfire', timerpackage);
+        }
+        console.log("Content pushed to users: " + content);
+        console.log("users notified of timer update: " + page.ConnectedSockets.length);
+    }
 };
 
 var getOrInitPage = function(name) {
@@ -100,7 +119,6 @@ var getOrInitPage = function(name) {
 var getPage = function(name) {
     return search(name, Pages);
 };
-
 function search(nameKey, myArray){
     for (var i=0; i < myArray.length; i++) {
         if (myArray[i].Name === nameKey) {
@@ -108,6 +126,23 @@ function search(nameKey, myArray){
         }
     }
 }
+var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
+    if (updateSender) {
+        for (var i = 0; i < page.ConnectedSockets.length; i++) {
+            page.ConnectedSockets[i].emit(updateType, updateObj);
+        }
+        console.log(page.ConnectedSockets.length + " client(s) " + page.Name + " notified of " + updateType + "update");
+    }
+    else {
+        for (var i = 0; i < page.ConnectedSockets.length; i++) {
+            if (page.ConnectedSockets[i] != socket) {
+                page.ConnectedSockets[i].emit(updateType, updateObj);
+            }
+            var j = page.ConnectedSockets.length - 1;
+            console.log(j + " client(s) in page " + page.Name + " notified of " + updateType + "update");
+        }
+    }
+};
 
 var Page = function(name) {
     this.Name = name;
