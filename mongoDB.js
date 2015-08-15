@@ -34,7 +34,6 @@ var sdmSchema = new mongoose.Schema({
     name: String,
     CurrentContent: String,
     ContentArray: Array,
-    Favorites: Array,
     Settings: { // TODO: add some youtube settings and such later
         bg_color: String,
         Timezone: String,
@@ -52,8 +51,9 @@ db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback
         if (err) return console.log(err);
 
         var timer = page.Timers.id(timerid);
+        var contentpackage = CreateContentPackage(page, content);
 
-        page.ContentArray.unshift(content);
+        page.ContentArray.unshift(contentpackage);
         timer.Active = true;
 
         page.save(function(err, obj) {
@@ -61,7 +61,8 @@ db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback
                 console.error("SetPageTimerActiveAndSaveContent operation failed with error:");
                 return console.error(err);
             }
-            console.log("timer with id set to active: " + timer._id);
+            console.log("timer with id set to active: " + timer._id + ", and content saved:");
+            console.log(contentpackage);
             callback();
         });
     });
@@ -71,8 +72,9 @@ db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content, callba
         if (err) return console.log(err);
 
         var timer = page.Timers.id(timerid);
+        var contentpackage = CreateContentPackage(page, content);
 
-        page.ContentArray.unshift(content);
+        page.ContentArray.unshift(contentpackage);
         timer.Active = false;
 
         page.save(function(err, obj) {
@@ -80,7 +82,8 @@ db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content, callba
                 console.error("SetPageTimerInactiveAndSaveContent operation failed with error:");
                 return console.error(err);
             }
-            console.log("timer with id set to inactive: " + timer._id);
+            console.log("timer with id set to inactive: " + timer._id + ", and content saved:");
+            console.log(contentpackage);
             callback();
         });
     });
@@ -90,15 +93,17 @@ db.DeletePageTimerAndSaveContent = function (Name, timerid, content, callback) {
     sdmPage.findOne({'name': Name}, function(err, page) {
         if (err) return console.error(err);
 
+        var contentpackage = CreateContentPackage(page, content);
         page.Timers.id(timerid).remove();
-        page.ContentArray.unshift(content);
+        page.ContentArray.unshift(contentpackage);
 
         page.save(function(err, obj) {
             if (err) {
                 console.error("DeletePageTimerAndSaveContent operation failed with error:");
                 return console.error(err);
             }
-            console.log("timer with id deleted from db: " + timerid);
+            console.log("timer with id deleted from db: " + timerid + ", and content saved:");
+            console.log(contentpackage);
             callback();
         });
     });
@@ -139,26 +144,48 @@ db.UpdatePageTimerActivationTime = function (Name, timerid, actitime) {
     });
 };
 db.SaveContent = function (Name, content, callback) {
-    sdmPage.update(
-        { name: Name }, // TODO: name is hardcoded
-        {
-            $push: {
-                'ContentArray': { $each: [content], $position: 0 } } // unshift
-        }, function(err, obj) {
+    //sdmPage.update(
+    //    { name: Name },
+    //    {
+    //        $push: {
+    //            'ContentArray': { $each: [content], $position: 0 } } // unshift
+    //    }, function(err, obj) {
+    //        if (err) {
+    //            console.error("SaveContent failed with error:");
+    //            return console.error(err);
+    //        }
+    //        console.log("Content save to db:");
+    //        console.log(content);
+    //        callback();
+    //    }
+    //);
+    sdmPage.findOne({'name': Name}, function(err, page) {
+        if (err) return console.error(err);
+
+        var contentpackage = CreateContentPackage(page, content);
+
+        page.ContentArray.unshift(contentpackage);
+
+        page.save(function(err, obj) {
             if (err) {
                 console.error("SaveContent failed with error:");
                 return console.error(err);
             }
-            console.log("Content save to db: " + content);
-            callback();
-        }
-    );
+            console.log("Content saved to db:");
+            console.log(contentpackage);
+            callback(contentpackage);
+        });
+    });
 };
 db.GetInitPage = function(Name, callback) {
     sdmPage.findOne({ name: Name }, { ContentArray: { $slice: 1 }
-            , _id: 0, Timers: 0, Favorites: 0},
+            , _id: 0, Timers: 0},
         function(err, page) {
-            callback(err, page);
+            if (err) {
+                console.error("GetInitPage operation failed with error:");
+                return console.error(err);
+            }
+            callback(page);
         });
 };
 db.AddNewTimer = function(Name, timer, callback) {
@@ -207,4 +234,24 @@ db.getAllTimers = function(callback) {
          Favorites: 0, Settings: 0 },  function(err, obj) {
         callback(err, obj);
     });
+};
+
+var CreateContentPackage = db.CreateContentPackage = function(page, content) {
+    var d = new Date(Date.now() + page.Settings.TimeDiff * 60000);
+    return {
+        content: content,
+        date: ConstructReadableDateString(d),
+        favorite: ExistingFavorite(content)
+    };
+};
+var ConstructReadableDateString = function (date) {
+    var hours = date.getUTCHours().toString().length === 1 ? "0" + date.getUTCHours() : date.getUTCHours();
+    var minutes = date.getUTCMinutes().toString().length === 1 ? "0" + date.getUTCMinutes() : date.getUTCMinutes();
+    var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
+    return date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear() + " "
+        + hours + ":" + minutes + ":" + seconds;
+};
+var ExistingFavorite = function(content) {
+    // todo: search local favorite list for match
+    return false;
 };

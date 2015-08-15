@@ -160,15 +160,16 @@ var removeTimerFromStruct = function() {
     return -1;
 };
 exports.removeTimerFromStructById = function(timerid) {
+    console.log("Trying to remove timer from timer struct");
     if (timers.length != 0) {
         var index = FindTimerIndexById(timers, timerid);
         if (index != undefined) {
             timers.splice(index, 1);
-            console.log("Timer with id " + timerid + " removed from timerstruct at index " + index);
+            console.log("Timer with id " + timerid + " removed from timer struct at index " + index);
             return 1;
         }
         else {
-            console.log("Timer removal failed: No timer with id " + timerid + " exists in timerstruct");
+            console.log("Timer removal failed: No timer with id " + timerid + " exists in timer struct");
             return-1
         }
     }
@@ -189,6 +190,9 @@ var CheckIfTimerActivation = function() {
         //console.log();
 
         if (NextTimer != -1 && now > NextTimer.ActivationTime){
+            console.log();
+            console.log("Timer activation registered");
+
             // remove the timer from timerstruct
             removeTimerFromStruct();
 
@@ -247,22 +251,22 @@ var ActivateOneTimeTimer = function(timer) {
     var EndContentFlag = timer.EndContent != "";
 
     // based on EndContentFlag, delete or set timer active, and push content update to user
-    if (EndContentFlag)
-        db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function() {
+    if (!EndContentFlag) {
+        db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
             io.PushTimerPackage(timer.PageName, timer.StartContent);
         });
-    else
-        db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.StartContent, function() {
+    }
+    else {
+        // if there is endcontent, start a new timer of Activation Length
+        db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
             io.PushTimerPackage(timer.PageName, timer.StartContent);
         });
 
-    // if there is endcontent, start a new timer of Activation Length
-    if (EndContentFlag) {
         console.log("End content timer startet:");
         console.log("Activation in: " + timer.ActivationLength + " seconds\n");
         // start new timer for endcontent
         timer.TimeoutVar = setTimeout(function () {
-            db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.EndContent, function() {
+            db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.EndContent, function () {
                 // push content to user
                 io.PushTimerPackage(timer.PageName, timer.EndContent);
             });
@@ -326,14 +330,7 @@ var PrintInitTimerStructMessage = function() {
 };
 var FindTimerIndexById = function(array, id) {
     for (var i = 0; i < array.length; i++) {
-        var timerid = id.toString();
-
-        console.log(array[i]);
-        console.log();
-        console.log(timerid);
-        console.log(array[i]._id);
-        console.log();
-        if (array[i]._id === timerid)
+        if (array[i]._id.toString() === id)
             return i;
     }
 };
