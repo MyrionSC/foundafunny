@@ -35,7 +35,8 @@ app.get('/', function(req, res) {
     //console.log("/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html");
     //res.sendFile('./client/index.html');
     //res.sendFile('/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html');
-    console.log(path.join(__dirname, './client', 'index.html'));
-    res.sendFile(path.join(__dirname, './client', 'index.html'));
+    //console.log(path.join(__dirname, './client', 'index.html'));
+    //res.sendFile(path.join(__dirname, './client', 'index.html'));
+    res.sendFile(path.join(''));
 });
 app.use('/logs', scribe.webPanel());
