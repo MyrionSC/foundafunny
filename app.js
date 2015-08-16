@@ -33,10 +33,10 @@ app.get('/', function(req, res) {
     //res.send('Logging at /logs');
     //console.log(__dirname + '/client/index.html');
     //console.log("/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html");
-    //res.sendFile('./client/index.html');
+    //res.sendFile('./test.html');
     //res.sendFile('/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html');
     //console.log(path.join(__dirname, './client', 'index.html'));
-    //res.sendFile(path.join(__dirname, './client', 'index.html'));
-    res.sendFile('test.html');
+    res.sendFile(path.join(__dirname, 'test.html'));
+    //res.sendFile('test.html');
 });
 app.use('/logs', scribe.webPanel());
