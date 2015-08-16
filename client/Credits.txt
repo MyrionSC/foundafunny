@@ -1,0 +1,10 @@
+Modules brought in from outside (open source of course):
+
+DateTime picker
+http://tarruda.github.io/bootstrap-datetimepicker/
+
+checklist-model
+http://vitalets.github.io/checklist-model/
+
+Logging
+https://github.com/bluejamesbond/Scribe.js

@@ -1,0 +1,52 @@
+.HistoryTitel {
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.HistoryItemOuter {
+    padding: 2px;
+}
+.HistoryItemInner {
+    font-size: 16px;
+    background-color: #eeeeee;
+    padding: 2px;
+    display: table;
+}
+.ChooseBtn {
+    width: 24px;
+    height: 12px;
+    margin: 0 5px;
+}
+.HistoryFavoriteStar {
+    height: 24px;
+    width: 24px;
+    margin: 0 5px;
+}
+.ContentParagraph {
+    display: table-cell;
+    height: 20px;
+    width: 100%;
+}
+
+
+.HistoryFooter {
+margin-top: 8px;
+display: table;
+border-spacing: 0;
+width: 100%;
+}
+.HistoryFooter > div {
+display: table-cell;
+}
+.NavBtn {
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: black;
+    border-style: ridge;
+}
+.HistoryInfo {
+    text-align: center;
+}

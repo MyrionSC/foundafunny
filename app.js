@@ -4,6 +4,7 @@ var app = require('express')();
 var server = require('http').Server(app);
 var scribe = require('scribe-js')();
 var console = process.console; // for logs
+var path = require('path');
 
 module.exports = {};
 module.exports.app = app;
@@ -29,6 +30,12 @@ server.listen(app.get('port'), function () {
 });
 // logging
 app.get('/', function(req, res) {
-    res.send('Logging at /logs');
+    //res.send('Logging at /logs');
+    //console.log(__dirname + '/client/index.html');
+    //console.log("/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html");
+    //res.sendFile('./client/index.html');
+    //res.sendFile('/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html');
+    console.log(path.join(__dirname, './client', 'index.html'));
+    res.sendFile(path.join(__dirname, './client', 'index.html'));
 });
 app.use('/logs', scribe.webPanel());

@@ -1,0 +1,74 @@
+<div style="padding: 10px">
+    <p style="font-size: 24px">Set New Timer</p>
+</div>
+<div class="SetTimerOuterBorderDiv">
+    <label class="SetTimerLabel" >
+        Name*<br><input class="SetTimerInputText" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
+    </label>
+    <label class="SetTimerLabel" >
+        Start Content<br>
+        <input class="SetTimerInputText" ng-model="Timer.StartContent" type="text" placeholder="Content pushed at Activation Time"/>
+    </label>
+    <p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
+
+    Type<br>
+    <div class="SetTimerRadioDiv">
+        <div class="SetTimerRadioSubDiv" style="margin: 3px; padding: 3px">
+            <label class="SetTimerLabel" style="margin-right: 30px">
+                One time
+                <input ng-model="Timer.Type" value="OneTime" name="TimerType" type="radio" style="margin: 0"/>
+            </label>
+            <label class="SetTimerLabel">
+                Weekly
+                <input ng-model="Timer.Type" value="Weekly" name="TimerType" type="radio" style="margin: 0"/>
+            </label>
+        </div>
+        <div class="SetTimerRadioSubDiv" ng-show="ShowWeeklyTypes">
+            <label class="SetTimerWeekRadioLabel" ng-repeat="day in WeekDays">
+                {{day}}<br>
+                <input type="checkbox" class="SetTimerWeekRadio" checklist-model="SelectedWeekDays" checklist-value="day" style="margin: 0 auto"/>
+            </label>
+        </div>
+    </div>
+    <p class="SetTimerErrorMessage" ng-show="ShowAtleastOneWeekDayError">Atleast one weekday must be specified</p>
+
+    <!--Date time pickers-->
+    <label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">
+        Activation Time<br>
+        <div style="padding-bottom: 10px" id="datetimepicker_date" class="input-append date">
+            <input type="text"/>
+            <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+            </span>
+        </div>
+    </label>
+    <label class="SetTimerLabel" ng-show="ShowWeeklyTypes">
+        Activation Time<br>
+        <div style="padding-bottom: 10px" id="datetimepicker_hour" class="input-append date">
+            <input type="text"/>
+            <span class="add-on">
+                <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+            </span>
+        </div>
+    </label>
+    <p class="SetTimerErrorMessage" ng-show="ShowActivationTimeError">Activation Time must be after current time</p>
+
+    <label class="SetTimerLabel">
+        Activation Length (in seconds)*<br>
+        <input class="SetTimerInputText" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
+    </label>
+    <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthWithoutEndContentError">If End Content is filled so must Activation Length</p>
+    <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
+    <label class="SetTimerLabel" >
+        End Content*<br>
+        <input class="SetTimerInputText" ng-model="Timer.EndContent" type="text" placeholder="Content activates after Activation Length"/>
+    </label>
+    <p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>
+    <p class="SetTimerAsterixInfo">* = Optional</p>
+</div>
+<div style="padding: 10px">
+    <button class="SetTimerButton" ng-click="SaveTimer()">
+        Save Timer
+    </button>
+    <span class="SetTimerSavedFeedback" ng-show="ShowTimerSavedFeedback">New Timer Saved</span>
+</div>

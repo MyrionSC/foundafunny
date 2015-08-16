@@ -1,0 +1,142 @@
+.borderContainer {
+    height:100%;
+    width: 100%;
+    border-collapse:collapse;
+    display : table;
+}
+
+.right {
+    background-color: lightgrey;
+    float: right;
+    height: 100%;
+    position: relative;
+}
+#rightOptionsMenu {
+    width: 220px;
+    overflow: hidden;
+}
+#rightOptionsMenu.ng-hide-add.ng-hide-add-active,
+#rightOptionsMenu.ng-hide-remove.ng-hide-remove-active {
+    -webkit-transition: all ease-out 0.4s;
+    transition: all ease-out 0.4s;
+}
+#rightOptionsMenu.ng-hide {
+    width: 0;
+}
+
+.optionButtons {
+    padding: 10px;
+    font-size: 32px;
+    width: 220px;
+    margin-bottom: 10px;
+    border: none;
+}
+#rightSelector {
+    /*border-left: 1px grey ridge;*/
+    /*border-right: 1px grey ridge;*/
+}
+
+#foot {
+    /*display : table-row;*/
+    /*vertical-align : bottom;*/
+    /*height : 1px;*/
+    background-color: lightgrey;
+    opacity: 0.8;
+}
+
+#sliderImg {
+    font-size: 20px;
+    float: right;
+    height: 21px;
+    width: 108px;
+    opacity: 0.6;
+    margin: 10px;
+    margin-right: 8px
+}
+
+#inputBoxContainer {
+    background-color: darkgray;
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    margin-left: -267px;
+    padding: 5px;
+    padding-bottom: 15px;
+    opacity: 0.8
+}
+#inputBox {
+    width: 500px;
+    font-size: 20px;
+    opacity: 1;
+    margin-bottom: 0;
+}
+#favoriteStar {
+    height: 24px;
+    width: 24px;
+    margin: 0 10px;
+}
+
+
+
+
+.arrowImg {
+    width: 20px;
+    height: 10px;
+    margin: 5px;
+    opacity: 0.3;
+}
+.arrowImg.rotateWithClock-add.rotateWithClock-add-active,
+.arrowImg.rotateAgainstClock-add.rotateAgainstClock-add-active,
+.arrowImg.rotateWithClock-remove.rotateWithClock-remove-active,
+.arrowImg.rotateAgainstClock-remove.rotateAgainstClock-remove-active {
+    -webkit-transition: all ease-out 0.6s;
+    transition: all ease-out 0.6s;
+}
+.rotateWithClock {
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.rotateAgainstClock {
+    -moz-transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+}
+
+.contentP {
+    font-size: 72px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.AbsoluteCenter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/*.AbsoluteCenter.negZIndex-remove.negZIndex-remove-active {*/
+    /*-webkit-transition: all ease-out 0.6s;*/
+    /*transition: all ease-out 0.6s;*/
+/*}*/
+/*.negZIndex {*/
+    /*z-index: -10;*/
+/*}*/
+
+#inputBoxContainer.ng-hide-add,
+#foot.ng-hide-add,
+#rightSelector.ng-hide-add
+{
+    -webkit-transition:all linear 0.5s;
+    -moz-transition:all linear 0.5s;
+    -ms-transition:all linear 0.5s;
+    -o-transition:all linear 0.5s;
+    transition:all linear 0.5s;
+}
+#inputBoxContainer.ng-hide-add-active,
+#foot.ng-hide-add.ng-hide-add-active,
+#rightSelector.ng-hide-add.ng-hide-add-active {
+    opacity: 0;
+}

@@ -305,7 +305,7 @@ var ConstructReadableDateString = function (date) {
     var hours = date.getUTCHours().toString().length === 1 ? "0" + date.getUTCHours() : date.getUTCHours();
     var minutes = date.getUTCMinutes().toString().length === 1 ? "0" + date.getUTCMinutes() : date.getUTCMinutes();
     var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
-    return date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear() + " "
+    return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() + " "
         + hours + ":" + minutes + ":" + seconds;
 };
 var ExistingFavorite = function(content) {

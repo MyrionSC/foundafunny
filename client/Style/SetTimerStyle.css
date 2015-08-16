@@ -1,0 +1,65 @@
+.SetTimerOuterBorderDiv {
+    /*border: 1px black ridge;*/
+    border-radius: 10px;
+    background-color: #eee;
+    padding: 15px;
+}
+.SetTimerInputText {
+    padding: 3px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 300px;
+}
+.SetTimerLabel{
+    padding: 0;
+}
+.SetTimerButton {
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ccffcc;
+}
+.SetTimerSavedFeedback {
+    margin: 5px;
+    font-size: 20px;
+    color: green;
+}
+.SetTimerSavedFeedback.ng-hide-add.ng-hide-add-active {
+    -webkit-transition: all ease-out 0.5s;
+    transition: all ease-out 0.5s;
+}
+.SetTimerSavedFeedback.ng-hide {
+    color: transparent;
+}
+
+
+.SetTimerAsterixInfo {
+    font-size: 12px;
+    color: #888888;
+    margin-bottom: -10px;
+}
+.SetTimerRadioDiv {
+    padding: 5px;
+    border-radius: 5px;
+    border: solid 1px #cccccc;
+    background-color: #fafafa;
+    margin-bottom: 10px;
+}
+.SetTimerRadioDiv * {
+    margin: 0;
+}
+.SetTimerRadioSubDiv {
+    display: flex;
+}
+.SetTimerWeekRadioLabel {
+    padding: 3px;
+    margin: 6px;
+}
+.SetTimerWeekRadio {
+    margin: 0 auto;
+    display: table;
+}
+.SetTimerErrorMessage {
+    color: red;
+    margin-top: -10px;
+}

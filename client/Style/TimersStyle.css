@@ -1,0 +1,35 @@
+.TimersOuterBorderDiv {
+    border-radius: 10px;
+    background-color: #eee;
+    padding: 0 10px;
+}
+.TimersTypeShowPicker {
+    display: -webkit-inline-box;
+    margin-left: 20px;
+}
+.TimersTypeShowPickerSeperator {
+    width: 2px;
+    background-color: black;
+    margin-bottom: 1px;
+}
+.TimersTypeShowPickerButton {
+    padding: 10px;
+    margin-bottom: 1px;
+    background-color: #e8e8e8;
+}
+.TimersNoSpecificTimers {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 15px;
+}
+
+.TimersDialogInfoP {
+    /*text-align: center;*/
+}
+.TimersDialogButtonWrapper {
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*width: 350px;*/
+}
+.TimersDialogButton {
+}

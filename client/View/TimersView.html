@@ -1,0 +1,75 @@
+<div style="padding: 10px">
+    <!--<h2>Timers</h2>-->
+    <p style="font-size: 24px">Timers</p>
+</div>
+<p style="font-size: 24px" ng-show="ShowLoadingTimers">Loading Timers...</p>
+<p style="font-size: 24px" ng-show="ShowNoTimers">No timers were found :(</p>
+<div ng-show="ShowTimerList">
+    <div class="TimersTypeShowPicker">
+        <div class="TimersTypeShowPickerButton noSelect" style="border-top-left-radius: 15px;" ng-mouseenter="TypePickerMouseEnter(OneTimeButton)" ng-mouseleave="TypePickerMouseLeave(OneTimeButton)" ng-click="TypePickerClick(OneTimeButton, WeeklyButton)" ng-style="{'background-color': OneTimeButton.BgColor}">One Time timers <b>{{OneTimeButton.TimerCount}}</b></div>
+        <div class="TimersTypeShowPickerSeperator"></div>
+        <div class="TimersTypeShowPickerButton noSelect" style="border-top-right-radius: 15px;" ng-mouseenter="TypePickerMouseEnter(WeeklyButton)" ng-mouseleave="TypePickerMouseLeave(WeeklyButton)" ng-click="TypePickerClick(WeeklyButton, OneTimeButton)" ng-style="{'background-color': WeeklyButton.BgColor}">Weekly timers <b>{{WeeklyButton.TimerCount}}</b></div>
+    </div>
+    <div class="TimersOuterBorderDiv" ng-show="OneTimeButton.Selected">
+        <div class="container" ng-hide="ShowNoOneTimeTimers">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Start Content</th>
+                    <th>Activation Time</th>
+                    <th>Activation Length</th>
+                    <th>End Content</th>
+                    <th>Active</th>
+                    <th>Time until next activation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="t in OneTimeTimerArray">
+                    <td>{{t.Name}}</td>
+                    <td>{{t.StartContent}}</td>
+                    <td>{{t.ActivationTimeReadable}}</td>
+                    <td>{{t.ActivationLength}}</td>
+                    <td>{{t.EndContent}}</td>
+                    <td>{{t.Active}}</td>
+                    <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
+                    <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="TimersNoSpecificTimers" ng-show="ShowNoOneTimeTimers">No one time timers could be found</p>
+    </div>
+    <div class="TimersOuterBorderDiv" ng-show="WeeklyButton.Selected">
+        <div class="container" ng-hide="ShowNoWeeklyTimers">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Start Content</th>
+                    <th>Activation Days</th>
+                    <th>Activation Time</th>
+                    <th>Activation Length</th>
+                    <th>End Content</th>
+                    <th>Active</th>
+                    <th>Time until next activation</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="t in WeeklyTimerArray">
+                    <td>{{t.Name}}</td>
+                    <td>{{t.StartContent}}</td>
+                    <td>{{t.ActivationDaysReadable}}</td>
+                    <td>{{t.ActivationTimeReadable}}</td>
+                    <td>{{t.ActivationLength}}</td>
+                    <td>{{t.EndContent}}</td>
+                    <td>{{t.Active}}</td>
+                    <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
+                    <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="TimersNoSpecificTimers" ng-show="ShowNoWeeklyTimers">No weekly timers could be found</p>
+    </div>
+</div>
