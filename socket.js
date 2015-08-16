@@ -14,11 +14,12 @@ var tempName = "third"; // todo: hardcoded
 var Pages = [];
 
 io.sockets.on('connection', function (socket) {
-    online++;
-    console.log("client connected. Now online: " + online);
     var Page = {};
     getOrInitPage(tempName, socket, function(page) {
         Page = page;
+        online++;
+        console.log("client connected to page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
+            ". Overall online: " + online );
     });
 
     // sends the PageObj info to new client on init
@@ -75,18 +76,30 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('favoritecontent', function (content) {
         console.log();
-        console.log("Favorite request received on content " + content + " from page " + Page.name);
-    });
+        console.log("Favorite request received on content " + content + " from page " + Page.Name);
 
+        // change all instances of content in db to favorite, notify other clients in callback
+        db.SetContentFavorite(Page.Name, content, function() {
+            //var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
+            NotifyClients(Page, socket, "favoriteupdate", content, false);
+        });
+    });
     socket.on('unfavoritecontent', function (content) {
         console.log();
-        console.log("Unfavorite request received on content " + content + " from page " + Page.name);
+        console.log("Unfavorite request received on content " + content + " from page " + Page.Name);
+
+        // change all instances of content in db to unfavorite, notify other clients in callback
+        db.SetContentUnFavorite(Page.Name, content, function() {
+            //var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
+            NotifyClients(Page, socket, "unfavoriteupdate", content, false);
+        });
     });
 
     socket.on('disconnect', function () {
         online--;
         Page.ConnectedSockets.splice(Page.ConnectedSockets.indexOf(socket), 1);
-        console.log("Client disconnected. Now online: " + online);
+        console.log("Client disconnected from page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
+        ". Overall online: " + online);
     });
 });
 

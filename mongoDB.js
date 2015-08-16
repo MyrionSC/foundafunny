@@ -34,6 +34,7 @@ var sdmSchema = new mongoose.Schema({
     name: String,
     CurrentContent: String,
     ContentArray: Array,
+    Favorites: Array,
     Settings: { // TODO: add some youtube settings and such later
         bg_color: String,
         Timezone: String,
@@ -46,6 +47,52 @@ var sdmTimer = mongoose.model("sdmtimer", timerSchema);
 
 
 // db methods
+db.SetContentFavorite = function (Name, content, callback) {
+    sdmPage.findOne({'name': Name}, function(err, page) {
+        if (err) return console.log(err);
+
+        for (var i = 0; i < page.ContentArray.length; i++) {
+            var c = page.ContentArray[i];
+
+            if (c.content === content) {
+                c.favorite = true;
+            }
+        }
+        page.markModified('ContentArray');
+
+        page.save(function(err, obj) {
+            if (err) {
+                console.error("SetContentFavorite operation failed with error:");
+                return console.error(err);
+            }
+            console.log("SetContentFavorite operation succeeded");
+            callback();
+        });
+    });
+};
+db.SetContentUnFavorite = function (Name, content, callback) {
+    sdmPage.findOne({'name': Name}, function(err, page) {
+        if (err) return console.log(err);
+
+        for (var i = 0; i < page.ContentArray.length; i++) {
+            var c = page.ContentArray[i];
+
+            if (c.content === content) {
+                c.favorite = false;
+            }
+        }
+        page.markModified('ContentArray');
+
+        page.save(function(err, obj) {
+            if (err) {
+                console.error("SetContentUnFavorite operation failed with error:");
+                return console.error(err);
+            }
+            console.log("SetContentUnFavorite operation succeeded");
+            callback();
+        });
+    });
+};
 db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback) {
     sdmPage.findOne({'name': Name}, function(err, page) {
         if (err) return console.log(err);
@@ -178,13 +225,23 @@ db.SaveContent = function (Name, content, callback) {
     });
 };
 db.GetInitPage = function(Name, callback) {
-    sdmPage.findOne({ name: Name }, { ContentArray: { $slice: 1 }
-            , _id: 0, Timers: 0},
+    sdmPage.findOne({ name: Name }, { _id: 0, Timers: 0 },
         function(err, page) {
             if (err) {
                 console.error("GetInitPage operation failed with error:");
                 return console.error(err);
             }
+
+            //console.log(page);
+            for (var i = 0; i < page.ContentArray.length; i++) {
+                var c = page.ContentArray[i];
+
+                if (c.favorite === true && page.Favorites.indexOf(c.content) === -1) {
+                    page.Favorites.push(c.content);
+                }
+            }
+            page.ContentArray.splice(1, page.ContentArray.length - 1); // we don't need all that content!
+
             callback(page);
         });
 };

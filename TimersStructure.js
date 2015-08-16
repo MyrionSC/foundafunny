@@ -181,13 +181,8 @@ var anyTimers = function() {
 };
 var CheckIfTimerActivation = function() {
     if (anyTimers()) {
-        //console.log("timers in queue: " + timers.length);
         var now = Date.now();
         var NextTimer = getNextTimer();
-
-        //console.log("Now: " + new Date(now).toString());
-        //console.log("Next Timer Activation: " + new Date(NextTimer.ActivationTime).toString());
-        //console.log();
 
         if (NextTimer != -1 && now > NextTimer.ActivationTime){
             console.log();
@@ -287,8 +282,10 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
     // if timer Activation time is later today, and today is an activation day
     // then everything is fine. If not, find the next activation day from today
     // and add that to the timers date, in utc time
-    if (timer.ActivationDays[today.getDay() - 1].Selected != true ||
-        (timer.ActivationDays[today.getDay() - 1].Selected == true &&
+    //console.log(timer.ActivationDays);
+    var todayWeekday = today.getDay() === 0 ? 6 : today.getDay() - 1;
+    if (timer.ActivationDays[todayWeekday].Selected != true ||
+        (timer.ActivationDays[todayWeekday].Selected == true &&
         today.getTime() > timerdate.getTime())) {
 
         timerdate.setDate(timerdate.getDate() + FindDaysUntilNextActivation(timer));
@@ -303,7 +300,7 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
 
 var FindDaysUntilNextActivation = function (timer) {
     var today = new Date();
-    var todayWeekday = today.getDay() - 1;
+    var todayWeekday = today.getDay() === 0 ? 6 : today.getDay() - 1;
 
     var res = 1;
     for (var i = 0; i < timer.ActivationDays.length; i++) {
