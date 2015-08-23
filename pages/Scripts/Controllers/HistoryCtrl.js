@@ -107,9 +107,15 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
         item.ArrowColor = "Pics/SmallArrowGrey.png";
     };
     s.SetInputClick = function (item) {
-        if (contentService.Page.CurrentContent.content != item.content) {
-            contentService.Page.CurrentContent = s.cs.ConstructContentPackage(item.content);
-            contentService.PushContentToServer(item.content);
+        if (s.cs.Page.CurrentContent.content != item.content) {
+            s.cs.Page.CurrentContent = s.cs.ConstructContentPackage(item.content);
+
+            if (s.cs.Page.CurrentContent.favorite === true)
+                s.cs.SetStarFavorite();
+            else
+                s.cs.SetStarUnFavorite();
+
+                s.cs.PushContentToServer(item.content);
             l.path('/'); // sends the user to redirecter -> frontpage
         }
         else

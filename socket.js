@@ -2,6 +2,7 @@ var app = require("./app.js");
 var io = require('socket.io')(app.server);
 var timerStruct = require('./TimersStructure.js');
 var db = require('./mongoDB.js');
+var pages = require('./Pages.js');
 var console = process.console; // for logs
 var exports = {};
 
@@ -11,25 +12,14 @@ var exports = {};
 
 var online = 0;
 var tempName = "third"; // todo: hardcoded
-var Pages = [];
 
 io.sockets.on('connection', function (socket) {
     var Page = {};
-    getOrInitPage(tempName, socket, function(page) {
-        Page = page;
-        online++;
-        console.log("client connected to page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
-            ". Overall online: " + online );
-    });
 
-    // sends the PageObj info to new client on init
-    db.GetInitPage(tempName, function(page) {
-        console.log();
-        console.log("sent init content to client:");
-        console.log(page);
-        socket.emit('pageinit', page);
+    // the first thing the client sends when connecting
+    socket.on('handshake', function (pagename) {
+        clientInit(pagename);
     });
-
     // if a client pushes new content, update db and other clients
     socket.on('pushcontent', function (newcontent) {
         console.log();
@@ -38,7 +28,7 @@ io.sockets.on('connection', function (socket) {
 
         // unshifts newcontent into ContentArray
         // todo: see if this takes too long
-        db.SaveContent(tempName, newcontent, function(contentpackage) {
+        db.SaveContent(Page.Name, newcontent, function(contentpackage) {
             NotifyClients(Page, socket, "contentupdate", contentpackage, false);
         });
     });
@@ -46,13 +36,13 @@ io.sockets.on('connection', function (socket) {
     // if a client pushes new timer, update db, add it to timerstructure and notify clients
     socket.on('savetimer', function (timer) {
         console.log();
-        console.log("new timer received:");
+        console.log("new timer from page " + Page.Name + " received:");
         console.log(timer);
 
         if (timer.Type === "Weekly")
             timerStruct.UpdateActivationTime(timer, false);
 
-        db.AddNewTimer(tempName, timer, function(newtimer) {
+        db.AddNewTimer(Page.Name, timer, function(newtimer) {
             console.log("Timer with id inserted into db: " + newtimer._id);
             timerStruct.insertTimerInStruct(newtimer);
             NotifyClients(Page, socket, "timerupdate", {}, false);
@@ -80,6 +70,8 @@ io.sockets.on('connection', function (socket) {
 
         // change all instances of content in db to favorite, notify other clients in callback
         db.SetContentFavorite(Page.Name, content, function() {
+            Page.insertFavorite(content);
+
             //var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
             NotifyClients(Page, socket, "favoriteupdate", content, false);
         });
@@ -90,6 +82,8 @@ io.sockets.on('connection', function (socket) {
 
         // change all instances of content in db to unfavorite, notify other clients in callback
         db.SetContentUnFavorite(Page.Name, content, function() {
+            Page.removeFavorite(content);
+
             //var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
             NotifyClients(Page, socket, "unfavoriteupdate", content, false);
         });
@@ -101,12 +95,39 @@ io.sockets.on('connection', function (socket) {
         console.log("Client disconnected from page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
         ". Overall online: " + online);
     });
+
+    var clientInit = function(pagename) {
+        if (pages.initDone) {
+            Page = pages.getPage(pagename);
+            Page.ConnectedSockets.push(socket);
+            online++;
+            console.log("client connected to page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
+                ". Overall online: " + online );
+
+            // sends the PageObj info to new client on init
+            // we don't have to check if it exists, it was done before this
+            db.GetInitPage(pagename, function(page) {
+                page.Favorites = Page.Favorites;
+
+                console.log();
+                console.log("sent init content to client:");
+                console.log(page);
+                socket.emit('pageinit', page);
+            });
+        }
+        else {
+            // wait 50 seconds for db call to get through and try again
+            setTimeout(function() {
+                clientInit(pagename);
+            }, 50);
+        }
+    };
 });
 
 exports.db = db;
 // used by timerstructure to update clients on timerfire
 exports.PushTimerPackage = function(pagename, content) {
-    var page = getPage(pagename);
+    var page = pages.getPage(pagename);
 
     // emit content to connected page sockets
     if (page === undefined || page.ConnectedSockets.length === 0) {
@@ -124,36 +145,6 @@ exports.PushTimerPackage = function(pagename, content) {
     }
 };
 
-var getOrInitPage = function(name, socket, callback) {
-    var page = nameSearch(name, Pages);
-
-    if (page != undefined) {
-        page.ConnectedSockets.push(socket);
-        console.log("Returning existing page for client: " + name);
-        callback(page);
-        return;
-    }
-
-    console.log("making new page for client: " + name);
-    db.GetInitPage(name, function(dbpage) {
-        page = new PageObj(name, dbpage.Settings);
-        console.log("New page filled with db data and returned:");
-        console.log(page);
-        page.ConnectedSockets.push(socket);
-        Pages.push(page);
-        callback(page);
-    });
-};
-var getPage = function(name) {
-    return nameSearch(name, Pages);
-};
-function nameSearch(nameKey, myArray){
-    for (var i=0; i < myArray.length; i++) {
-        if (myArray[i].Name === nameKey) {
-            return myArray[i];
-        }
-    }
-}
 var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
     if (updateSender) {
         for (var i = 0; i < page.ConnectedSockets.length; i++) {
@@ -170,17 +161,6 @@ var NotifyClients = function (page, socket, updateType, updateObj, updateSender)
         var j = page.ConnectedSockets.length - 1;
         console.log(j + " client(s) in page " + page.Name + " notified of " + updateType);
     }
-};
-
-var PageObj = function(Name, Settings) {
-    this.Name = Name;
-    this.Settings = new SettingsObj(Settings);
-    this.ConnectedSockets = [];
-};
-var SettingsObj = function(settings) {
-    this.bg_color = settings.bg_color;
-    this.Timezone = settings.Timezone;
-    this.TimeDiff = settings.TimeDiff;
 };
 
 // perform handshake with timersstructure

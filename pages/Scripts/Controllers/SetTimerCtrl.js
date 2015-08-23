@@ -90,7 +90,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             // if weekly timer, fill activation days in order
             if (s.Timer.Type === "Weekly") DetectAndSortWeekdays(s.Timer, s.SelectedWeekDays);
 
-            s.Timer.PageName = contentService.Page.name;
+            s.Timer.PageName = contentService.Page.Name;
 
             console.log("New timer sent to server:");
             console.log(s.Timer);

@@ -12,6 +12,7 @@ on normal content change, send it to other clients before saving in db
 Make small notification popups for everything (incoming and local changes)
 
 
+
 Could have:
 A timecounter for the page timezone
 emoticons in text
@@ -36,13 +37,13 @@ Frontpage is only updated when mouse is moved. Probably something with angular, 
 
 Notes:
 When setting timers, should the user be allowed to set seconds? Should ask the group what they think.
-I have no idea where the "make current content favorite" toggle should be
 How long should users be allowed to set timer ActivationLength? Anything more than 1000 sec would
     probably be stupid
 The values in setTimer are almost certainly wrong for various tz's, but that is a problem for a later date
 bootstrap via cdn sometimes takes a few seconds to load. consider placing it locally if problems persists.
 Should timer activation content be added to db when no one is online? Should it be added at all?
 Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
+    (maybe not anymore with bootstrap
 
 
 naming brainstorm:

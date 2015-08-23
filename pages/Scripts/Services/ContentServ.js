@@ -2,11 +2,12 @@ app.service('contentService', function ($http, $rootScope, $location) {
     var that = this;
     //var url = 'https://sdm-backend.herokuapp.com';
     var url = 'http://localhost:5000'; // when testing
+    var httplock = true;
 
     this.FavoriteStarColor = "Pics/FavoriteStarDark.png";
     this.FavoriteStarTitel = "Set current content as favorite";
     this.Page = {
-        name: "",
+        Name: "",
         CurrentContent: {
             content: "",
             date: "",
@@ -27,6 +28,8 @@ app.service('contentService', function ($http, $rootScope, $location) {
     // ----------|
 
     var socket = io.connect(url);
+    socket.on('connect', function() { sockethandshake(socket) });
+    //socket.on('reconnect', function() { sockethandshake(socket) });
 
     // incoming
     socket.on('pageinit', function (page) {
@@ -36,6 +39,9 @@ app.service('contentService', function ($http, $rootScope, $location) {
         // update local page
         that.Page = page;
         that.Page.CurrentContent = page.ContentArray[0];
+
+        // remove http lock, so history and timers can be gotten again
+        httplock = false;
 
         // update views with new data
         $rootScope.$broadcast("update-frontpage"); // for updating frontpage view
@@ -52,6 +58,11 @@ app.service('contentService', function ($http, $rootScope, $location) {
     socket.on('timerfire', function(data) {
         console.log("timerfire registered");
         console.log(data);
+
+        // see if contentpackage is favorite locally
+        // on the server, a db call would be necessary, it is easier here
+        data.favorite = ExistingFavorite(data.content);
+
         that.Page.CurrentContent = data;
 
         $rootScope.$broadcast("update-frontpage"); // for updating frontpage view
@@ -125,39 +136,40 @@ app.service('contentService', function ($http, $rootScope, $location) {
     // -----|
 
     this.GetHistory = function(callback, skip, limit) {
-        $http.get(url + '/get/history?skip=' + skip + '&limit=' + limit).
-            success(function(data) {
-                callback(data);
-            }).
-            error(function(data, status, headers, config) {
-                console.log("error: " + data + ", " + status + ", " + headers + ", " + config);
-                callback("Error reaching database");
-            }
-        );
+        if (!httplock) {
+            $http.get(url + '/get/history?pagename=' + that.Page.Name + '&skip=' + skip + '&limit=' + limit).
+                success(function(data) {
+                    callback(data);
+                }).
+                error(function(data, status, headers, config) {
+                    console.log("error: " + data + ", " + status + ", " + headers + ", " + config);
+                    callback("Error reaching database");
+                }
+            );
+        }
+        else {
+            setTimeout(function() {
+                that.GetHistory(callback, skip, limit);
+            }, 50);
+        }
     };
-
-    this.GetFavorites = function(callback, skip, limit) {
-        $http.get(url + '/get/history?skip=' + skip + '&limit=' + limit).// todo: actually get favorites, not history
-            success(function(data) {
-                callback(data);
-            }).
-            error(function(data, status, headers, config) {
-                console.log("error: " + data + ", " + status + ", " + headers + ", " + config);
-                callback("Error reaching database");
-            }
-        );
-    };
-
     this.GetTimers = function(callback) {
-        $http.get(url + '/get/timers').
-            success(function(data) {
-                callback(data);
-            }).
-            error(function(data, status, headers, config) {
-                console.log("error: " + data + ", " + status + ", " + headers + ", " + config);
-                callback("Error reaching database");
-            }
-        );
+        if (!httplock) {
+            $http.get(url + '/get/timers?pagename=' + that.Page.Name).
+                success(function(data) {
+                    callback(data);
+                }).
+                error(function(data, status, headers, config) {
+                    console.log("error: " + data + ", " + status + ", " + headers + ", " + config);
+                    callback("Error reaching database");
+                }
+            );
+        }
+        else {
+            setTimeout(function() {
+                that.GetTimers(callback);
+            }, 50);
+        }
     };
 
     // ---------------- |
@@ -202,5 +214,12 @@ app.service('contentService', function ($http, $rootScope, $location) {
         var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
         return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() + " "
             + hours + ":" + minutes + ":" + seconds;
+    };
+    var sockethandshake = function(socket) {
+        console.log("Commencing handshake with server");
+        // extracting
+        var pagename = "third"; // todo: extract pagename from url
+        console.log($location.absUrl());
+        socket.emit("handshake", pagename);
     };
 });

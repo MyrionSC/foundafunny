@@ -86,23 +86,14 @@ var InitTimerStruct = function() {
 };
 
 var StartCheckInterval = function() {
-    var i = 0;
     console.log("Starting timer check interval");
-    if (anyTimers()) {
+    if (anyTimers())
         console.log("Next timer activation at: " + new Date(getNextTimer().ActivationTime).toString());
-    }
-    else {
+    else
         console.log("There are currently no timers in the timer struct");
-    }
 
 
     setInterval(function() {
-        //if (i % 10 === 0) {
-        //    console.log("Number of timers currently in struct: " + timers.length);
-        //    i = 0;
-        //}
-        //i++;
-
         CheckIfTimerActivation();
     }, 1000);
 };

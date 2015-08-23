@@ -1,10 +1,12 @@
 //
 
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 var scribe = require('scribe-js')();
 var console = process.console; // for logs
 var path = require('path');
+var db = require('./mongoDB.js');
 
 module.exports = {};
 module.exports.app = app;
@@ -24,19 +26,24 @@ app.all('*',function(req,res,next)
 
     next();
 });
+//app.get('/', function(req, res) {
+//    res.sendFile(__dirname + '/client/test.html');
+//});
+app.use('/pages', function(req, res, next) {
+    var pagename = "";
+    if (req.originalUrl.match(/\./) === null) {
+        pagename = req.originalUrl.substring(6);
+        console.log(pagename);
+        req.url = "/";
+    }
+    next();
+});
+app.use(express.static(__dirname + '/'));
+app.use('/pages', express.static(__dirname + '/pages'));
 
 server.listen(app.get('port'), function () {
     console.log("server started. Listening on port " + app.get('port'));
 });
 // logging
-app.get('/', function(req, res) {
-    //res.send('Logging at /logs');
-    //console.log(__dirname + '/client/index.html');
-    //console.log("/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html");
-    //res.sendFile('./test.html');
-    //res.sendFile('/home/martin/marand.dk/ShowDatMeme/mark.2/server/client/Index.html');
-    //console.log(path.join(__dirname, './client', 'index.html'));
-    res.sendFile(path.join(__dirname, 'client/index.html'));
-    //res.sendFile('test.html');
-});
+
 app.use('/logs', scribe.webPanel());
