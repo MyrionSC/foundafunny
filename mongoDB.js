@@ -317,13 +317,7 @@ var InitPagesInRAM = function() {
 };
 var CreateContentPackage = db.CreateContentPackage = function(page, content) {
     var d = new Date(Date.now() + page.Settings.TimeDiff * 60000);
-    //console.log(page.name);
     var ramPage = pages.getPage(page.Name);
-    //console.log(ramPage.Name);
-    //console.log(ramPage.Settings);
-    //console.log(ramPage.ConnectedSockets.length);
-    //console.log(ramPage.Favorites);
-    //console.log(ramPage.testing());
 
     return {
         content: content,
