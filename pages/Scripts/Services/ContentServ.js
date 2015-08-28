@@ -1,7 +1,7 @@
 app.service('contentService', function ($http, $rootScope, $location) {
     var that = this;
-    //var url = 'https://sdm-backend.herokuapp.com';
-    var url = 'http://localhost:5000'; // when testing
+    var url = 'https://sdm-backend.herokuapp.com';
+    //var url = 'http://localhost:5000'; // when testing
     var httplock = true;
 
     this.FavoriteStarColor = "Pics/FavoriteStarDark.png";
