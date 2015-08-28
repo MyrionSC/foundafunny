@@ -26,9 +26,9 @@ app.all('*',function(req,res,next)
 
     next();
 });
-//app.get('/', function(req, res) {
-//    res.sendFile(__dirname + '/client/test.html');
-//});
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
 app.use('/pages', function(req, res, next) {
     var pagename = "";
     if (req.originalUrl.match(/\./) === null) {
