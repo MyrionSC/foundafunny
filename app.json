@@ -1,6 +1,6 @@
 {
-  "name": "Node.js Getting Started",
-  "description": "A barebones Node.js app using Express 4",
+  "name": "sdm-backend",
+  "description": "backend and static html dealer for sdm",
   "repository": "https://github.com/heroku/sdm-backend",
   "logo": "http://node-js-sample.herokuapp.com/node.svg",
   "keywords": ["node", "express", "static"]

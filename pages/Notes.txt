@@ -10,7 +10,7 @@ communicate error messages to client when db operations fail etc.
 on normal content change, send it to other clients before saving in db
     test if it is a problem first. The current way is safer.
 Make small notification popups for everything (incoming and local changes)
-
+Parse Youtube: Add parsing of time in video
 
 
 Could have:
@@ -47,12 +47,19 @@ Remember to monkeytest content input. Too long contents will fuck history view u
 
 
 naming brainstorm:
-funshare
-sharefun
-funsharer
-fundealer
-funspread
-something with show, view
+ShareFun (occupied)
+FunShare (occupied)
+FunSharer (occupied)
+FunDealer (occupied)
+FoundAFunny (free)(bought)
+FoundThisFunny (free)
+FoundSomeFun (free)
+IFoundThis (occupied)
+LookAtThis (occupied)
+LookAtThat (occupied)
+
+something with show, view, found
+
 
 
 On timezones:

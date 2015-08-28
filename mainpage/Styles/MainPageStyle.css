@@ -1,0 +1,52 @@
+body {
+    background-color: white;
+    margin: 0;
+}
+header {
+    background-color: #000000;
+}
+header span {
+    color: #fff;
+}
+#headerdiv {
+    /*margin: auto;*/
+    /*width: 600px;*/
+    padding: 15px;
+}
+#headerTitel {
+    font-size: 24px;
+    font-weight: bolder;
+    font-family: Arial;
+    font-style: italic;
+}
+#CenterDiv {
+    display: flex;
+    height: 1000px;
+    margin: auto;
+    width: 800px;
+}
+#CenterDiv span, p {
+    font-size: 18px;
+    font-family: "Helvetica Neue Light", "Lucida Grande", "Calibri", "Arial", sans-serif;
+}
+#LeftGradientDiv {
+    width: 100px;
+    height: 100%;
+    background: -webkit-linear-gradient(90deg, white , lightgrey); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(90deg, white , lightgrey); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(90deg, white , lightgrey); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(90deg, white , lightgrey); /* Standard syntax */
+}
+#RightGradientDiv {
+    width: 100px;
+    height: 100%;
+    background: -webkit-linear-gradient(270deg, white , lightgrey); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(270deg, white , lightgrey); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(270deg, white , lightgrey); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(270deg, white , lightgrey); /* Standard syntax */
+}
+#CenterContentDiv {
+    height: 100%;
+    width: 600px;
+    background-color: lightgrey;
+}

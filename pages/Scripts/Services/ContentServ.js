@@ -1,12 +1,12 @@
 app.service('contentService', function ($http, $rootScope, $location) {
     var that = this;
-    var url = 'https://sdm-backend.herokuapp.com';
-    //var url = 'http://localhost:5000'; // when testing
+    //var url = 'https://sdm-backend.herokuapp.com';
+    var url = 'http://localhost:5000'; // when testing
     var httplock = true;
 
     this.FavoriteStarColor = "Pics/FavoriteStarDark.png";
     this.FavoriteStarTitel = "Set current content as favorite";
-    this.Page = {
+    this.Page = { // this is mainly so you can see what Page looks like
         Name: "",
         CurrentContent: {
             content: "",
@@ -40,7 +40,7 @@ app.service('contentService', function ($http, $rootScope, $location) {
         that.Page = page;
         that.Page.CurrentContent = page.ContentArray[0];
 
-        // remove http lock, so history and timers can be gotten again
+        // remove http lock, so history and timers can be gotten
         httplock = false;
 
         // update views with new data

@@ -1,1 +1,42 @@
-<p>This is the outer index</p>
+<!DOCTYPE html>
+<html ng-app="SDMMainPage">
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <!-- Core libraries -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+    <!-- Script files -->
+    <script src="mainpage/Scripts/app.js"></script>
+    <script src="mainpage/Scripts/Controllers/MainCtrl.js"></script>
+    <script src="mainpage/Scripts/Controllers/FrontpageCtrl.js"></script>
+    <script src="mainpage/Scripts/Controllers/CreatePageCtrl.js"></script>
+
+    <!-- Style files -->
+    <link rel="stylesheet" type="text/css" href="mainpage/Styles/MainPageStyle.css">
+    <link rel="stylesheet" type="text/css" href="mainpage/Styles/CreatePageStyle.css">
+    <link rel="stylesheet" type="text/css" href="mainpage/Styles/FrontPageStyle.css">
+
+    <title></title>
+</head>
+<body ng-controller="MainCtrl">
+
+<header>
+    <div id="headerdiv">
+        <span id="headerTitel">FoundAFunny</span>
+    </div>
+</header>
+
+<div id="CenterDiv">
+    <div id="LeftGradientDiv"></div>
+    <div id="CenterContentDiv">
+        <div ng-view style="padding: 20px;"></div>
+    </div>
+    <div id="RightGradientDiv"></div>
+</div>
+
+
+</body>
+</html>

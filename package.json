@@ -2,9 +2,9 @@
   "name": "sdm-backend",
   "version": "0.1.3",
   "description": "The backend for Show Dat Meme",
-  "main": "index.js",
+  "main": "serverscripts/index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node serverscripts/index.js"
   },
   "dependencies": {
     "express": "~4.9.x",
