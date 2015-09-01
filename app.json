@@ -1,7 +1,7 @@
 {
-  "name": "sdm-backend",
+  "name": "foundafunny",
   "description": "backend and static html dealer for sdm",
-  "repository": "https://github.com/heroku/sdm-backend",
+  "repository": "https://github.com/heroku/foundafunny",
   "logo": "http://node-js-sample.herokuapp.com/node.svg",
   "keywords": ["node", "express", "static"]
 }

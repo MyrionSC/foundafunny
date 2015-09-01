@@ -1,2 +1,6 @@
 todo:
 Experiment with bootstrap
+
+
+bugs:
+hash disappears when redirecting through foundafunny.com
