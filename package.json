@@ -7,10 +7,11 @@
     "start": "node serverscripts/index.js"
   },
   "dependencies": {
+    "body-parser": "^1.13.3",
     "express": "~4.9.x",
-    "socket.io": "^1.3.5",
     "mongoose": "3.8.15",
-    "scribe-js": "*"
+    "scribe-js": "*",
+    "socket.io": "^1.3.5"
   },
   "engines": {
     "node": "0.12.2"

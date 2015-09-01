@@ -6,6 +6,8 @@ var console = process.console; // for logs
 var exports = module.exports = {};
 var io, db; // are filled after handshake from socket.js
 var timers = [];
+var pages = require ("./Pages.js");
+
 
 exports.SocketHandshake = function(IO) {
     console.log("Starting socket handshake");
@@ -18,71 +20,77 @@ exports.SocketHandshake = function(IO) {
 
 // get timers in db, check if they are still good, insert the good ones in timer structure
 var InitTimerStruct = function() {
-    PrintInitTimerStructMessage();
+    if (pages.initDone) {
+        PrintInitTimerStructMessage();
+        db.getAllTimers(function(err, pages) {
+            if (err) return console.error(err);
+            console.log("Number of pages retrieved from db: " + pages.length);
+            //console.log("return pages from db:");
+            //console.log(pages);
+            //console.log();
+            console.log("Current Time is " + new Date().toString());
+            console.log();
+            var n = 0;
+            for (var i = 0; i < pages.length; i++) {
+                var p = pages[i];
+                console.log("Checking " + p.Timers.length +  " timers in page: " + p.Name);
+                for (var j = 0; j < p.Timers.length; j++) {
+                    var t = p.Timers[j];
+                    //console.log();
 
-    db.getAllTimers(function(err, pages) {
-        if (err) return console.error(err);
-        console.log("Number of pages retrieved from db: " + pages.length);
-        //console.log("return pages from db:");
-        //console.log(pages);
-        //console.log();
-        console.log("Current Time is " + new Date().toString());
-        console.log("Starting init of timer structure");
-        console.log();
-        var n = 0;
-        for (var i = 0; i < pages.length; i++) {
-            var p = pages[i];
-            console.log("Checking timers in page:");
-            console.log(p);
-            for (var j = 0; j < p.Timers.length; j++) {
-                var t = p.Timers[j];
-                console.log();
-
-                if (t.Type === "Weekly") {
-                    console.log("Checking against weekly timer with Activation Time: " + new Date(t.ActivationTime).toString());
-                    UpdateActivationTime(t, false);
-                    insertTimerInStruct(t)
-                }
-                else {
-                    var now = new Date(Date.now());
-                    console.log("Checking against Single timer with Activation Time: " + new Date(t.ActivationTime).toString());
-
-                    if (t.ActivationTime > now.getTime()) {
-                        console.log("Timer is good, inserting into struct");
-                        insertTimerInStruct(t);
+                    if (t.Type === "Weekly") {
+                        console.log("Checking against weekly timer with Activation Time: " + new Date(t.ActivationTime).toString());
+                        UpdateActivationTime(t, false);
+                        insertTimerInStruct(t)
                     }
                     else {
-                        console.log("Timer removed");
-                        t.remove();
+                        var now = new Date(Date.now());
+                        console.log("Checking against Single timer with Activation Time: " + new Date(t.ActivationTime).toString());
+
+                        if (t.ActivationTime > now.getTime()) {
+                            console.log("Timer is good, inserting into struct");
+                            insertTimerInStruct(t);
+                        }
+                        else {
+                            console.log("Timer removed");
+                            t.remove();
+                        }
                     }
+                    n++;
+                    console.log();
                 }
-                n++;
+
+                p.save(function(err, obj) {
+                    if (err) {
+                        console.log("An error occured in the saving of page:");
+                        console.log(p);
+                        return console.log(err);
+                    }
+                });
             }
 
-            p.save(function(err, obj) {
-                if (err) {
-                    console.log("An error occured in the saving of page:");
-                    console.log(p);
-                    return console.log(err);
+            console.log();
+            console.log("Timer structure initialization is done");
+            console.log("Number of timers found in db: " + n);
+            console.log("Number of timers inserted into timestruct at init: " + timers.length);
+            if (timers.length != 0) {
+                console.log("id and activation time of the timers from first to last:");
+                for (var i = 0; i < timers.length; i++) {
+                    console.log("id: " + timers[i]._id + ", Activation Time: " + new Date(timers[i].ActivationTime).toString());
                 }
-            });
-        }
-
-        console.log();
-        console.log("Struct init is done");
-        console.log("Number of timers found in db: " + n);
-        console.log("Number of timers inserted into timestruct at init: " + timers.length);
-        if (timers.length != 0) {
-            console.log("id and activation time of the timers from first to last:");
-            for (var i = 0; i < timers.length; i++) {
-                console.log("id: " + timers[i]._id + ", Activation Time: " + new Date(timers[i].ActivationTime).toString());
             }
-        }
-        console.log();
+            console.log();
 
-        // after all timers have been inserted or deleted, start interval
-        StartCheckInterval();
-    });
+            // after all timers have been inserted or deleted, start interval
+            StartCheckInterval();
+        });
+    }
+    else {
+        // wait 50 seconds for page init to be done and try again
+        setTimeout(function() {
+            InitTimerStruct();
+        }, 50);
+    }
 };
 
 var StartCheckInterval = function() {
@@ -179,6 +187,14 @@ var CheckIfTimerActivation = function() {
             console.log();
             console.log("Timer activation registered");
 
+            console.log();
+            console.log(now);
+            console.log(NextTimer.ActivationTime);
+            console.log();
+            console.log("now: " + new Date(now).toString());
+            console.log("next timer: " + new Date(NextTimer.ActivationTime).toString());
+            console.log();
+
             // remove the timer from timerstruct
             removeTimerFromStruct();
 
@@ -263,12 +279,11 @@ var ActivateOneTimeTimer = function(timer) {
 // should only be called on weekly timers
 var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) {
     var today = new Date(Date.now()); // current date in utc
-    //console.log("today utc time:");
-    //console.log(today.toTimeString());
-    //console.log(today.getTime());
-
     var timerdate = new Date(timer.ActivationTime);
-    AlignDates(timerdate, today);
+
+    if (today.getTime() - timerdate.getTime() > 604800) { // one week in ms
+        AlignDates(timerdate, today);
+    }
 
     // if timer Activation time is later today, and today is an activation day
     // then everything is fine. If not, find the next activation day from today
@@ -313,8 +328,11 @@ var AlignDates = function(date, today) {
 };
 
 var PrintInitTimerStructMessage = function() {
-    console.log("Initializing timer struct");
-    console.log("Getting timers in database");
+    console.log();
+    console.log("----------------------------------------|");
+    console.log("Starting Timer Structure Initialization |");
+    console.log("----------------------------------------|");
+    console.log();
 };
 var FindTimerIndexById = function(array, id) {
     for (var i = 0; i < array.length; i++) {

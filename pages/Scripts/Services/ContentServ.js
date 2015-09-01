@@ -1,4 +1,4 @@
-app.service('contentService', function ($http, $rootScope, $location) {
+app.service('contentService', function ($http, $rootScope, $location, $window) {
     var that = this;
     var url = 'https://sdm-backend.herokuapp.com';
     //var url = 'http://localhost:5000'; // when testing
@@ -16,9 +16,9 @@ app.service('contentService', function ($http, $rootScope, $location) {
         ContentArray: [],
         Favorites: [],
         Settings: {
-            bg_color: "", // TODO: add some youtube settings and such later
-            Timezone: "",
-            TimeDiff: 0
+            bgColor: "", // TODO: add some youtube settings and such later
+            TimezoneReadable: "",
+            offset: 0
         },
         Timers: []
     };
@@ -196,7 +196,7 @@ app.service('contentService', function ($http, $rootScope, $location) {
     };
 
     this.ConstructContentPackage = function(input) {
-        var d = new Date(Date.now() + this.Page.Settings.TimeDiff * 60000);
+        var d = new Date(Date.now() + this.Page.Settings.offset * 60000);
         return {
             content: input,
             date: ConstructReadableDateString(d),
@@ -217,9 +217,9 @@ app.service('contentService', function ($http, $rootScope, $location) {
     };
     var sockethandshake = function(socket) {
         console.log("Commencing handshake with server");
-        // extracting
-        var pagename = "third"; // todo: extract pagename from url
-        console.log($location.absUrl());
+        // extracting pagename from pathname
+        var pagename = $window.location.pathname.substring(7); // todo: extract pagename from url
+        console.log(pagename);
         socket.emit("handshake", pagename);
     };
 });

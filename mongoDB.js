@@ -33,25 +33,25 @@ var timerSchema = new mongoose.Schema({
     EndContent: String,
     Active: Boolean
 });
-var sdmSchema = new mongoose.Schema({
+var pageSchema = new mongoose.Schema({
     Name: String,
     CurrentContent: String,
     ContentArray: Array,
     Favorites: Array,
     Settings: { // TODO: add some youtube settings and such later
-        bg_color: String,
-        Timezone: String,
-        TimeDiff: Number // difference from localtime to utc in minutes
+        bgColor: String,
+        timezoneReadable: String,
+        offset: Number // difference from localtime to utc in minutes
     },
     Timers: [timerSchema]
 });
-var sdmPage = mongoose.model("sdmpage", sdmSchema);
-var sdmTimer = mongoose.model("sdmtimer", timerSchema);
+var FaFPage = mongoose.model("sdmpage", pageSchema);
+var FaFTimer = mongoose.model("sdmtimer", timerSchema);
 
 
 // db methods
 db.SetContentFavorite = function (Name, content, callback) {
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
         for (var i = 0; i < page.ContentArray.length; i++) {
@@ -74,7 +74,7 @@ db.SetContentFavorite = function (Name, content, callback) {
     });
 };
 db.SetContentUnFavorite = function (Name, content, callback) {
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
         for (var i = 0; i < page.ContentArray.length; i++) {
@@ -97,7 +97,7 @@ db.SetContentUnFavorite = function (Name, content, callback) {
     });
 };
 db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback) {
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
         var timer = page.Timers.id(timerid);
@@ -118,7 +118,7 @@ db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback
     });
 };
 db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content, callback) {
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
         var timer = page.Timers.id(timerid);
@@ -140,7 +140,7 @@ db.SetPageTimerInactiveAndSaveContent = function (Name, timerid, content, callba
 };
 db.DeletePageTimerAndSaveContent = function (Name, timerid, content, callback) {
     // todo: see if timer id can be used instead
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.error(err);
 
         var contentpackage = CreateContentPackage(page, content);
@@ -161,7 +161,7 @@ db.DeletePageTimerAndSaveContent = function (Name, timerid, content, callback) {
 db.DeletePageTimer = function (Name, timerid, callback) {
     console.log("Trying to remove timer with id " + timerid + " from " +
         "page: " + Name);
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.error(err);
 
         page.Timers.id(timerid).remove();
@@ -177,7 +177,7 @@ db.DeletePageTimer = function (Name, timerid, callback) {
     });
 };
 db.UpdatePageTimerActivationTime = function (Name, timerid, actitime) {
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
         var timer = page.Timers.id(timerid);
@@ -194,22 +194,7 @@ db.UpdatePageTimerActivationTime = function (Name, timerid, actitime) {
     });
 };
 db.SaveContent = function (Name, content, callback) {
-    //sdmPage.update(
-    //    { Name: Name },
-    //    {
-    //        $push: {
-    //            'ContentArray': { $each: [content], $position: 0 } } // unshift
-    //    }, function(err, obj) {
-    //        if (err) {
-    //            console.error("SaveContent failed with error:");
-    //            return console.error(err);
-    //        }
-    //        console.log("Content save to db:");
-    //        console.log(content);
-    //        callback();
-    //    }
-    //);
-    sdmPage.findOne({'Name': Name}, function(err, page) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.error(err);
 
         var contentpackage = CreateContentPackage(page, content);
@@ -228,7 +213,7 @@ db.SaveContent = function (Name, content, callback) {
     });
 };
 db.GetInitPage = function(Name, callback) {
-    sdmPage.findOne({ Name: Name }, { _id: 0, Timers: 0, ContentArray: { $slice: 1 } },
+    FaFPage.findOne({ Name: Name }, { _id: 0, Timers: 0, ContentArray: { $slice: 1 } },
         function(err, page) {
             if (err) {
                 console.error("GetInitPage operation failed with error:");
@@ -238,7 +223,7 @@ db.GetInitPage = function(Name, callback) {
         });
 };
 db.AddNewTimer = function(Name, timer, callback) {
-    var newtimer = new sdmTimer({
+    var newtimer = new FaFTimer({
         PageName: timer.PageName,
         Name: timer.Name,
         StartContent: timer.StartContent,
@@ -252,7 +237,7 @@ db.AddNewTimer = function(Name, timer, callback) {
         Active: timer.Active
     });
 
-    sdmPage.update(
+    FaFPage.update(
         { Name: Name },
         {
             $push: { 'Timers': newtimer }
@@ -266,57 +251,84 @@ db.AddNewTimer = function(Name, timer, callback) {
         }
     );
 };
+db.CreateNewPage = function(NewPagePackage, callback) {
+    var NewPage = new FaFPage({
+        Name: NewPagePackage.pagename
+    });
+    NewPage.Settings.bgColor = NewPagePackage.bgColor;
+    NewPage.Settings.timezoneReadable = NewPagePackage.timezoneReadable;
+    NewPage.Settings.offset = NewPagePackage.offset;
+
+    // add the first content
+    var d = new Date(Date.now() + NewPagePackage.offset * 60000);
+    var firstContent = {
+        content: "Hello World",
+        date: ConstructReadableDateString(d),
+        favorite: false
+    };
+    NewPage.ContentArray.push(firstContent);
+
+    NewPage.save(function (err) {
+        if (err) {
+            console.error("CreateNewPage operation failed with error obj:");
+            return console.error(err);
+        }
+        // saved!
+        callback();
+    });
+};
+
+
 db.getHistory = function(Name, skip, limit, callback) {
-    sdmPage.findOne({ Name: Name }, { ContentArray: { $slice: [skip, limit] },
+    FaFPage.findOne({ Name: Name }, { ContentArray: { $slice: [skip, limit] },
         Name: 0, Timers: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
         callback(err, obj);
     });
 };
 db.getTimers = function(Name, callback) {
-    sdmPage.findOne({ Name: Name }, { Timers: { $slice: 10 }, // TODO: slice is hardcoded
+    FaFPage.findOne({ Name: Name }, { Timers: { $slice: 10 }, // TODO: slice is hardcoded
         Name: 0, ContentArray: 0, Favorites: 0, Settings: 0, _id: 0 },  function(err, obj) {
         callback(err, obj);
     });
 };
 db.getAllTimers = function(callback) {
-    sdmPage.find({}, { Name: 0, ContentArray: 0,
-         Favorites: 0, Settings: 0 },  function(err, obj) {
+    FaFPage.find({}, { ContentArray: 0, Favorites: 0, Settings: 0 },  function(err, obj) {
         callback(err, obj);
     });
 };
 
 var InitPagesInRAM = function() {
-    console.log("Starting init of pages in RAM");
-    sdmPage.find({}, {},  function(err, dbpages) {
+    PrintRAMInitMsg();
+    FaFPage.find({}, {},  function(err, dbpages) {
         if (err) {
             console.error("InitPagesInRAM operation failed with error object:");
             return console.error(err.message);
         }
 
+        console.log("Numer of Pages found in db: " + dbpages.length);
         for (var i = 0; i < dbpages.length; i++) {
             var p = dbpages[i];
-
             // find one instance of each favorite in page
-            for (var i = 0; i < p.ContentArray.length; i++) {
-                var c = p.ContentArray[i];
+            for (var j = 0, len = p.ContentArray.length; j < len; j++) {
+                var c = p.ContentArray[j];
                 if (c.favorite === true && p.Favorites.indexOf(c.content) === -1) {
                     p.Favorites.push(c.content);
                 }
             }
-
             pages.createPage(p);
         }
 
         console.log("Page init done. Number of pages loaded into ram: " + pages.getNumberOfPages());
         console.log("Pages names are:");
-        for (var i = 0; i < pages.getNumberOfPages(); i++) {
+        for (var i = 0; i < dbpages.length; i++) {
             console.log(pages.pages[i].Name);
         }
         pages.initDone = true;
     });
 };
 var CreateContentPackage = db.CreateContentPackage = function(page, content) {
-    var d = new Date(Date.now() + page.Settings.TimeDiff * 60000);
+    var d = new Date(Date.now() + page.Settings.offset * 60000);
+    console.log(page.Name);
     var ramPage = pages.getPage(page.Name);
 
     return {
@@ -331,4 +343,11 @@ var ConstructReadableDateString = function (date) {
     var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
     return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() + " "
         + hours + ":" + minutes + ":" + seconds;
+};
+var PrintRAMInitMsg = function() {
+    console.log();
+    console.log("---------------------------------|");
+    console.log("Starting RAM Page Initialization |");
+    console.log("---------------------------------|");
+    console.log();
 };

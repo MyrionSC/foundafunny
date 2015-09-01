@@ -1,7 +1,9 @@
 var exports = module.exports = {};
 var Pages = exports.pages = [];
 
+// checked against in socket.js and timerstruct
 exports.initDone = false;
+
 exports.createPage = function(page) {
     Pages.push(new PageObj(page.Name, page.Settings, page.Favorites));
 };
@@ -40,12 +42,9 @@ var PageObj = function(Name, Settings, Favorites) {
     this.ExistingFavorite = function(content) {
         return this.Favorites.indexOf(content) != -1;
     };
-    this.testing = function() {
-        return "this is a motherfucking test";
-    };
 };
 var SettingsObj = function(settings) {
-    this.bg_color = settings.bg_color;
-    this.Timezone = settings.Timezone;
-    this.TimeDiff = settings.TimeDiff;
+    this.bgColor = settings.bgColor;
+    this.timezoneReadable = settings.timezoneReadable;
+    this.offset = settings.offset;
 };

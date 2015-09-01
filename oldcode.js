@@ -4,7 +4,7 @@
 
 // generate new sdm instance
 //var initMongoDB = function (Name) {
-//    var newmongo = new sdmPage({
+//    var newmongo = new FaFPage({
 //        name: Name,
 //        Settings: {
 //            bg_color: "#ffffff",

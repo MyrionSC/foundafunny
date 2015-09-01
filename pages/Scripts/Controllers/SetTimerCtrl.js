@@ -59,7 +59,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             s.ShowAtleastOneWeekDayError = true;
             Errors = true;
         }
-        if (s.Timer.Type === "OneTime" && !ActivationTimeMoreThanCurrentTime(contentService.Page.Settings.TimeDiff, at)) {
+        if (s.Timer.Type === "OneTime" && !ActivationTimeMoreThanCurrentTime(contentService.Page.Settings.offset, at)) {
             s.ShowActivationTimeError = true;
             Errors = true;
         }
@@ -84,7 +84,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
                 ConstructReadableDateString(at) : ConstructReadableHourString(at); // used for showcase, nothing else
 
             // convert datetimepicker time back to utc, which is the only thing the server deals in
-            var timeDiffNeg = contentService.Page.Settings.TimeDiff * -1;
+            var timeDiffNeg = contentService.Page.Settings.offset * -1;
             s.Timer.ActivationTime = at.getTime() + timeDiffNeg * 60000;
 
             // if weekly timer, fill activation days in order
@@ -119,7 +119,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
 
     var setDatePickerToPageTime = function() {
         var utc = Date.now();
-        var ClientDate = new Date(utc + contentService.Page.Settings.TimeDiff * 60000);
+        var ClientDate = new Date(utc + contentService.Page.Settings.offset * 60000);
 
         datepicker.data('datetimepicker').setDate(ClientDate);
         hourpicker.data('datetimepicker').setDate(ClientDate);
