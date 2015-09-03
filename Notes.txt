@@ -1,7 +1,5 @@
-todo:
+todo mainpage:
 Settings
-Add firefox styles
-make loading screen for history
 Connection error handling (could be as soon as socket.io looses connection)
 Sort timers by ActivationTime in db gettimers function
 Do something about showing a lot of timers (limit gotten amount or slider)
@@ -9,15 +7,18 @@ Do something about showing a lot of timers (limit gotten amount or slider)
 communicate error messages to client when db operations fail etc.
 on normal content change, send it to other clients before saving in db
     test if it is a problem first. The current way is safer.
-Make small notification popups for everything (incoming and local changes)
+Make small notification popups (in a not annoying way) for everything (incoming and local changes)
 Parse Youtube: Add parsing of time in video
+
+todo frontpage:
+Rework the design, test out bootstrap styles
 
 
 Could have:
 A timecounter for the page timezone
 emoticons in text
 twitter support
-
+9gag support
 
 
 Bugs:
@@ -44,22 +45,6 @@ bootstrap via cdn sometimes takes a few seconds to load. consider placing it loc
 Should timer activation content be added to db when no one is online? Should it be added at all?
 Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
     (maybe not anymore with bootstrap
-
-
-naming brainstorm:
-ShareFun (occupied)
-FunShare (occupied)
-FunSharer (occupied)
-FunDealer (occupied)
-FoundAFunny (free)(bought)
-FoundThisFunny (free)
-FoundSomeFun (free)
-IFoundThis (occupied)
-LookAtThis (occupied)
-LookAtThat (occupied)
-
-something with show, view, found
-
 
 
 On timezones:

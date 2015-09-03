@@ -6,6 +6,7 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
     var w = window.innerWidth * 0.75;
     s.WrapperWidth = w + "px";
 
+    s.ShowHistoryList = false;
     s.skip = 0;
     s.limit = 0;
     s.endIndex = 0;
@@ -28,6 +29,7 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
 
     s.GetHistory = function (skip, limit) {
         skip = parseInt(skip);
+        s.ShowHistoryList = false;
         contentService.GetHistory(function (content) {
             s.HistoryArray = content;
 
@@ -52,6 +54,7 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
                 s.GetNewerBtn.SetLightGreen();
 
             s.endIndex = skip + s.HistoryArray.length;
+            s.ShowHistoryList = true;
         }, skip, limit);
     };
 

@@ -3,6 +3,7 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
     var optionobj = sidebarService.faInfoObj;
 
     s.FavoriteArray = [];
+    s.ShowFavoriteList = false;
 
     optionobj.SetSelected();
 
@@ -12,12 +13,17 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
             s.FavoriteArray.push(new FavObj(s.cs.Page.Favorites[i]));
         }
     };
+    var UpdateView = function() {
+        s.ShowFavoriteList = s.FavoriteArray.length > 0;
+    };
 
     // init
     PrepareFavorites();
+    UpdateView();
 
     s.$on('update-favorites', function () {
         PrepareFavorites();
+        UpdateView();
     });
 
     s.SetInputEnter = function(item) {
@@ -57,6 +63,7 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
         // delete locally
         s.FavoriteArray.splice(contentSearch(s.FavoriteArray, item.content), 1);
         s.cs.Page.Favorites.splice(s.cs.Page.Favorites.indexOf(item.content), 1);
+        UpdateView();
         // notify server
         s.cs.MakeContentUnfavorite(item.content);
     };

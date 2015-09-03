@@ -1,7 +1,7 @@
 <div style="padding: 10px">
     <p style="font-size: 24px">Favorite Contents</p>
 </div>
-<div class="SetTimerOuterBorderDiv">
+<div ng-show="ShowFavoriteList" class="SetTimerOuterBorderDiv">
     <div class="container">
         <table class="table table-striped">
             <thead>
@@ -23,6 +23,5 @@
             </tbody>
         </table>
     </div>
-
-    <!--<div style="background-color: black; width: 100%; height: 1px; margin-top: -20px;"></div>-->
 </div>
+<p style="font-size: 24px" ng-hide="ShowFavoriteList">No favorites found</p>
