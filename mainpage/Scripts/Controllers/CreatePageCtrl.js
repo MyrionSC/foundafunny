@@ -4,10 +4,23 @@ app.controller('CreatePageCtrl', function ($scope, HTTPService) {
     s.Pagename = "";
     s.Offset = 0;
     s.timezoneReadable = "";
+    s.NewPageUrl = "";
+    s.ShowGeneratingPage = false;
+    s.ShowPageUrl = false;
+    s.ShowIllegalPagename = false;
+    s.ShowPagenameAlreadyTaken = false;
 
     s.CreatePage = function() {
         var NewPagePackage = {};
+        s.ShowIllegalPagename = false;
+        s.ShowPagenameAlreadyTaken = false;
 
+        if (!NameCheck(s.Pagename)) {
+            s.ShowIllegalPagename = true;
+            return;
+        }
+
+        s.ShowGeneratingPage = true;
         var jele = $('#timezoneselect');
         var offset = $('option:selected', jele).attr('data-offset');
         NewPagePackage.pagename = s.Pagename;
@@ -22,15 +35,21 @@ app.controller('CreatePageCtrl', function ($scope, HTTPService) {
 
         console.log(NewPagePackage);
         HTTPService.CreateNewPage(NewPagePackage, function(res) {
-            // todo: make better / less annoying messages (so not alerts)
+            s.ShowGeneratingPage = false;
             if (res.data.status === 430) {
                 // pagename is taken
-                alert("pagename is already taken abort abort");
+                s.ShowPagenameAlreadyTaken = true;
             }
             else {
-                alert("Page is created. It can be found at: foundafunny.com/pages/" + s.Pagename);
+                s.NewPageUrl = "foundafunny.com/pages/" + s.Pagename;
+                s.ShowPageUrl = true;
                 console.log(res);
             }
         });
+    };
+    var NameCheck = function(str) {
+        str = str.trim();
+        if (str.match(/[^a-z0-9_-]+/) === null) return true;
+        return false;
     };
 });

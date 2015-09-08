@@ -7,6 +7,7 @@ var exports = module.exports = {};
 var io, db; // are filled after handshake from socket.js
 var timers = [];
 var pages = require ("./Pages.js");
+var TestNoTimers = false; // for testing the server without timers
 
 
 exports.SocketHandshake = function(IO) {
@@ -15,7 +16,8 @@ exports.SocketHandshake = function(IO) {
     io = IO;
     db = IO.db;
 
-    InitTimerStruct();
+    if (TestNoTimers === false)
+        InitTimerStruct();
 };
 
 // get timers in db, check if they are still good, insert the good ones in timer structure
@@ -33,10 +35,10 @@ var InitTimerStruct = function() {
             var n = 0;
             for (var i = 0; i < pages.length; i++) {
                 var p = pages[i];
-                console.log("Checking " + p.Timers.length +  " timers in page: " + p.Name);
+                console.log("---Checking " + p.Timers.length +  " timers in page: " + p.Name);
                 for (var j = 0; j < p.Timers.length; j++) {
                     var t = p.Timers[j];
-                    //console.log();
+                    console.log("-");
 
                     if (t.Type === "Weekly") {
                         console.log("Checking against weekly timer with Activation Time: " + new Date(t.ActivationTime).toString());
@@ -57,8 +59,8 @@ var InitTimerStruct = function() {
                         }
                     }
                     n++;
-                    console.log();
                 }
+                console.log();
 
                 p.save(function(err, obj) {
                     if (err) {
@@ -70,7 +72,7 @@ var InitTimerStruct = function() {
             }
 
             console.log();
-            console.log("Timer structure initialization is done");
+            console.log("---Timer structure initialization is done");
             console.log("Number of timers found in db: " + n);
             console.log("Number of timers inserted into timestruct at init: " + timers.length);
             if (timers.length != 0) {

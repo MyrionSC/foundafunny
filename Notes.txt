@@ -1,5 +1,6 @@
 todo mainpage:
 Settings
+    Themes (black and white)
 Connection error handling (could be as soon as socket.io looses connection)
 Sort timers by ActivationTime in db gettimers function
 Do something about showing a lot of timers (limit gotten amount or slider)
@@ -9,9 +10,12 @@ on normal content change, send it to other clients before saving in db
     test if it is a problem first. The current way is safer.
 Make small notification popups (in a not annoying way) for everything (incoming and local changes)
 Parse Youtube: Add parsing of time in video
+fix weekly timers
+    Activation time does not update correctly
 
 todo frontpage:
 Rework the design, test out bootstrap styles
+On page creation, print new page url in textbox with copy-to-clipboard button in side
 
 
 Could have:
