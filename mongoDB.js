@@ -6,7 +6,7 @@ var pages = require ("./Pages.js");
 var console = process.console; // for logs
 var db = module.exports = {};
 
-var uristring = 'mongodb://sdm-backend:sdm235813@ds043962.mongolab.com:43962/heroku_zkp49g4w';
+var uristring = process.env.MONGOLAB_URI;
 
 // connect to mongolab
 mongoose.connect(uristring, function (err, res) {

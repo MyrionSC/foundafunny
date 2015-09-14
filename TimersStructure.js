@@ -7,7 +7,7 @@ var exports = module.exports = {};
 var io, db; // are filled after handshake from socket.js
 var timers = [];
 var pages = require ("./Pages.js");
-var TestNoTimers = false; // for testing the server without timers
+var TestNoTimers = true; // for testing the server without timers
 
 
 exports.SocketHandshake = function(IO) {
@@ -18,6 +18,8 @@ exports.SocketHandshake = function(IO) {
 
     if (TestNoTimers === false)
         InitTimerStruct();
+    else
+        console.log("\nTesting without timers");
 };
 
 // get timers in db, check if they are still good, insert the good ones in timer structure

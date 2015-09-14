@@ -6,8 +6,6 @@ Sort timers by ActivationTime in db gettimers function
 Do something about showing a lot of timers (limit gotten amount or slider)
     slider for favorites as well
 communicate error messages to client when db operations fail etc.
-on normal content change, send it to other clients before saving in db
-    test if it is a problem first. The current way is safer.
 Make small notification popups (in a not annoying way) for everything (incoming and local changes)
 Parse Youtube: Add parsing of time in video
 fix weekly timers
@@ -38,6 +36,8 @@ At some point, I should do away with the automatic center for everything else th
 Weekly timer content might be added twice at activation
 Frontpage is only updated when mouse is moved. Probably something with angular, should try calling apply
     various places.
+When redirecting from heroku domain to custom domain, hash routing is lost
+    It might not be bad actually, atleast the mainpage is better for it imo
 
 
 Notes:
