@@ -7,7 +7,7 @@ var exports = module.exports = {};
 var io, db; // are filled after handshake from socket.js
 var timers = [];
 var pages = require ("./Pages.js");
-var TestNoTimers = true; // for testing the server without timers
+var TestNoTimers = false; // for testing the server without timers
 
 
 exports.SocketHandshake = function(IO) {
