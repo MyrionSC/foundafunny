@@ -8,13 +8,25 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
     s.videoUrl = ""; // used by video
     var width = document.body.clientWidth - 100;
     s.paraWidth = width + "px"; // used by text
+    s.resolvedContent = "";
     s.templates =
         [ { name: 'Loading', url: 'View/Frontpage-Templates/LoadingTemp.html'},
         { name: 'Text', url: 'View/Frontpage-Templates/TextTemp.html'},
         { name: 'Image', url: 'View/Frontpage-Templates/ImageTemp.html'},
         { name: 'Video', url: 'View/Frontpage-Templates/VideoTemp.html'},
-        { name: 'Youtube', url: 'View/Frontpage-Templates/YoutubeTemp.html'} ];
+        { name: 'Youtube', url: 'View/Frontpage-Templates/YoutubeTemp.html'},
+        { name: 'ResolvedImg', url: 'View/Frontpage-Templates/ResolvedImageTemp.html'}
+        ];
     s.template = s.templates[0];
+
+    var resolver = new ImageResolver( {});
+    resolver.register(new ImageResolver.FileExtension());
+    resolver.register(new ImageResolver.NineGag());
+    resolver.register(new ImageResolver.Instagram());
+    resolver.register(new ImageResolver.ImgurPage());
+    resolver.register(new ImageResolver.MimeType());
+    resolver.register(new ImageResolver.Opengraph());
+    resolver.register(new ImageResolver.Webpage());
 
     // set frontpage option as selected in sidebar
     sidebarService.setOption(optionobj);
@@ -96,14 +108,26 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
 
     // navigates to correct view template
     var Navigate = function (str) {
-        if (CheckImgUrl(str)) {
+        if (CheckYoutubeUrl(str)) {
+            s.template = s.templates[4];
+        }
+        else if (CheckResolvedImageUrl(str)) {
+            s.template = s.templates[0];
+            resolver.resolve( str, function( result ){
+                if ( result ) {
+                    console.log(result.image);
+                    s.resolvedContent = result.image;
+                    s.template = s.templates[5];
+                } else {
+                    s.template = s.templates[1];
+                }
+            });
+        }
+        else if (CheckImgUrl(str)) {
             s.template = s.templates[2];
         }
         else if (CheckVideoUrl(str)) {
             s.template = s.templates[3];
-        }
-        else if (CheckYoutubeUrl(str)) {
-            s.template = s.templates[4];
         }
         else {
             s.template = s.templates[1];
@@ -118,6 +142,12 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
     var CheckYoutubeUrl = function (url) {
         return(url.match(/https:\/\/www\.Youtube\.com/i)!= null ||
         url.match(/Youtu\.be/i)!= null);
+    };
+    var CheckResolvedImageUrl = function (url) {
+        return(
+            url.match(/imgur\.com/i)!= null
+        );
+        // todo: add more sources like 9gag, flicr
     };
 
     var StartTimeInSec = function(TimeString) {

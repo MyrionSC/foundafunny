@@ -36,7 +36,6 @@ fix weekly timers
 
 Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
-frontpage img might be fucked. It atleast doesn't do sizes right.
 History possibly gotten twice (it's written twice in server logs at least)
 if you change views via adressbar, sidebar fucks up
 History: if there are 10 contents, you can push get next content and get 0 content
