@@ -1,9 +1,10 @@
-app.controller('FrontPageCtrl', function($scope, $location, $sce, sidebarService, contentService) {
+app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sidebarService, contentService) {
     var s = $scope;
     s.cs = contentService;
     var optionobj = sidebarService.fpInfoObj;
     s.finalHeight = "";
     s.finalWidth = "";
+    s.resizeReady = false;
     s.videoUrl = ""; // used by video
     var width = document.body.clientWidth - 100;
     s.paraWidth = width + "px"; // used by text
@@ -18,29 +19,48 @@ app.controller('FrontPageCtrl', function($scope, $location, $sce, sidebarService
     // set frontpage option as selected in sidebar
     sidebarService.setOption(optionobj);
 
+    // ----------------|
+    // Event listeners |
+    // ----------------|
+
     s.$on('update-frontpage', function () {
         s.cs.Page.CurrentContent.favorite === true ? s.cs.SetStarFavorite() :
             s.cs.SetStarUnFavorite();
 
+        // resetting templates to prepare for new content
+        s.template = s.templates[0];
+        s.$apply();
         Navigate(s.cs.Page.CurrentContent.content);
         s.$apply();
     });
-
     s.$on('$includeContentLoaded', function(){ // is emitted when templates switch, in Navigate function
         if (s.template.name == "Video") {
             // ensures that video can be played according to sce restriction
             s.videoUrl = $sce.trustAsResourceUrl(s.cs.Page.CurrentContent.content);
         }
         else if (s.template.name == "Youtube") {
-            // extracts the video id from player
-            var VideoID = (s.cs.Page.CurrentContent.content.match(/watch\?v=([^&]+)/) || [" ", "dQw4w9WgXcQ"])[1];
-            var PlayListID = (s.cs.Page.CurrentContent.content.match(/list=([^&]+)/) || [" ", null])[1];
+            s.resizeReady = true;
 
-            if (PlayListID == null) {
-                s.videoUrl=$sce.trustAsResourceUrl("https://www.youtube.com/embed/" + VideoID + "?autoplay=true");
-            } else {
-                s.videoUrl=$sce.trustAsResourceUrl("http://www.youtube.com/embed/" + VideoID + "?autoplay=1&loop=1&listType=playlist&list=" + PlayListID);
-            }
+            var YTvideoURL = "";
+            var str = s.cs.Page.CurrentContent.content;
+
+            // extracts the video id from player
+            var VideoID = "";
+            if (str.match(/https:\/\/www\.Youtube\.com/i)!= null)
+                VideoID = (str.match(/watch\?v=([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
+            else
+                VideoID = (str.match(/youtu\.be\/([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
+
+            var PlayListID = (str.match(/list=([^&?]+)/i) || [" ", null])[1];
+            var VideoStartTime = (str.match(/t=([^&?]+)/i) || [" ", null])[1];
+
+            // construct youtube video URL
+            YTvideoURL = "https://www.youtube.com/embed/" + VideoID + "?autoplay=true";
+            if (PlayListID != null) YTvideoURL += "&loop=1&listType=playlist&list=" + PlayListID;
+            if (VideoStartTime != null) YTvideoURL += "&start=" + StartTimeInSec(VideoStartTime);
+
+            console.log("new youtube video url: " + YTvideoURL);
+            s.videoUrl=$sce.trustAsResourceUrl(YTvideoURL);
 
             // also sets height and width to almost screensize while we're at it
             var w = document.body.clientWidth - 25,
@@ -96,7 +116,16 @@ app.controller('FrontPageCtrl', function($scope, $location, $sce, sidebarService
         return(url.match(/\.(webm|mp4)$/) != null);
     };
     var CheckYoutubeUrl = function (url) {
-        return(url.match(/https:\/\/www\.Youtube\.com/i)!= null);
+        return(url.match(/https:\/\/www\.Youtube\.com/i)!= null ||
+        url.match(/Youtu\.be/i)!= null);
+    };
+
+    var StartTimeInSec = function(TimeString) {
+        var hours = parseInt((TimeString.match(/([0-9]+)h/i) || [" ", 0])[1]);
+        var mins = parseInt((TimeString.match(/([0-9]+)m/i) || [" ", 0])[1]);
+        var secs = parseInt((TimeString.match(/([0-9]+)s/i) || [" ", 0])[1]);
+
+        return hours * 3600 + mins * 60 + secs;
     };
 
     s.$on('$destroy', function () {
@@ -107,7 +136,8 @@ app.controller('FrontPageCtrl', function($scope, $location, $sce, sidebarService
     // init |
     // -----|
 
-    // if contentstring is set, use that as basis for navigation. Else keep showing loading screen and let $on handle rest.
+    // if contentstring is set, use that as basis for navigation. Else keep showing loading screen and let
+    // $on('update-frontpage') handle rest.
     if (s.cs.Page.CurrentContent.content != "")
         Navigate(s.cs.Page.CurrentContent.content);
 });

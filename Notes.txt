@@ -7,38 +7,42 @@ Do something about showing a lot of timers (limit gotten amount or slider)
     slider for favorites as well
 communicate error messages to client when db operations fail etc.
 Make small notification popups (in a not annoying way) for everything (incoming and local changes)
-Parse Youtube: Add parsing of time in video
-fix weekly timers
-    Activation time does not update correctly
 
 todo frontpage:
 Rework the design, test out bootstrap styles
 On page creation, print new page url in textbox with copy-to-clipboard button in side
 
+todo: server
+See if server files can't be thrown into a subdirectory
 
 Could have:
 A timecounter for the page timezone
 emoticons in text
 twitter support
 9gag support
+twitch stream support
+imgur support
+
 
 
 Bugs:
+
+- Important -
+fix weekly timers
+    Activation time does not update correctly
+    If single weekday weekly timer, too much activation time is added
+        example: wednessday activation -> 21 days to next activation
+
+
 Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
 frontpage img might be fucked. It atleast doesn't do sizes right.
-Going from frontpage to anything else does not instantly remove input bar
 History possibly gotten twice (it's written twice in server logs at least)
 if you change views via adressbar, sidebar fucks up
-History: if there is 10 contents, you can push get next content and get 0 content
-At some point, I should do away with the automatic center for everything else than frontpage,
-    but there is no way I'm doing it soon :P
+History: if there are 10 contents, you can push get next content and get 0 content
 Weekly timer content might be added twice at activation
-Frontpage is only updated when mouse is moved. Probably something with angular, should try calling apply
-    various places.
 When redirecting from heroku domain to custom domain, hash routing is lost
     It might not be bad actually, atleast the mainpage is better for it imo
-
 
 Notes:
 When setting timers, should the user be allowed to set seconds? Should ask the group what they think.
@@ -50,9 +54,16 @@ Should timer activation content be added to db when no one is online? Should it 
 Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
     (maybe not anymore with bootstrap
 
+- Random thoughts -
 
 On timezones:
 Using an offset value corresponding to the timezone of the client works. I just have to be able to calculate the correct
 offset at page generation time, by making the user choose in which timezone the page should be located. That should be
 changeable from the settings menu. But that is further down the line. A lot of testing required, but mainly just value
 tuning, so should be easy (and boring...)
+
+On "dynamic" page serving:
+Seems that you normally inject javascript into the header of a statically served
+html page to achieve that dynamic nature of a statically served page. I just look at
+the last part of the page url, as that is the only thing i need. But that might not
+be following conventions. If I ever need more, I will probably look into doing it the right way.
