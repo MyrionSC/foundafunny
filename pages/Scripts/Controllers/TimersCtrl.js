@@ -96,10 +96,13 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
     };
     var DeleteDialogAssured = function (t) {
         console.log("Deleting timer locally");
+
+
+
         if (t.Type === "OneTime")
-            s.OneTimeTimerArray.splice(FindTimerIndex(s.OneTimeTimerArray, t), 1);
+            s.OneTimeTimerArray.splice(FindTimerIndex(s.OneTimeTimerArray, t._id), 1);
         else
-            s.WeeklyTimerArray.splice(FindTimerIndex(s.WeeklyTimerArray, t), 1);
+            s.WeeklyTimerArray.splice(FindTimerIndex(s.WeeklyTimerArray, t._id), 1);
 
         updateVars();
 

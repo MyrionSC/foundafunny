@@ -1,3 +1,5 @@
+----- TO DO -----
+
 todo mainpage:
 Settings
     Themes (black and white)
@@ -25,14 +27,13 @@ imgur support
 
 
 
-Bugs:
+----- BUGS -----
 
 - Important -
 fix weekly timers
     Activation time does not update correctly
     If single weekday weekly timer, too much activation time is added
         example: wednessday activation -> 21 days to next activation
-
 
 Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
@@ -43,7 +44,8 @@ Weekly timer content might be added twice at activation
 When redirecting from heroku domain to custom domain, hash routing is lost
     It might not be bad actually, atleast the mainpage is better for it imo
 
-Notes:
+----- Notes -----
+
 When setting timers, should the user be allowed to set seconds? Should ask the group what they think.
 How long should users be allowed to set timer ActivationLength? Anything more than 1000 sec would
     probably be stupid
@@ -53,7 +55,7 @@ Should timer activation content be added to db when no one is online? Should it 
 Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
     (maybe not anymore with bootstrap
 
-- Random thoughts -
+----- Random thoughts -----
 
 On timezones:
 Using an offset value corresponding to the timezone of the client works. I just have to be able to calculate the correct
