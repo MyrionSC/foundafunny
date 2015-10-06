@@ -2,23 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66683689-0b1b-4455-b340-1e1f1c7a154d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/logs/2015/Oct/01_oct_15.log.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/logs/2015/Oct/04_oct_15.log.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/logs/2015/Oct/06_oct_15.log.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build/config.gypi" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/server.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/server_node_modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.env" afterPath="$PROJECT_DIR$/.env" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js" afterPath="$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/history.json" afterPath="$PROJECT_DIR$/logs/history.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/2015/Oct/06_oct_15.log.json" afterPath="$PROJECT_DIR$/logs/2015/Oct/06_oct_15.log.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mongoDB.js" afterPath="$PROJECT_DIR$/mongoDB.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,11 +25,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="mongoDB.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="mongoDB.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mongoDB.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.2173913">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -51,10 +37,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContentServ.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ContentServ.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.096618354">
+            <state vertical-scroll-proportion="0.0">
               <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
               <folding />
             </state>
@@ -65,7 +51,7 @@
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="13" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="88" />
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -99,8 +85,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/mongoDB.js" />
         <option value="$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js" />
+        <option value="$PROJECT_DIR$/mongoDB.js" />
       </list>
     </option>
   </component>
@@ -345,29 +331,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="13" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="88" />
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mongoDB.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.2173913">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.096618354">
-          <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
