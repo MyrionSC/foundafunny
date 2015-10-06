@@ -11,7 +11,8 @@ var uristring = process.env.MONGOLAB_URI;
 // connect to mongolab
 mongoose.connect(uristring, function (err, res) {
     if (err) {
-        console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+        console.log ('ERROR connecting to: ' + uristring);
+        console.log (err);
     } else {
         console.log ('Succeeded connected to: ' + uristring);
 

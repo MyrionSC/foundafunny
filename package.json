@@ -9,7 +9,7 @@
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "~4.9.x",
-    "mongoose": "3.8.15",
+    "mongoose": "*",
     "scribe-js": "*",
     "socket.io": "^1.3.5"
   },
