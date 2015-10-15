@@ -1,1 +1,1 @@
-Show dat meme server
+Found a fucking funny!

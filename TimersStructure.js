@@ -31,7 +31,7 @@ var InitTimerStruct = function() {
             console.log("Number of pages retrieved from db: " + pages.length);
             //console.log("return pages from db:");
             //console.log(pages);
-            //console.log();
+            //console.log("\n"
             console.log("Current Time is " + new Date().toString());
             console.log();
             var n = 0;
@@ -285,6 +285,9 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
     var today = new Date(Date.now()); // current date in utc
     var timerdate = new Date(timer.ActivationTime);
 
+    //console.log(convertMillisecondsToDigitalClock(today.getTime() - timerdate.getTime()).clock);
+    //console.log(today.getTime() - timerdate.getTime());
+    //console.log(today.getTime() - timerdate.getTime() > 604800);
     if (today.getTime() - timerdate.getTime() > 604800) { // one week in ms
         AlignDates(timerdate, today);
     }
@@ -292,13 +295,12 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
     // if timer Activation time is later today, and today is an activation day
     // then everything is fine. If not, find the next activation day from today
     // and add that to the timers date, in utc time
-    //console.log(timer.ActivationDays);
     var todayWeekday = today.getDay() === 0 ? 6 : today.getDay() - 1;
     if (timer.ActivationDays[todayWeekday].Selected != true ||
         (timer.ActivationDays[todayWeekday].Selected == true &&
         today.getTime() > timerdate.getTime())) {
 
-        timerdate.setDate(timerdate.getDate() + FindDaysUntilNextActivation(timer));
+        timerdate.setDate(today.getDate() + FindDaysUntilNextActivation(timer));
         console.log("Activation Time of timer with id " + timer._id + " is now: " + timerdate.toString());
     }
 
@@ -344,3 +346,16 @@ var FindTimerIndexById = function(array, id) {
             return i;
     }
 };
+
+// CONVERT MILLISECONDS TO DIGITAL CLOCK FORMAT
+function convertMillisecondsToDigitalClock(ms) {
+    var hours = Math.floor(ms / 3600000), // 1 Hour = 36000 Milliseconds
+        minutes = Math.floor((ms % 3600000) / 60000), // 1 Minutes = 60000 Milliseconds
+        seconds = Math.floor(((ms % 360000) % 60000) / 1000) // 1 Second = 1000 Milliseconds
+    return {
+        hours : hours,
+        minutes : minutes,
+        seconds : seconds,
+        clock : hours + ":" + minutes + ":" + seconds
+    };
+}
