@@ -38,9 +38,9 @@ var InitTimerStruct = function() {
             for (var i = 0; i < pages.length; i++) {
                 var p = pages[i];
                 console.log("---Checking " + p.Timers.length +  " timers in page: " + p.Name);
+                console.log("-");
                 for (var j = 0; j < p.Timers.length; j++) {
                     var t = p.Timers[j];
-                    console.log("-");
 
                     if (t.Type === "Weekly") {
                         console.log("Checking against weekly timer with Activation Time: " + new Date(t.ActivationTime).toString());
@@ -51,7 +51,7 @@ var InitTimerStruct = function() {
                         var now = new Date(Date.now());
                         console.log("Checking against Single timer with Activation Time: " + new Date(t.ActivationTime).toString());
 
-                        if (t.ActivationTime > now.getTime()) {
+                        if (t.OriginalActivationTime > now.getTime()) {
                             console.log("Timer is good, inserting into struct");
                             insertTimerInStruct(t);
                         }
@@ -61,8 +61,8 @@ var InitTimerStruct = function() {
                         }
                     }
                     n++;
+                    console.log("-");
                 }
-                console.log();
 
                 p.save(function(err, obj) {
                     if (err) {
@@ -73,7 +73,6 @@ var InitTimerStruct = function() {
                 });
             }
 
-            console.log();
             console.log("---Timer structure initialization is done");
             console.log("Number of timers found in db: " + n);
             console.log("Number of timers inserted into timestruct at init: " + timers.length);
@@ -98,12 +97,13 @@ var InitTimerStruct = function() {
 };
 
 var StartCheckInterval = function() {
+    console.log('*');
+    console.log("Current Time is " + new Date().toString());
     console.log("Starting timer check interval");
     if (anyTimers())
         console.log("Next timer activation at: " + new Date(getNextTimer().ActivationTime).toString());
     else
         console.log("There are currently no timers in the timer struct");
-
 
     setInterval(function() {
         CheckIfTimerActivation();
@@ -188,16 +188,13 @@ var CheckIfTimerActivation = function() {
         var NextTimer = getNextTimer();
 
         if (NextTimer != -1 && now > NextTimer.ActivationTime){
-            console.log();
+            console.log("*");
             console.log("Timer activation registered");
 
-            console.log();
-            console.log(now);
-            console.log(NextTimer.ActivationTime);
-            console.log();
-            console.log("now: " + new Date(now).toString());
-            console.log("next timer: " + new Date(NextTimer.ActivationTime).toString());
-            console.log();
+            //console.log(now);
+            //console.log(NextTimer.ActivationTime);
+            //console.log("now: " + new Date(now).toString());
+            //console.log("next timer: " + new Date(NextTimer.ActivationTime).toString());
 
             // remove the timer from timerstruct
             removeTimerFromStruct();
@@ -205,11 +202,11 @@ var CheckIfTimerActivation = function() {
             // Perform timer activation
             ActivateTimer(NextTimer);
 
-            if (NextTimer.Type === "Weekly") {
-                // update and insert next timer activation date into timerstruct
-                UpdateActivationTime(NextTimer, true);
-                insertTimerInStruct(NextTimer);
-            }
+            //if (NextTimer.Type === "Weekly") {
+            //    // update and insert next timer activation date into timerstruct
+            //    UpdateActivationTime(NextTimer, true);
+            //    insertTimerInStruct(NextTimer);
+            //}
 
             // check again to see if any new timers have activated this second
             CheckIfTimerActivation();
@@ -235,6 +232,27 @@ var ActivateWeeklyTimer = function (timer) {
         });
     }
     else {
+        // if there is endcontent, update timer activation time and status
+        if (timer.Active != true) {
+            db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
+                io.PushTimerPackage(timer.PageName, timer.StartContent);
+
+                timer.Active = true;
+                timer.ActivationTime += timer.ActivationLength * 1000;
+
+                insertTimerInStruct(timer);
+            });
+        } else {
+            db.SetPageTimerInactiveAndSaveContent(timer.PageName, timer._id, timer.EndContent, function() {
+                io.PushTimerPackage(timer.PageName, timer.EndContent);
+
+                timer.Active = false;
+
+                UpdateActivationTime(timer, true);
+                insertTimerInStruct(timer);
+            });
+        }
+
         db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function() {
             io.PushTimerPackage(timer.PageName, timer.StartContent);
         });
@@ -263,34 +281,30 @@ var ActivateOneTimeTimer = function(timer) {
         });
     }
     else {
-        // if there is endcontent, start a new timer of Activation Length
-        db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-            io.PushTimerPackage(timer.PageName, timer.StartContent);
-        });
+        // if there is endcontent, update timer activation time and status
+        if (timer.Active != true) {
+            db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
+                io.PushTimerPackage(timer.PageName, timer.StartContent);
 
-        console.log("End content timer startet:");
-        console.log("Activation in: " + timer.ActivationLength + " seconds\n");
-        // start new timer for endcontent
-        timer.TimeoutVar = setTimeout(function () {
+                timer.Active = true;
+                timer.ActivationTime += timer.ActivationLength * 1000;
+
+                insertTimerInStruct(timer);
+            });
+        } else {
             db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.EndContent, function () {
-                // push content to user
                 io.PushTimerPackage(timer.PageName, timer.EndContent);
             });
-        }, timer.ActivationLength * 1000);
+        }
     }
 };
 
 // should only be called on weekly timers
 var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) {
     var today = new Date(Date.now()); // current date in utc
-    var timerdate = new Date(timer.ActivationTime);
+    var timerdate = new Date(timer.OriginalActivationTime);
 
-    //console.log(convertMillisecondsToDigitalClock(today.getTime() - timerdate.getTime()).clock);
-    //console.log(today.getTime() - timerdate.getTime());
-    //console.log(today.getTime() - timerdate.getTime() > 604800);
-    if (today.getTime() - timerdate.getTime() > 604800) { // one week in ms
-        AlignDates(timerdate, today);
-    }
+    AlignDates(timerdate, today);
 
     // if timer Activation time is later today, and today is an activation day
     // then everything is fine. If not, find the next activation day from today
@@ -301,9 +315,9 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
         today.getTime() > timerdate.getTime())) {
 
         timerdate.setDate(today.getDate() + FindDaysUntilNextActivation(timer));
-        console.log("Activation Time of timer with id " + timer._id + " is now: " + timerdate.toString());
     }
 
+    console.log("Activation Time of timer with id " + timer._id + " is now: " + timerdate.toString());
     timer.ActivationTime = timerdate.getTime();
 
     if (Save)
@@ -346,16 +360,3 @@ var FindTimerIndexById = function(array, id) {
             return i;
     }
 };
-
-// CONVERT MILLISECONDS TO DIGITAL CLOCK FORMAT
-function convertMillisecondsToDigitalClock(ms) {
-    var hours = Math.floor(ms / 3600000), // 1 Hour = 36000 Milliseconds
-        minutes = Math.floor((ms % 3600000) / 60000), // 1 Minutes = 60000 Milliseconds
-        seconds = Math.floor(((ms % 360000) % 60000) / 1000) // 1 Second = 1000 Milliseconds
-    return {
-        hours : hours,
-        minutes : minutes,
-        seconds : seconds,
-        clock : hours + ":" + minutes + ":" + seconds
-    };
-}

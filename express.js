@@ -31,7 +31,7 @@ app.get('/get/timers', function (request, response) {
 
         // todo: sort timers by closest to activation
 
-        console.log("Returned number of timers: " + obj.Timers);
+        console.log("Returned number of timers: " + obj.Timers.length);
         response.send(obj.Timers);
     });
 });

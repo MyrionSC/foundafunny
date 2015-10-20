@@ -1,3 +1,19 @@
+Change timer init (weekly timers) to calculate activation time from originalActivationTime
+    Test before going further.
+        OriginalActivationTime doesn't get uploaded right now for some reason
+Change weekly timers and to use originalActivationTime when calculating
+    new activation time
+Set new activationTime when endcontent exists. After Activation Length, use OriginalActivationTime
+    to calculate new activation time.
+
+
+
+
+
+
+
+
+
 ----- TO DO -----
 
 todo mainpage:
@@ -26,14 +42,16 @@ twitch stream support
 imgur support
 
 
-
 ----- BUGS -----
 
 - Important -
 fix weekly timers
-    Activation time does not update correctly
-    If single weekday weekly timer, too much activation time is added
-        example: wednessday activation -> 21 days to next activation
+    When the client and servers date don't match, the UpdateActivationTime function does
+        not calculate the time correctly. Most likely line 313 is the problem.
+            Exibit 1 (client two hours ahead):
+                Client time: wednesday 01.00
+                Server time: tuesday 11.00
+                The server shoots wrong by one day
 
 Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
@@ -54,6 +72,10 @@ bootstrap via cdn sometimes takes a few seconds to load. consider placing it loc
 Should timer activation content be added to db when no one is online? Should it be added at all?
 Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
     (maybe not anymore with bootstrap
+
+---- Before Release -----
+
+Find stable versions of dependencies and use those instead of the newest versions always.
 
 ----- Random thoughts -----
 

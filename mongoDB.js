@@ -29,6 +29,7 @@ var timerSchema = new mongoose.Schema({
     ActivationDays: Array,
     ActivationDaysReadable: String,
     ActivationTime: Number,
+    OriginalActivationTime: Number,
     ActivationTimeReadable: String,
     ActivationLength: Number,
     EndContent: String,
@@ -106,6 +107,7 @@ db.SetPageTimerActiveAndSaveContent = function (Name, timerid, content, callback
 
         page.ContentArray.unshift(contentpackage);
         timer.Active = true;
+        timer.ActivationTime += timer.ActivationLength * 1000;
 
         page.save(function(err, obj) {
             if (err) {
@@ -232,11 +234,13 @@ db.AddNewTimer = function(Name, timer, callback) {
         ActivationDays: timer.ActivationDays,
         ActivationDaysReadable: timer.ActivationDaysReadable,
         ActivationTime: timer.ActivationTime,
+        OriginalActivationTime: timer.OriginalActivationTime,
         ActivationTimeReadable: timer.ActivationTimeReadable,
         ActivationLength: timer.ActivationLength,
         EndContent: timer.EndContent,
         Active: timer.Active
     });
+
 
     FaFPage.update(
         { Name: Name },

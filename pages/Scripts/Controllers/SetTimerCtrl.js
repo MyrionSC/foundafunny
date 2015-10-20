@@ -86,6 +86,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             // convert datetimepicker time back to utc, which is the only thing the server deals in
             var timeDiffNeg = contentService.Page.Settings.offset * -1;
             s.Timer.ActivationTime = at.getTime() + timeDiffNeg * 60000;
+            s.Timer.OriginalActivationTime = s.Timer.ActivationTime;
 
             // if weekly timer, fill activation days in order
             if (s.Timer.Type === "Weekly") DetectAndSortWeekdays(s.Timer, s.SelectedWeekDays);
@@ -207,6 +208,7 @@ var TimerObject = function () {
     this.ActivationDays = [];
     this.ActivationDaysReadable = "";
     this.ActivationTime = 0;
+    this.OriginalActivationTime = 0;
     this.ActivationTimeReadable = "";
     this.ActivationLength = 0;
     this.EndContent = "";
