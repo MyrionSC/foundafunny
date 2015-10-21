@@ -252,21 +252,6 @@ var ActivateWeeklyTimer = function (timer) {
                 insertTimerInStruct(timer);
             });
         }
-
-        db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function() {
-            io.PushTimerPackage(timer.PageName, timer.StartContent);
-        });
-
-        console.log("End content timer startet:");
-        console.log("Activation in: " + timer.ActivationLength + " seconds\n");
-
-        // start new timer for endcontent
-        timer.TimeoutVar = setTimeout(function () {
-            db.SetPageTimerInactiveAndSaveContent(timer.PageName, timer._id, timer.EndContent, function() {
-                // push content to user
-                io.PushTimerPackage(timer.PageName, timer.EndContent);
-            });
-        }, timer.ActivationLength * 1000);
     }
 };
 var ActivateOneTimeTimer = function(timer) {

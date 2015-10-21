@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/TimersStructure.js" line="291" mnemonic="4" />
-    <bookmark url="file://$PROJECT_DIR$/TimersStructure.js" line="255" mnemonic="2" />
+    <bookmark url="file://$PROJECT_DIR$/TimersStructure.js" line="276" mnemonic="4" />
     <bookmark url="file://$PROJECT_DIR$/mongoDB.js" line="130" mnemonic="3" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66683689-0b1b-4455-b340-1e1f1c7a154d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Notes.txt" afterPath="$PROJECT_DIR$/Notes.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/Scripts/Controllers/SetTimerCtrl.js" afterPath="$PROJECT_DIR$/pages/Scripts/Controllers/SetTimerCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TimersStructure.js" afterPath="$PROJECT_DIR$/TimersStructure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/express.js" afterPath="$PROJECT_DIR$/express.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/history.json" afterPath="$PROJECT_DIR$/logs/history.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mongoDB.js" afterPath="$PROJECT_DIR$/mongoDB.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="server.iws" />
@@ -48,21 +42,21 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Notes.txt" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Notes.txt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Notes.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.31400967">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="49" column="74" selection-start-line="49" selection-start-column="74" selection-end-line="49" selection-end-column="74" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="TimersStructure.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="TimersStructure.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/TimersStructure.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
-                  <caret line="302" column="24" selection-start-line="302" selection-start-column="4" selection-end-line="302" selection-end-column="24" />
+                <state vertical-scroll-proportion="0.5024155">
+                  <caret line="253" column="9" selection-start-line="253" selection-start-column="9" selection-end-line="253" selection-end-column="9" />
                   <folding>
                     <element signature="n#!!doc" expanded="true" />
                   </folding>
@@ -128,10 +122,10 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/express.js" />
         <option value="$PROJECT_DIR$/pages/Scripts/Controllers/SetTimerCtrl.js" />
-        <option value="$PROJECT_DIR$/TimersStructure.js" />
         <option value="$PROJECT_DIR$/mongoDB.js" />
         <option value="$PROJECT_DIR$/Notes.txt" />
         <option value="$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js" />
+        <option value="$PROJECT_DIR$/TimersStructure.js" />
       </list>
     </option>
   </component>
@@ -548,19 +542,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TimersStructure.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="302" column="24" selection-start-line="302" selection-start-column="4" selection-end-line="302" selection-end-column="24" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Notes.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.31400967">
+        <state vertical-scroll-proportion="0.0">
           <caret line="49" column="74" selection-start-line="49" selection-start-column="74" selection-end-line="49" selection-end-column="74" />
           <folding />
         </state>
@@ -571,6 +555,16 @@
         <state vertical-scroll-proportion="0.16908212">
           <caret line="7" column="27" selection-start-line="7" selection-start-column="27" selection-end-line="7" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TimersStructure.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5024155">
+          <caret line="253" column="9" selection-start-line="253" selection-start-column="9" selection-end-line="253" selection-end-column="9" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
