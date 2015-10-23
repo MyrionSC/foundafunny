@@ -29,7 +29,7 @@ var PageObj = function(Name, Settings, Favorites) {
 
     this.insertFavorite = function(content) {
         var index = this.Favorites.indexOf(content);
-        if (index != -1) {
+        if (index == -1) {
             this.Favorites.push(content);
         }
     };

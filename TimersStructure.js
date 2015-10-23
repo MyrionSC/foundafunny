@@ -229,6 +229,9 @@ var ActivateWeeklyTimer = function (timer) {
     if (!EndContentFlag) {
         db.SaveContent(timer.PageName, timer.StartContent, function() {
             io.PushTimerPackage(timer.PageName, timer.StartContent);
+
+            UpdateActivationTime(timer, true);
+            insertTimerInStruct(timer);
         });
     }
     else {
