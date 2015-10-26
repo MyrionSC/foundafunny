@@ -6,9 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66683689-0b1b-4455-b340-1e1f1c7a154d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Pages.js" afterPath="$PROJECT_DIR$/Pages.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TimersStructure.js" afterPath="$PROJECT_DIR$/TimersStructure.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/history.json" afterPath="$PROJECT_DIR$/logs/history.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pages/Style/TimersStyle.css" afterPath="$PROJECT_DIR$/pages/Style/TimersStyle.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="server.iws" />
@@ -57,7 +55,7 @@
           <file leaf-file-name="TimersStructure.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/TimersStructure.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.38647342">
+                <state vertical-scroll-proportion="1.0386473">
                   <caret line="241" column="0" selection-start-line="241" selection-start-column="0" selection-end-line="241" selection-end-column="0" />
                   <folding>
                     <element signature="n#!!doc" expanded="true" />
@@ -93,8 +91,18 @@
           <file leaf-file-name="ContentServ.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.096618354">
-                  <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+                <state vertical-scroll-proportion="0.12077295">
+                  <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="TimersStyle.css" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/pages/Style/TimersStyle.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
                   <folding />
                 </state>
               </provider>
@@ -149,6 +157,7 @@
         <option value="$PROJECT_DIR$/Pages.js" />
         <option value="$PROJECT_DIR$/TimersStructure.js" />
         <option value="$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js" />
+        <option value="$PROJECT_DIR$/pages/Style/TimersStyle.css" />
       </list>
     </option>
   </component>
@@ -233,29 +242,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="pages" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Controllers" />
+              <option name="myItemId" value="Style" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -690,7 +677,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TimersStructure.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38647342">
+        <state vertical-scroll-proportion="1.0386473">
           <caret line="241" column="0" selection-start-line="241" selection-start-column="0" selection-end-line="241" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
@@ -698,10 +685,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/pages/Style/TimersStyle.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pages/Scripts/Services/ContentServ.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.096618354">
-          <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.12077295">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding />
         </state>
       </provider>

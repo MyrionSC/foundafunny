@@ -4,7 +4,8 @@
     padding: 0 10px;
 }
 .TimersTypeShowPicker {
-    display: -webkit-inline-box;
+    display: -webkit-box;
+    display: -moz-box;
     margin-left: 20px;
 }
 .TimersTypeShowPickerSeperator {
