@@ -7,6 +7,6 @@ app.config(function ($routeProvider) {
         .when('/history', { templateUrl: 'View/HistoryView.html', controller: 'HistoryCtrl'})
         .when('/timers', { templateUrl: 'View/TimersView.html', controller: 'TimersCtrl'})
         .when('/settimer', { templateUrl: 'View/SetTimerView.html', controller: 'SetTimerCtrl'})
-        .when('/configuresite', { templateUrl: 'View/ConfigureSiteView.html', controller: 'ConfigureSiteCtrl'})
+        .when('/settings', { templateUrl: 'View/SettingsView.html', controller: 'SettingsCtrl'})
         .otherwise({ redirectTo: '/frontpage' });
 });

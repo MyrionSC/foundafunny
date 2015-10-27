@@ -25,6 +25,7 @@ Do something about showing a lot of timers (limit gotten amount or slider)
     slider for favorites as well
 communicate error messages to client when db operations fail etc.
 Make small notification popups (in a not annoying way) for everything (incoming and local changes)
+Settings: make page tz changeable (should change current timers activation time as well)
 
 todo frontpage:
 Rework the design, test out bootstrap styles
@@ -52,6 +53,7 @@ fix weekly timers
                 Client time: wednesday 01.00
                 Server time: tuesday 11.00
                 The server shoots wrong by one day
+            possible solution: use time of client to calculate new activation time
 
 Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
@@ -72,6 +74,9 @@ bootstrap via cdn sometimes takes a few seconds to load. consider placing it loc
 Should timer activation content be added to db when no one is online? Should it be added at all?
 Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
     (maybe not anymore with bootstrap
+Time zone shifts (like shift from winter to summer time) doesn't change timers and pagetime accordingly
+    I'm thinking that people can shift the pagetime themselves when their time shifts
+    I just have to provide the functionality of course.
 
 ---- Before Release -----
 

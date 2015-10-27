@@ -3,15 +3,15 @@
 </div>
 <div class="SetTimerOuterBorderDiv">
     <label class="SetTimerLabel" >
-        Name*<br><input class="SetTimerInputText" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
+        Name<br><input class="SetTimerInputText" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
     </label>
     <label class="SetTimerLabel" >
-        Start Content<br>
+        Start Content*<br>
         <input class="SetTimerInputText" ng-model="Timer.StartContent" type="text" placeholder="Content pushed at Activation Time"/>
     </label>
     <p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
 
-    Type<br>
+    Type*<br>
     <div class="SetTimerRadioDiv">
         <div class="SetTimerRadioSubDiv" style="margin: 3px; padding: 3px">
             <label class="SetTimerLabel" style="margin-right: 30px">
@@ -34,7 +34,7 @@
 
     <!--Date time pickers-->
     <label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">
-        Activation Time<br>
+        Activation Time*<br>
         <div style="padding-bottom: 10px" id="datetimepicker_date" class="input-append date">
             <input type="text"/>
             <span class="add-on">
@@ -43,7 +43,7 @@
         </div>
     </label>
     <label class="SetTimerLabel" ng-show="ShowWeeklyTypes">
-        Activation Time<br>
+        Activation Time*<br>
         <div style="padding-bottom: 10px" id="datetimepicker_hour" class="input-append date">
             <input type="text"/>
             <span class="add-on">
@@ -54,17 +54,17 @@
     <p class="SetTimerErrorMessage" ng-show="ShowActivationTimeError">Activation Time must be after current time</p>
 
     <label class="SetTimerLabel">
-        Activation Length (in seconds)*<br>
+        Activation Length (in seconds)<br>
         <input class="SetTimerInputText" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
     </label>
     <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthWithoutEndContentError">If End Content is filled so must Activation Length</p>
     <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
     <label class="SetTimerLabel" >
-        End Content*<br>
+        End Content<br>
         <input class="SetTimerInputText" ng-model="Timer.EndContent" type="text" placeholder="Content activates after Activation Length"/>
     </label>
     <p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>
-    <p class="SetTimerAsterixInfo">* = Optional</p>
+    <p class="SetTimerAsterixInfo">* = Obligatory</p>
 </div>
 <div style="padding: 10px">
     <button class="SetTimerButton" ng-click="SaveTimer()">

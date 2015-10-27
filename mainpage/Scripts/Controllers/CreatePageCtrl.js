@@ -22,12 +22,15 @@ app.controller('CreatePageCtrl', function ($scope, HTTPService) {
 
         s.ShowGeneratingPage = true;
         var jele = $('#timezoneselect');
-        var offset = $('option:selected', jele).attr('data-offset');
         NewPagePackage.pagename = s.Pagename;
-        NewPagePackage.timezoneReadable = jele.val();
+        NewPagePackage.timezoneVal = jele.val();
+        NewPagePackage.timezoneReadable = $('#timezoneselect option[value="' + jele.val() + '"]').html();
         NewPagePackage.bgColor = "#ffffff";
+        NewPagePackage.theme = "Light";
+        NewPagePackage.fontColor = "#000000";
 
         // transform the offset into minutes
+        var offset = $('option:selected', jele).attr('data-offset');
         var hours = parseInt(offset.substring(0,3));
         var min = parseInt(offset.substring(4, 6));
         if (hours < 0) min *= -1;

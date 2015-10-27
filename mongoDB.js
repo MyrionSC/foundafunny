@@ -43,7 +43,10 @@ var pageSchema = new mongoose.Schema({
     Settings: { // TODO: add some youtube settings and such later
         bgColor: String,
         timezoneReadable: String,
-        offset: Number // difference from localtime to utc in minutes
+        timezoneVal: String,
+        offset: Number, // difference from localtime to utc in minutes
+        theme: String,
+        fontColor: String
     },
     Timers: [timerSchema]
 });
@@ -256,13 +259,17 @@ db.AddNewTimer = function(Name, timer, callback) {
         }
     );
 };
+
 db.CreateNewPage = function(NewPagePackage, callback) {
     var NewPage = new FaFPage({
         Name: NewPagePackage.pagename
     });
     NewPage.Settings.bgColor = NewPagePackage.bgColor;
+    NewPage.Settings.timezoneVal = NewPagePackage.timezoneVal;
     NewPage.Settings.timezoneReadable = NewPagePackage.timezoneReadable;
     NewPage.Settings.offset = NewPagePackage.offset;
+    NewPage.Settings.theme = NewPagePackage.theme;
+    NewPage.Settings.fontColor = NewPagePackage.fontColor;
 
     // add the first content
     var d = new Date(Date.now() + NewPagePackage.offset * 60000);

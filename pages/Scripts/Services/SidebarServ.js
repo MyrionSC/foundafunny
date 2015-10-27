@@ -36,7 +36,7 @@ app.service('sidebarService', function ($location) {
         $location.path('settimer');
     };
     t.csInfoObj.Functionality = function () {
-        $location.path('configuresite');
+        $location.path('settings');
     };
 
 

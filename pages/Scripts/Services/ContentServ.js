@@ -17,8 +17,9 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         Favorites: [],
         Settings: {
             bgColor: "", // TODO: add some youtube settings and such later
-            TimezoneReadable: "",
-            offset: 0
+            timezoneReadable: "",
+            offset: 0,
+            theme: ""
         },
         Timers: []
     };
@@ -46,7 +47,8 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         // update views with new data
         $rootScope.$broadcast("update-frontpage"); // for updating frontpage view
         $rootScope.$broadcast("update-set-timer"); // for updating set timer view
-        $rootScope.$broadcast("update-favorites"); // for updating set timer view
+        $rootScope.$broadcast("update-favorites"); // for updating favorites view
+        $rootScope.$broadcast("update-settings"); // for updating settings view
     });
     socket.on('contentupdate', function (data) {
         console.log("content updated:");
