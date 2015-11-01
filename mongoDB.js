@@ -244,7 +244,6 @@ db.AddNewTimer = function(Name, timer, callback) {
         Active: timer.Active
     });
 
-
     FaFPage.update(
         { Name: Name },
         {
@@ -258,6 +257,21 @@ db.AddNewTimer = function(Name, timer, callback) {
             callback(newtimer);
         }
     );
+};
+db.UpdatePageSettings = function (Name, settings, callback) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
+        if (err) return console.log(err);
+
+        page.Settings = settings;
+
+        page.save(function(err, obj) {
+            if (err) {
+                console.error("UpdatePageSettings operation failed with error:");
+                return console.error(err);
+            }
+            callback();
+        });
+    });
 };
 
 db.CreateNewPage = function(NewPagePackage, callback) {

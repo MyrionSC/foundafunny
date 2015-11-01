@@ -6,7 +6,7 @@
         <label class="SetTimerLabel" >
             Theme
             <br>
-            <select id="themeselect" class="SettingsListPickers">
+            <select ng-model="theme" id="themeselect" class="SettingsListPickers">
                 <option data-theme="Dark" value="Dark">Dark</option>
                 <option data-theme="Light" value="Light">Light</option>
             </select>
@@ -122,10 +122,10 @@
     </div>
 
     <div style="padding: 10px">
-        <button class="SetTimerButton" ng-click="SaveTimer()">
+        <button class="SetTimerButton" ng-click="SaveSettings()">
             Save Timer
         </button>
-        <span class="SettingsSavedFeedback" ng-show="ShowTimerSavedFeedback">New Timer Saved</span>
+        <span class="SettingsSavedFeedback" ng-show="ShowSettingsSavedFeedback">New Timer Saved</span>
         <span class="SettingsNoChangesFeedback" ng-show="ShowNoChangesFeedback">Nothing was changed</span>
     </div>
 </div>

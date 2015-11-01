@@ -19,6 +19,7 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
         ];
     s.template = s.templates[0];
 
+    // from image resolver library, extracts img urls from some large image sharing pages
     var resolver = new ImageResolver( {});
     resolver.register(new ImageResolver.FileExtension());
     resolver.register(new ImageResolver.NineGag());

@@ -42,9 +42,14 @@ var PageObj = function(Name, Settings, Favorites) {
     this.ExistingFavorite = function(content) {
         return this.Favorites.indexOf(content) != -1;
     };
+    this.updateSettings = function(settings) {
+        this.Settings = settings;
+    };
 };
 var SettingsObj = function(settings) {
     this.bgColor = settings.bgColor;
     this.timezoneReadable = settings.timezoneReadable;
     this.offset = settings.offset;
+    this.timezoneVal = settings.timezoneVal;
+    this.theme = settings.theme;
 };

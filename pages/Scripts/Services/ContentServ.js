@@ -1,7 +1,7 @@
 app.service('contentService', function ($http, $rootScope, $location, $window) {
     var that = this;
-    //var url = 'https://foundafunny.herokuapp.com';
-    var url = 'http://localhost:5000'; // when testing
+    var url = 'https://foundafunny.herokuapp.com';
+    //var url = 'http://localhost:5000'; // when testing
     var httplock = true;
 
     this.FavoriteStarColor = "Pics/FavoriteStarDark.png";
@@ -16,13 +16,18 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         ContentArray: [],
         Favorites: [],
         Settings: {
-            bgColor: "", // TODO: add some youtube settings and such later
+            //bgColor: "", // TODO: add some youtube settings and such later
             timezoneReadable: "",
             offset: 0,
             theme: ""
         },
         Timers: []
     };
+    this.FrontPageStyle = {
+        bgColor: "",
+        pColor: ""
+    };
+
 
     // ----------|
     // SOCKET.IO |
@@ -40,6 +45,9 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         // update local page
         that.Page = page;
         that.Page.CurrentContent = page.ContentArray[0];
+
+        // update frontpage styles based on settings
+        that.UpdateFrontPageStyle();
 
         // remove http lock, so history and timers can be gotten
         httplock = false;
@@ -104,6 +112,16 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         $rootScope.$broadcast("update-history"); // for updating timers view
         $rootScope.$broadcast("update-favorites"); // for updating timers view
     });
+    socket.on('settingsupdate', function(data) {
+        console.log("settingsupdate registered");
+        console.log(data);
+
+        that.Page.Settings = data;
+        that.UpdateFrontPageStyle();
+
+        $rootScope.$broadcast("update-frontpage"); // for updating timers view
+        $rootScope.$broadcast("update-settings"); // for updating settings view
+    });
 
     // outgoing
     this.PushContentToServer = function (content) {
@@ -130,6 +148,11 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         console.log("Making content unfavorite:");
         console.log(content);
         socket.emit('unfavoritecontent', content);
+    };
+    this.SaveSettings = function(settings) {
+        console.log("Saving settings to server:");
+        console.log(settings);
+        socket.emit('savesettings', settings);
     };
 
 
@@ -178,6 +201,7 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
     // HELPER FUNCTIONS |
     // ---------------- |
 
+    // public
     this.SetStarFavorite = function() {
         this.setStarToYellow();
         this.FavoriteStarTitel = "Revert current content to unfavorite";
@@ -205,6 +229,18 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
             favorite: ExistingFavorite(input)
         };
     };
+
+    this.UpdateFrontPageStyle = function () {
+        if (this.Page.Settings.theme == "Light") {
+            this.FrontPageStyle.bgColor = "white";
+            this.FrontPageStyle.pColor = "black";
+        } else {
+            this.FrontPageStyle.bgColor = "black";
+            this.FrontPageStyle.pColor = "white";
+        }
+    };
+
+    // local
     var ExistingFavorite = function(content) {
         if (that.Page.Favorites.indexOf(content) != -1)
             return true;

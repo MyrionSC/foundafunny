@@ -3,11 +3,27 @@
     font-size: 20px;
     color: green;
 }
+.SettingsSavedFeedback.ng-hide-add.ng-hide-add-active {
+    -webkit-transition: all ease-out 0.5s;
+    transition: all ease-out 0.5s;
+}
+.SettingsSavedFeedback.ng-hide {
+    color: transparent;
+}
+
 .SettingsNoChangesFeedback {
     margin: 5px;
     font-size: 20px;
     color: red;
 }
+.SettingsNoChangesFeedback.ng-hide-add.ng-hide-add-active {
+    -webkit-transition: all ease-out 0.5s;
+    transition: all ease-out 0.5s;
+}
+.SettingsNoChangesFeedback.ng-hide {
+    color: transparent;
+}
+
 .SettingsListPickers {
     margin-bottom: 15px;
     width: 400px;

@@ -32,7 +32,6 @@ io.sockets.on('connection', function (socket) {
             NotifyClients(Page, socket, "contentupdate", contentpackage, false);
         });
     });
-
     // if a client pushes new timer, update db, add it to timerstructure and notify clients
     socket.on('savetimer', function (timer) {
         console.log();
@@ -48,7 +47,6 @@ io.sockets.on('connection', function (socket) {
             NotifyClients(Page, socket, "timerupdate", {}, false);
         });
     });
-
     // if a client pushes a timer delete, update db and delete it from timerstructure
     socket.on('deletetimer', function (timer) {
         console.log();
@@ -63,7 +61,6 @@ io.sockets.on('connection', function (socket) {
             }
         });
     });
-
     socket.on('favoritecontent', function (content) {
         console.log();
         console.log("Favorite request received on content " + content + " from page " + Page.Name);
@@ -86,6 +83,17 @@ io.sockets.on('connection', function (socket) {
 
             //var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
             NotifyClients(Page, socket, "unfavoriteupdate", content, false);
+        });
+    });
+    socket.on('savesettings', function(settings) {
+        console.log();
+        console.log("Save Settings request received from page " + Page.Name);
+
+        // change all instances of content in db to unfavorite, notify other clients in callback
+        db.UpdatePageSettings(Page.Name, settings, function() {
+            Page.updateSettings(settings);
+
+            NotifyClients(Page, socket, "settingsupdate", settings, false);
         });
     });
 

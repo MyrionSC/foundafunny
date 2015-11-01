@@ -1,7 +1,7 @@
 app.service('HTTPService', function ($http) {
     var that = this;
-    //var url = 'https://foundafunny.herokuapp.com';
-    var url = 'http://localhost:5000'; // when testing
+    var url = 'https://foundafunny.herokuapp.com';
+    //var url = 'http://localhost:5000'; // when testing
 
     this.CreateNewPage = function(NewPagePackage, callback) {
         $http.post(url + '/post/createpage', NewPagePackage).

@@ -116,13 +116,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-/*.AbsoluteCenter.negZIndex-remove.negZIndex-remove-active {*/
-    /*-webkit-transition: all ease-out 0.6s;*/
-    /*transition: all ease-out 0.6s;*/
-/*}*/
-/*.negZIndex {*/
-    /*z-index: -10;*/
-/*}*/
+.FullScreen {
+    min-height: 100%;
+    min-width: 100%;
+}
 
 #inputBoxContainer.ng-hide-add,
 #foot.ng-hide-add,
