@@ -58,10 +58,9 @@
 
     <title>Show Dat Meme!</title>
 </head>
-<body ng-controller="MainCtrl" ng-mousemove="mousemove($event)">
-
-
-<div id="mainContent" ng-class="['AbsoluteCenter']" ng-mouseenter="sbs.closeOptions()">
+<body ng-controller="MainCtrl" ng-mousemove="mousemove($event)" >
+<!--ng-style="{'background-color': 'black'}"-->
+<div id="mainContent" ng-mouseenter="sbs.closeOptions()">
     <div ng-view></div>
 </div>
 

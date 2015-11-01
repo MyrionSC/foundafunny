@@ -1,7 +1,7 @@
 app.service('contentService', function ($http, $rootScope, $location, $window) {
     var that = this;
-    var url = 'https://foundafunny.herokuapp.com';
-    //var url = 'http://localhost:5000'; // when testing
+    //var url = 'https://foundafunny.herokuapp.com';
+    var url = 'http://localhost:5000'; // when testing
     var httplock = true;
 
     this.FavoriteStarColor = "Pics/FavoriteStarDark.png";

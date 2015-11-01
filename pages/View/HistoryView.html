@@ -1,39 +1,41 @@
-<div ng-show="ShowHistoryList">
-    <div style="padding: 10px">
-        <p style="font-size: 24px">Content History</p>
-    </div>
-    <div class="SetTimerOuterBorderDiv">
-        <div class="container">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th style="width: 100px"></th>
-                    <th>Content</th>
-                    <th style="width: 150px">Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="item in HistoryArray track by $index">
-                    <td>
-                        <div style="width: 100px">
-                            <img title="Select this content" class="ChooseBtn" ng-src="{{item.ArrowColor}}" ng-mouseenter="SetInputEnter(item)" ng-mouseleave="SetInputLeave(item)" ng-click="SetInputClick(item)"/>
-                            <img title="{{item.TitelText}}" class="HistoryFavoriteStar" ng-src="{{item.StarColor}}" ng-mouseenter="HistoryStarEnter(item)" ng-mouseleave="HistoryStarLeave(item)" ng-click="HistoryStarClick(item)">
-                        </div>
-                    </td>
-                    <td>{{item.content}}</td>
-                    <td style="width: 150px">{{item.date}}</td>
-                </tr>
-                </tbody>
-            </table>
+<div ng-class="['AbsoluteCenter']">
+    <div ng-show="ShowHistoryList">
+        <div style="padding: 10px">
+            <p style="font-size: 24px">Content History</p>
         </div>
+        <div class="SetTimerOuterBorderDiv">
+            <div class="container">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px"></th>
+                        <th>Content</th>
+                        <th style="width: 150px">Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in HistoryArray track by $index">
+                        <td>
+                            <div style="width: 100px">
+                                <img title="Select this content" class="ChooseBtn" ng-src="{{item.ArrowColor}}" ng-mouseenter="SetInputEnter(item)" ng-mouseleave="SetInputLeave(item)" ng-click="SetInputClick(item)"/>
+                                <img title="{{item.TitelText}}" class="HistoryFavoriteStar" ng-src="{{item.StarColor}}" ng-mouseenter="HistoryStarEnter(item)" ng-mouseleave="HistoryStarLeave(item)" ng-click="HistoryStarClick(item)">
+                            </div>
+                        </td>
+                        <td>{{item.content}}</td>
+                        <td style="width: 150px">{{item.date}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <div style="background-color: black; width: 100%; height: 1px; margin-top: -20px;"></div>
+            <div style="background-color: black; width: 100%; height: 1px; margin-top: -20px;"></div>
 
-        <div class="HistoryFooter">
-            <div class="NavBtn noSelect" ng-style="{'backgroundColor': GetNewerBtn.Color}" ng-mouseenter="NavBtnMouseIn(GetNewerBtn)" ng-mouseleave="NavBtnMouseOut(GetNewerBtn)" ng-click="GetNewer()">Get Newer</div>
-            <div class="HistoryInfo"> Showing item {{ skip }} to {{ endIndex }} </div>
-            <div class="NavBtn noSelect" ng-style="{'backgroundColor': GetOlderBtn.Color}" ng-mouseenter="NavBtnMouseIn(GetOlderBtn)" ng-mouseleave="NavBtnMouseOut(GetOlderBtn)" ng-click="GetOlder()">Get Older</div>
+            <div class="HistoryFooter">
+                <div class="NavBtn noSelect" ng-style="{'backgroundColor': GetNewerBtn.Color}" ng-mouseenter="NavBtnMouseIn(GetNewerBtn)" ng-mouseleave="NavBtnMouseOut(GetNewerBtn)" ng-click="GetNewer()">Get Newer</div>
+                <div class="HistoryInfo"> Showing item {{ skip }} to {{ endIndex }} </div>
+                <div class="NavBtn noSelect" ng-style="{'backgroundColor': GetOlderBtn.Color}" ng-mouseenter="NavBtnMouseIn(GetOlderBtn)" ng-mouseleave="NavBtnMouseOut(GetOlderBtn)" ng-click="GetOlder()">Get Older</div>
+            </div>
         </div>
     </div>
+    <img ng-hide="ShowHistoryList" ng-src="Pics/loading-gif.gif"/>
 </div>
-<img ng-hide="ShowHistoryList" ng-src="Pics/loading-gif.gif"/>
