@@ -14,7 +14,7 @@
         <label class="SetTimerLabel" >
             Timezone
             <br>
-            <select id="timezoneselect" class="SettingsListPickers">
+            <select ng-model="timezoneVal" id="timezoneselect" class="SettingsListPickers">
                 <option data-offset="-11:00" value="Pacific/Midway">(UTC-11:00) Midway Island, American Samoa</option>
                 <option data-offset="-10:00" value="Pacific/Honolulu">(UTC-10:00) Hawaii</option>
                 <option data-offset="-08:00" value="America/Anchorage">(UTC-08:00) Alaska</option>
@@ -29,9 +29,9 @@
                 <option data-offset="-05:00" value="America/Mexico_City">(UTC-05:00) Guadalajara, Mexico City, Monterrey</option>
                 <option data-offset="-05:00" value="America/Bogota">(UTC-05:00) Bogota, Lima, Quito</option>
                 <option data-offset="-05:00" value="America/Jamaica">(UTC-05:00) Kingston, George Town</option>
+                <option data-offset="-04:30" value="America/Caracas">(UTC-04:30) Caracas</option>
                 <option data-offset="-04:00" value="America/New_York">(UTC-04:00) Eastern Time (US and Canada)</option>
                 <option data-offset="-04:00" value="America/Indiana/Indianapolis">(UTC-04:00) Indiana (East)</option>
-                <option data-offset="-04:30" value="America/Caracas">(UTC-04:30) Caracas</option>
                 <option data-offset="-04:00" value="America/Asuncion">(UTC-04:00) Asuncion</option>
                 <option data-offset="-04:00" value="America/Cuiaba">(UTC-04:00) Cuiaba</option>
                 <option data-offset="-04:00" value="America/Manaus">(UTC-04:00) Georgetown, La Paz, Manaus, San Juan</option>
@@ -42,7 +42,7 @@
                 <option data-offset="-03:00" value="America/Montevideo">(UTC-03:00) Montevideo</option>
                 <option data-offset="-03:00" value="America/Bahia">(UTC-03:00) Salvador</option>
                 <option data-offset="-03:00" value="America/Santiago">(UTC-03:00) Santiago</option>
-                <option data-offset="-02:00" value="America/St_Johns">(UTC-02:30) Newfoundland and Labrador</option>
+                <option data-offset="-02:30" value="America/St_Johns">(UTC-02:30) Newfoundland and Labrador</option>
                 <option data-offset="-02:00" value="America/Godthab">(UTC-02:00) Greenland</option>
                 <option data-offset="-02:00" value="America/Noronha">(UTC-02:00) Mid-Atlantic</option>
                 <option data-offset="-01:00" value="Atlantic/Cape_Verde">(UTC-01:00) Cape Verde Islands</option>

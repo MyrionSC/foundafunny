@@ -16,7 +16,6 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         ContentArray: [],
         Favorites: [],
         Settings: {
-            //bgColor: "", // TODO: add some youtube settings and such later
             timezoneReadable: "",
             offset: 0,
             theme: ""
@@ -35,7 +34,6 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
 
     var socket = io.connect(url);
     socket.on('connect', function() { sockethandshake(socket) });
-    //socket.on('reconnect', function() { sockethandshake(socket) });
 
     // incoming
     socket.on('pageinit', function (page) {
@@ -52,18 +50,14 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         // remove http lock, so history and timers can be gotten
         httplock = false;
 
-        // update views with new data
-        $rootScope.$broadcast("update-frontpage"); // for updating frontpage view
-        $rootScope.$broadcast("update-set-timer"); // for updating set timer view
-        $rootScope.$broadcast("update-favorites"); // for updating favorites view
-        $rootScope.$broadcast("update-settings"); // for updating settings view
+        Broadcast(["update-frontpage", "update-set-timer", "update-favorites", "update-settings"]);
     });
     socket.on('contentupdate', function (data) {
         console.log("content updated:");
         console.log(data);
         that.Page.CurrentContent = data;
-        $rootScope.$broadcast("update-frontpage"); // for updating frontpage view
-        $rootScope.$broadcast("update-history"); // for updating history view
+
+        Broadcast(["update-frontpage", "update-history"]);
     });
     socket.on('timerfire', function(data) {
         console.log("timerfire registered");
@@ -75,9 +69,7 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
 
         that.Page.CurrentContent = data;
 
-        $rootScope.$broadcast("update-frontpage"); // for updating frontpage view
-        $rootScope.$broadcast("update-history"); // for updating history view
-        $rootScope.$broadcast("update-timers"); // for updating timers view
+        Broadcast(["update-frontpage", "update-history", "update-timers"]);
     });
     socket.on('timerupdate', function() {
         console.log("timerupdate registered");
@@ -94,9 +86,7 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
             that.SetStarFavorite();
         }
 
-        $rootScope.$broadcast("update-frontpage"); // for updating timers view
-        $rootScope.$broadcast("update-history"); // for updating timers view
-        $rootScope.$broadcast("update-favorites"); // for updating timers view
+        Broadcast(["update-frontpage", "update-history", "update-favorites"]);
     });
     socket.on('unfavoriteupdate', function(data) {
         console.log("unfavoriteupdate registered");
@@ -108,9 +98,7 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
             that.SetStarUnFavorite();
         }
 
-        $rootScope.$broadcast("update-frontpage"); // for updating timers view
-        $rootScope.$broadcast("update-history"); // for updating timers view
-        $rootScope.$broadcast("update-favorites"); // for updating timers view
+        Broadcast(["update-frontpage", "update-history", "update-favorites"]);
     });
     socket.on('settingsupdate', function(data) {
         console.log("settingsupdate registered");
@@ -119,8 +107,7 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         that.Page.Settings = data;
         that.UpdateFrontPageStyle();
 
-        $rootScope.$broadcast("update-frontpage"); // for updating timers view
-        $rootScope.$broadcast("update-settings"); // for updating settings view
+        Broadcast(["update-frontpage", "update-settings", "update-timers"]);
     });
 
     // outgoing
@@ -241,6 +228,11 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
     };
 
     // local
+    var Broadcast = function(receivers) {
+        for (var i = 0; i < receivers.length; i++) {
+            $rootScope.$broadcast(receivers[i]);
+        }
+    };
     var ExistingFavorite = function(content) {
         if (that.Page.Favorites.indexOf(content) != -1)
             return true;
@@ -254,10 +246,10 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
             + hours + ":" + minutes + ":" + seconds;
     };
     var sockethandshake = function(socket) {
-        console.log("Commencing handshake with server");
+        //console.log("Commencing handshake with server");
         // extracting pagename from pathname
-        var pagename = $window.location.pathname.substring(7); // todo: extract pagename from url
-        console.log(pagename);
+        var pagename = $window.location.pathname.substring(7); // if pathname composition changes, this breaks
+        //console.log(pagename);
         socket.emit("handshake", pagename);
     };
 });

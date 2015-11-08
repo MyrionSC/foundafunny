@@ -34,6 +34,9 @@ On page creation, print new page url in textbox with copy-to-clipboard button in
 todo: server
 See if server files can't be thrown into a subdirectory
 
+todo: all
+remove fontcolour and bgcolour. It is replaced by theme.
+
 Could have:
 A timecounter for the page timezone
 emoticons in text
@@ -63,6 +66,10 @@ History: if there are 10 contents, you can push get next content and get 0 conte
 Weekly timer content might be added twice at activation
 When redirecting from heroku domain to custom domain, hash routing is lost
     It might not be bad actually, atleast the mainpage is better for it imo
+Sometimes on load the frontpage favorite star is not lit if content favorite
+When changing timezones, if timers are after activation time they arctivate. This shouldn't happen.
+    For single time timers: They should be deleted
+    For weekly timers: they should be updated
 
 ----- Notes -----
 

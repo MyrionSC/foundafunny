@@ -89,9 +89,13 @@ io.sockets.on('connection', function (socket) {
         console.log();
         console.log("Save Settings request received from page " + Page.Name);
 
-        // change all instances of content in db to unfavorite, notify other clients in callback
-        db.UpdatePageSettings(Page.Name, settings, function() {
+        var offsetDiff = findDifference(Page.Settings.offset, settings.offset);
+
+        db.UpdatePageSettings(Page.Name, settings, offsetDiff, function() {
             Page.updateSettings(settings);
+
+            // update timers in timerstruct if new timezone
+            timerStruct.updateTimersTimezone(Page.Name, settings, offsetDiff);
 
             NotifyClients(Page, socket, "settingsupdate", settings, false);
         });
@@ -169,6 +173,24 @@ var NotifyClients = function (page, socket, updateType, updateObj, updateSender)
         var j = page.ConnectedSockets.length - 1;
         console.log(j + " client(s) in page " + page.Name + " notified of " + updateType);
     }
+};
+// find difference between difference from older to newer
+var findDifference = function(older, newer) {
+    var diff = 0;
+    if (older <= 0 && newer <= 0) {
+        diff = Math.abs(older - newer);
+    } else if (older <= 0 && newer >= 0) {
+        diff = older * -1 + newer;
+    } else if (older >= 0 && newer <= 0) {
+        diff = newer * -1 + older;
+    } else { // original >= 0 && newer >= 0
+        diff = Math.abs(older * -1 - newer * -1);
+    }
+
+    if (older > newer) {
+        return diff * -1;
+    }
+    return diff;
 };
 
 // perform handshake with timersstructure

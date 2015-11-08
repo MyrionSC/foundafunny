@@ -24,6 +24,7 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
     s.$on('update-favorites', function () {
         PrepareFavorites();
         UpdateView();
+        s.$apply();
     });
 
     s.SetInputEnter = function(item) {

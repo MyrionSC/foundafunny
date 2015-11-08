@@ -97,8 +97,6 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
     var DeleteDialogAssured = function (t) {
         console.log("Deleting timer locally");
 
-
-
         if (t.Type === "OneTime")
             s.OneTimeTimerArray.splice(FindTimerIndex(s.OneTimeTimerArray, t._id), 1);
         else
@@ -116,9 +114,7 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
 
     s.$on('update-timers', function () {
         resetValues();
-        //setTimeout(function() { // give the db half a second to update
         s.GetTimers();
-        //},500); // todo: check if this is still necessary at some point
     });
 
     var resetValues = function() {

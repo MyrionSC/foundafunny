@@ -162,7 +162,7 @@ var removeTimerFromStruct = function() {
     }
     return -1;
 };
-exports.removeTimerFromStructById = function(timerid) {
+var removeTimerFromStructById = exports.removeTimerFromStructById = function(timerid) {
     console.log("Trying to remove timer from timer struct");
     if (timers.length != 0) {
         var index = FindTimerIndexById(timers, timerid);
@@ -179,6 +179,32 @@ exports.removeTimerFromStructById = function(timerid) {
     console.log("Timer removal failed: No timers in struct");
     return -1;
 };
+
+exports.updateTimersTimezone = function (pagename, settings, offsetDiff) {
+    var timersToUpdate = [];
+    // find the timers of pagename
+    for (var i = 0; i < timers.length; i++) {
+        if (timers[i].PageName == pagename) {
+            timersToUpdate.push(timers[i]);
+        }
+    }
+
+    // remove timers, update them and reinsert them in struct
+    for (var i = 0; i < timersToUpdate.length; i++) {
+        var t = timersToUpdate[i];
+
+        removeTimerFromStructById(t._id);
+
+        // update activation time
+        t.ActivationTime = t.ActivationTime + offsetDiff * 60 * 1000;
+        t.OriginalActivationTime = t.OriginalActivationTime + offsetDiff * 60 * 1000;
+
+        insertTimerInStruct(t);
+    }
+};
+
+
+
 var anyTimers = function() {
     return timers.length != 0;
 };
@@ -344,7 +370,7 @@ var PrintInitTimerStructMessage = function() {
 };
 var FindTimerIndexById = function(array, id) {
     for (var i = 0; i < array.length; i++) {
-        if (array[i]._id.toString() === id)
+        if (array[i]._id.toString() === id.toString()) // toString is needed to remove quotations from input
             return i;
     }
 };

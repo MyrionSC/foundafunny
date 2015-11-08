@@ -258,11 +258,19 @@ db.AddNewTimer = function(Name, timer, callback) {
         }
     );
 };
-db.UpdatePageSettings = function (Name, settings, callback) {
+db.UpdatePageSettings = function (Name, settings, offsetDiff, callback) {
     FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
         page.Settings = settings;
+
+        // update timers activation time
+        for (var i = 0; i < page.Timers.length; i++) {
+            var t = page.Timers[i];
+
+            t.ActivationTime = t.ActivationTime + offsetDiff * 60 * 1000;
+            t.OriginalActivationTime = t.OriginalActivationTime + offsetDiff * 60 * 1000;
+        }
 
         page.save(function(err, obj) {
             if (err) {
