@@ -1,4 +1,4 @@
-app.controller('CreatePageCtrl', function ($scope, $window, HTTPService) {
+app.controller('CreatePageCtrl', function ($scope, HTTPService) {
     var s = $scope;
 
     s.Pagename = "";
@@ -21,10 +21,10 @@ app.controller('CreatePageCtrl', function ($scope, $window, HTTPService) {
         }
 
         s.ShowGeneratingPage = true;
-        var jele = $('#cpTimeZoneSelect');
+        var jele = $('#timezoneselect');
         NewPagePackage.pagename = s.Pagename;
         NewPagePackage.timezoneVal = jele.val();
-        NewPagePackage.timezoneReadable = $('#cpTimeZoneSelect option[value="' + jele.val() + '"]').html();
+        NewPagePackage.timezoneReadable = $('#timezoneselect option[value="' + jele.val() + '"]').html();
         NewPagePackage.bgColor = "#ffffff";
         NewPagePackage.theme = "Light";
         NewPagePackage.fontColor = "#000000";
@@ -38,7 +38,6 @@ app.controller('CreatePageCtrl', function ($scope, $window, HTTPService) {
 
         console.log(NewPagePackage);
         HTTPService.CreateNewPage(NewPagePackage, function(res) {
-            console.log(res);
             s.ShowGeneratingPage = false;
             if (res.data.status === 430) {
                 // pagename is taken
@@ -53,7 +52,6 @@ app.controller('CreatePageCtrl', function ($scope, $window, HTTPService) {
     };
     var NameCheck = function(str) {
         str = str.trim();
-        if (str === "") return false;
         if (str.match(/[^a-z0-9_-]+/) === null) return true;
         return false;
     };

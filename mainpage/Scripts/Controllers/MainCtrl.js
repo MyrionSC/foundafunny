@@ -1,5 +1,7 @@
-app.controller('MainCtrl', function ($scope) {
+app.controller('MainCtrl', function ($scope, $window) {
     var s = $scope;
 
-    s.test = "testing motherfucker";
+    s.bgHeight = $window.innerHeight + "px";
+    s.bgWidth = $window.innerWidth + "px";
+    s.topFillerHeight = $window.innerHeight / 5 + "px";
 });

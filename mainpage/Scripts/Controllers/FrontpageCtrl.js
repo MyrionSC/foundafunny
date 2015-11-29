@@ -1,9 +1,8 @@
-app.controller('FrontPageCtrl', function ($scope, $location) {
+app.controller('FrontPageCtrl', function ($scope, $window, $location) {
     var s = $scope;
     var l = $location;
 
-    s.test = "frontpage, this is a";
     s.click = function() {
-        l.path('createpage');
+        $('html,body').animate({scrollTop:$window.innerHeight}, 350);
     };
 });

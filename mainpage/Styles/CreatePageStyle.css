@@ -5,6 +5,10 @@
     font-size: 18px;
     margin-bottom: 20px;
 }
+#cpContentDiv {
+    width: 350px;
+    margin: auto;
+}
 .cpErrorMessage {
     color: red;
     font-size: 14px;
@@ -12,4 +16,16 @@
 }
 .cpSuccessMessage {
     color: green;
+}
+#cpShowPageUrl {
+    margin-bottom: 10px;
+}
+#cpNameInput {
+    margin-bottom: 20px;
+    width: 330px;
+    font-size: 16px;
+}
+#cpTimeZoneSelect {
+    margin-bottom: 40px;
+    width: 330px;
 }
