@@ -1,55 +1,44 @@
-Change timer init (weekly timers) to calculate activation time from originalActivationTime
-    Test before going further.
-        OriginalActivationTime doesn't get uploaded right now for some reason
-Change weekly timers and to use originalActivationTime when calculating
-    new activation time
-Set new activationTime when endcontent exists. After Activation Length, use OriginalActivationTime
-    to calculate new activation time.
+----- DOING -----
+- use https to get libraries
 
-
-
-
-
-
-
-
+- See if server files can't be thrown into a subdirectory
 
 ----- TO DO -----
 
-todo mainpage:
-Settings
-    Themes (black and white)
-Connection error handling (could be as soon as socket.io looses connection)
-Sort timers by ActivationTime in db gettimers function
-Do something about showing a lot of timers (limit gotten amount or slider)
+todo userpage:
+- Sort timers by ActivationTime in db gettimers function
+- Do something about showing a lot of timers (limit gotten amount or slider)
     slider for favorites as well
-communicate error messages to client when db operations fail etc.
-Make small notification popups (in a not annoying way) for everything (incoming and local changes)
-Settings: make page tz changeable (should change current timers activation time as well)
+- communicate error messages to client when db operations fail etc.
+- Make small notification popups (in a not annoying way) for everything (incoming and local changes)
+- Settings: make page tz changeable (should change current timers activation time as well)
+- enable / disable timer option
+- See if it is possible to determine what kind of resource something is with a http call before deciding what to do
+    Regex is not too good, because it is impossible to catch everything
 
-todo frontpage:
-Rework the design, test out bootstrap styles
-On page creation, print new page url in textbox with copy-to-clipboard button in side
+todo generationpage:
+- Rework the design, test out bootstrap styles
+- On page creation, print new page url in textbox with copy-to-clipboard button in side
 
 todo: server
-See if server files can't be thrown into a subdirectory
 
 todo: all
-remove fontcolour and bgcolour. It is replaced by theme.
+- remove fontcolour and bgcolour. It is replaced by theme
+- make better "page not found" page
 
 Could have:
-A timecounter for the page timezone
-emoticons in text
-twitter support
-9gag support
-twitch stream support
-imgur support
+- A timecounter for the page timezone
+- emoticons in text
+- twitter support
+- 9gag support (have to be tested, doesn't seem to work)
+- twitch stream support
+- Option to have more minimised option bar
 
 
 ----- BUGS -----
 
-- Important -
-fix weekly timers
+-- Important --
+- fix weekly timers
     When the client and servers date don't match, the UpdateActivationTime function does
         not calculate the time correctly. Most likely line 313 is the problem.
             Exibit 1 (client two hours ahead):
@@ -58,36 +47,37 @@ fix weekly timers
                 The server shoots wrong by one day
             possible solution: use time of client to calculate new activation time
 
-Going from history to set timer sometimes destroy datetimepicker.
+- Look what happens when you change timezone in the middle of a timer activation
+- Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
-History possibly gotten twice (it's written twice in server logs at least)
-if you change views via adressbar, sidebar fucks up
-History: if there are 10 contents, you can push get next content and get 0 content
-Weekly timer content might be added twice at activation
-When redirecting from heroku domain to custom domain, hash routing is lost
+- History possibly gotten twice (it's written twice in server logs at least)
+- if you change views via adressbar, sidebar fucks up
+- History: if there are 10 contents, you can push get next content and get 0 content
+- Weekly timer content might be added twice at activation
+- When redirecting from heroku domain to custom domain, hash routing is lost
     It might not be bad actually, atleast the mainpage is better for it imo
-Sometimes on load the frontpage favorite star is not lit if content favorite
-When changing timezones, if timers are after activation time they arctivate. This shouldn't happen.
+- Sometimes on load the frontpage favorite star is not lit if content favorite
+- When changing timezones, if timers are after activation time they arctivate. This shouldn't happen.
     For single time timers: They should be deleted
     For weekly timers: they should be updated
 
 ----- Notes -----
 
-When setting timers, should the user be allowed to set seconds? Should ask the group what they think.
-How long should users be allowed to set timer ActivationLength? Anything more than 1000 sec would
+- When setting timers, should the user be allowed to set seconds? Should ask the group what they think.
+- How long should users be allowed to set timer ActivationLength? Anything more than 1000 sec would
     probably be stupid
-The values in setTimer are almost certainly wrong for various tz's, but that is a problem for a later date
-bootstrap via cdn sometimes takes a few seconds to load. consider placing it locally if problems persists.
-Should timer activation content be added to db when no one is online? Should it be added at all?
-Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
+- bootstrap via cdn sometimes takes a few seconds to load. consider placing it locally if problems persists.
+- Should timer activation content be added to db when no one is online? Should it be added at all?
+- Remember to monkeytest content input. Too long contents will fuck history view up, I guarantee it!
     (maybe not anymore with bootstrap
-Time zone shifts (like shift from winter to summer time) doesn't change timers and pagetime accordingly
+- Time zone shifts (like shift from winter to summer time) doesn't change timers and pagetime accordingly
     I'm thinking that people can shift the pagetime themselves when their time shifts
     I just have to provide the functionality of course.
+- If I delete pages from the db manually the server cracks if someone were on them.
 
 ---- Before Release -----
 
-Find stable versions of dependencies and use those instead of the newest versions always.
+- Find stable versions of dependencies and use those instead of the newest versions always.
 
 ----- Random thoughts -----
 
