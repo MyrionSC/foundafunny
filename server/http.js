@@ -3,7 +3,7 @@
 // --------|
 
 var db = require("./mongoDB.js");
-var app = require('./app.js').app;
+var app = require('./../app.js').app;
 var pages = require('./Pages.js');
 var console = process.console; // for logs
 

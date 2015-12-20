@@ -1,4 +1,4 @@
-var app = require("./app.js");
+var app = require("./../app.js");
 var io = require('socket.io')(app.server);
 var timerStruct = require('./TimersStructure.js');
 var db = require('./mongoDB.js');
