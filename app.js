@@ -35,25 +35,22 @@ app.get('/', function(req, res) {
 });
 app.use('/pages', function(req, res, next) {
     var pagename = "";
-    if (req.originalUrl.match(/\./) === null) {
-        // IMPORTANT: this extracts the pagename from the orig url by cutting the "/pages/" from the front of the url.
-        // If the orig url changes length, then everything breaks down!
-        pagename = req.originalUrl.substring(7);
+    if (req.originalUrl.match(/\./) === null) { // we don't want period in our strings. It shouldn't be possible either
+		pagename = req.originalUrl.substring(7); // todo: This is a really fickle system, if the path before it changes it breaks
+		console.log();
+		console.log("Client trying to connect to page " + pagename);
+		console.log("Checking if page " + pagename + " exists");
 
-        console.log();
-        console.log("Client trying to connect to page " + pagename);
-        console.log("Checking if page " + pagename + " exists");
-
-        // check if page exists
-        if (pages.getPage(pagename) === undefined) {
-            console.log("Page " + pagename + " does not exist");
-            req.url = "/error/pagenotfound.html"; // redirect to error page
-        }
-        else {
-            console.log("Page " + pagename + " exists");
-            req.url = "/"; // redirect to /pages/
-        }
-        console.log();
+		// check if page exists
+		if (pages.getPage(pagename) === undefined) {
+			console.log("Page " + pagename + " does not exist");
+			req.url = "/error/pagenotfound.html";
+		}
+		else {
+			console.log("Page " + pagename + " exists");
+			req.url = "/";
+		}
+		console.log();
     }
     next();
 });
