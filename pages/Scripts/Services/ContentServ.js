@@ -1,8 +1,16 @@
 app.service('contentService', function ($http, $rootScope, $location, $window) {
     var that = this;
-    var url = 'https://foundafunny.herokuapp.com';
+    //var url = 'https://foundafunny.herokuapp.com';
+    var url = document.location.hostname == "localhost" ? 'http://localhost:5000' :
+        'https://foundafunny.herokuapp.com';
     //var url = 'http://localhost:5000'; // when testing
     var httplock = true;
+
+    //if (document.location.hostname == "localhost")
+    //    var url = 'http://localhost:5000'; // when testing
+    //else
+    //    var url = 'https://foundafunny.herokuapp.com';
+
 
     this.FavoriteStarColor = "Pics/FavoriteStarDark.png";
     this.FavoriteStarTitel = "Set current content as favorite";

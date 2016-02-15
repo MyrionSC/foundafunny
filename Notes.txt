@@ -1,7 +1,6 @@
 ----- DOING -----
-- use https to get libraries
 
-- See if server files can't be thrown into a subdirectory
+Make local test db
 
 ----- TO DO -----
 
@@ -15,10 +14,12 @@ todo userpage:
 - enable / disable timer option
 - See if it is possible to determine what kind of resource something is with a http call before deciding what to do
     Regex is not too good, because it is impossible to catch everything
+- Make properties of timers able to be changed
 
 todo generationpage:
-- Rework the design, test out bootstrap styles
+- Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
 - On page creation, print new page url in textbox with copy-to-clipboard button in side
+
 
 todo: server
 

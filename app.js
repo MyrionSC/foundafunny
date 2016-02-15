@@ -15,13 +15,6 @@ module.exports.server = server;
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-//app.use( bodyParser.json() );       // to support JSON-encoded bodies
-//app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-//    extended: true
-//}));
-//app.use(express.json());       // to support JSON-encoded bodies
-//app.use(express.urlencoded()); // to support URL-encoded bodies
-
 app.set('port', (process.env.PORT || 5000));
 app.all('*',function(req,res,next)
 {
@@ -43,7 +36,10 @@ app.get('/', function(req, res) {
 app.use('/pages', function(req, res, next) {
     var pagename = "";
     if (req.originalUrl.match(/\./) === null) {
+        // IMPORTANT: this extracts the pagename from the orig url by cutting the "/pages/" from the front of the url.
+        // If the orig url changes length, then everything breaks down!
         pagename = req.originalUrl.substring(7);
+
         console.log();
         console.log("Client trying to connect to page " + pagename);
         console.log("Checking if page " + pagename + " exists");
@@ -51,11 +47,11 @@ app.use('/pages', function(req, res, next) {
         // check if page exists
         if (pages.getPage(pagename) === undefined) {
             console.log("Page " + pagename + " does not exist");
-            req.url = "/error/pagenotfound.html";
+            req.url = "/error/pagenotfound.html"; // redirect to error page
         }
         else {
             console.log("Page " + pagename + " exists");
-            req.url = "/";
+            req.url = "/"; // redirect to /pages/
         }
         console.log();
     }
