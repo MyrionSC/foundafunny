@@ -29,7 +29,14 @@ app.get('/get/timers', function (request, response) {
     db.getTimers(pagename, function(err, obj) {
         if (err) return console.error(err);
 
+        console.log(obj.Timers);
+
         // todo: sort timers by closest to activation
+        obj.Timers.sort(function(a,b) {
+            return a.ActivationTime - b.ActivationTime;
+        });
+
+        console.log(obj.Timers);
 
         console.log("Returned number of timers: " + obj.Timers.length);
         response.send(obj.Timers);

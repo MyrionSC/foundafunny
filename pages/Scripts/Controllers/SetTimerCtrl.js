@@ -13,7 +13,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
     s.ShowActivationLengthWithoutEndContentError = false;
     s.ShowActivationLengthNaNError = false;
     s.ShowEndContentWithoutActivationLengthError = false;
-    s.ShowSettingsSavedFeedback = false;
+    s.ShowTimerSavedFeedback = false;
 
     // when Timer.Type switches to Weekly, show weekly checkboxes
     $scope.$watch('Timer.Type', function() {
@@ -43,7 +43,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         s.ShowActivationLengthWithoutEndContentError = false;
         s.ShowActivationLengthNaNError = false;
         s.ShowEndContentWithoutActivationLengthError = false;
-        s.ShowSettingsSavedFeedback = false;
+        s.ShowTimerSavedFeedback = false;
 
         var dpt = datepicker.data('datetimepicker').getDate();
         var hpt = hourpicker.data('datetimepicker').getDate();
@@ -97,9 +97,9 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             console.log(s.Timer);
 
             // show feedback
-            s.ShowSettingsSavedFeedback = true;
+            s.ShowTimerSavedFeedback = true;
             setTimeout(function () {
-                s.ShowSettingsSavedFeedback = false;
+                s.ShowTimerSavedFeedback = false;
             }, 3000);
 
             // send timer to server
@@ -148,6 +148,9 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
 
     optionobj.SetSelected();
 });
+
+
+
 
 // helper functions / objects
 var ActivationTimeMoreThanCurrentTime = function (diff, at) {

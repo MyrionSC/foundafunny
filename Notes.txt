@@ -1,16 +1,14 @@
 ----- DOING -----
 
-Make local test db
+- Sort timers by ActivationTime in db gettimers function
 
 ----- TO DO -----
 
 todo userpage:
-- Sort timers by ActivationTime in db gettimers function
 - Do something about showing a lot of timers (limit gotten amount or slider)
     slider for favorites as well
 - communicate error messages to client when db operations fail etc.
 - Make small notification popups (in a not annoying way) for everything (incoming and local changes)
-- Settings: make page tz changeable (should change current timers activation time as well)
 - enable / disable timer option
 - See if it is possible to determine what kind of resource something is with a http call before deciding what to do
     Regex is not too good, because it is impossible to catch everything
