@@ -1,0 +1,17 @@
+A little how to do file
+
+-------------------
+
+ADDING NEW CONTROLLER WITH VIEW
+
+1: Add new html file
+to be continued :P
+
+-------------------
+
+ADDING NEW TEMPLATE TO FRONTPAGE
+
+1: create template html file
+2: Add path to html file to s.Templates in Scripts/Controllers/FrontPageCtrl.js
+3: Add navigation logic to new template in FrontPage.js
+

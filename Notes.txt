@@ -1,6 +1,6 @@
 ----- DOING -----
 
-- Sort timers by ActivationTime in db gettimers function
+- twitch stream support
 
 ----- TO DO -----
 
@@ -30,7 +30,6 @@ Could have:
 - emoticons in text
 - twitter support
 - 9gag support (have to be tested, doesn't seem to work)
-- twitch stream support
 - Option to have more minimised option bar
 
 
@@ -45,6 +44,7 @@ Could have:
                 Server time: tuesday 11.00
                 The server shoots wrong by one day
             possible solution: use time of client to calculate new activation time
+- If multiple timers have expired when starting server, not all is deleted
 
 - Look what happens when you change timezone in the middle of a timer activation
 - Going from history to set timer sometimes destroy datetimepicker.

@@ -15,7 +15,8 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
         { name: 'Image', url: 'View/Frontpage-Templates/ImageTemp.html'},
         { name: 'Video', url: 'View/Frontpage-Templates/VideoTemp.html'},
         { name: 'Youtube', url: 'View/Frontpage-Templates/YoutubeTemp.html'},
-        { name: 'ResolvedImg', url: 'View/Frontpage-Templates/ResolvedImageTemp.html'}
+        { name: 'ResolvedImg', url: 'View/Frontpage-Templates/ResolvedImageTemp.html'},
+        { name: 'Twitch', url: 'View/Frontpage-Templates/TwitchTemp.html'}
         ];
     s.template = s.templates[0];
 
@@ -59,7 +60,7 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
 
             // extracts the video id from player
             var VideoID = "";
-            if (str.match(/https:\/\/www\.Youtube\.com/i)!= null)
+            if (str.match(/www\.Youtube\.com/i)!= null)
                 VideoID = (str.match(/watch\?v=([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
             else
                 VideoID = (str.match(/youtu\.be\/([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
@@ -112,6 +113,9 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
         if (CheckYoutubeUrl(str)) {
             s.template = s.templates[4];
         }
+        else if (CheckTwitchUrl(str)) {
+            s.template = s.templates[6];
+        }
         else if (CheckResolvedImageUrl(str)) {
             s.template = s.templates[0];
             resolver.resolve( str, function( result ){
@@ -135,20 +139,21 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
         }
     };
     var CheckImgUrl = function (url) {
-        return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+        return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
     };
     var CheckVideoUrl = function (url) {
-        return(url.match(/\.(webm|mp4)$/) != null);
+        return url.match(/\.(webm|mp4)$/) != null;
     };
     var CheckYoutubeUrl = function (url) {
-        return(url.match(/https:\/\/www\.Youtube\.com/i)!= null ||
-        url.match(/Youtu\.be/i)!= null);
+        return url.match(/www\.youtube\.com/i)!= null ||
+        url.match(/youtu\.be/i)!= null;
     };
     var CheckResolvedImageUrl = function (url) {
-        return(
-            url.match(/imgur\.com/i)!= null
-        );
+        return url.match(/imgur\.com/i)!= null;
         // todo: add more sources like 9gag, flicr
+    };
+    var CheckTwitchUrl = function (url) {
+        return url.match(/www\.twitch\.tv/i)!= null;
     };
 
     var StartTimeInSec = function(TimeString) {
