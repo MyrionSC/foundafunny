@@ -1,6 +1,6 @@
 ----- DOING -----
 
-- twitch stream support
+
 
 ----- TO DO -----
 
@@ -12,7 +12,12 @@ todo userpage:
 - enable / disable timer option
 - See if it is possible to determine what kind of resource something is with a http call before deciding what to do
     Regex is not too good, because it is impossible to catch everything
+    Try to use iframe for everything
 - Make properties of timers able to be changed
+- Name favorites
+- Change host/pages/userpage to host/userpage
+    Consider where host/logs should go. One solution is baring users to create page "logs", but logs shouldn't be
+    available to users anyway, so it should probably be moved to another address anyway.
 
 todo generationpage:
 - Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
@@ -31,7 +36,7 @@ Could have:
 - twitter support
 - 9gag support (have to be tested, doesn't seem to work)
 - Option to have more minimised option bar
-
+- Slack plugin, to add content without going to faf page
 
 ----- BUGS -----
 
@@ -46,6 +51,7 @@ Could have:
             possible solution: use time of client to calculate new activation time
 - If multiple timers have expired when starting server, not all is deleted
 
+- doesn't seem like resize works on youtube and twitch
 - Look what happens when you change timezone in the middle of a timer activation
 - Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).
@@ -59,6 +65,7 @@ Could have:
 - When changing timezones, if timers are after activation time they arctivate. This shouldn't happen.
     For single time timers: They should be deleted
     For weekly timers: they should be updated
+- When putting in new content after a timer activation the timer shouldn't activate its endcontent.
 
 ----- Notes -----
 
