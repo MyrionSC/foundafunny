@@ -8,6 +8,7 @@ app.controller('MainCtrl', function ($scope, $rootScope, $location, $window, sid
     var lastMousePosY = 0;
     var TimeoutVar = 0;
 
+    // push content in content input field on enter press
     $window.addEventListener("keypress",function(evt) {
         evt = evt || window.event;
         var charCode = evt.keyCode || evt.which;
@@ -18,6 +19,7 @@ app.controller('MainCtrl', function ($scope, $rootScope, $location, $window, sid
             if (val != "" && contentService.Page.CurrentContent.content != val) {
                 contentService.Page.CurrentContent = s.cs.ConstructContentPackage(val);     // set new value locally
                 contentService.PushContentToServer(val);      // push new value to db
+                InputEle.blur(); // removes focus
 
                 $rootScope.$broadcast("update-frontpage");
                 //$location.path("/");                    // show new value
