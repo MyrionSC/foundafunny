@@ -82,6 +82,19 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
             s.finalWidth = w + "px";
             s.finalHeight = h + "px";
         }
+        else if (s.template.name == "Twitch") {
+            s.resizeReady = true;
+
+            var str = s.cs.Page.CurrentContent.content;
+            var TwitchVideoURL = (str.match(/twitch\.tv\/([a-zA-Z0-9_]+)/i) || [" ", "bobross"])[1];
+            s.videoUrl = $sce.trustAsResourceUrl("http://player.twitch.tv/?channel=" + TwitchVideoURL);
+
+            // sets height and width to almost screensize
+            var w = document.body.clientWidth - 25,
+                h = document.body.clientHeight - 25;
+            s.finalWidth = w + "px";
+            s.finalHeight = h + "px";
+        }
     });
 
 
