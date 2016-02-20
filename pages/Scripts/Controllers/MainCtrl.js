@@ -19,7 +19,11 @@ app.controller('MainCtrl', function ($scope, $rootScope, $location, $window, sid
             if (val != "" && contentService.Page.CurrentContent.content != val) {
                 contentService.Page.CurrentContent = s.cs.ConstructContentPackage(val);     // set new value locally
                 contentService.PushContentToServer(val);      // push new value to db
-                InputEle.blur(); // removes focus
+
+                // removes focus and hide frame / input element
+                InputEle.blur();
+                s.FrameShow = false;
+                s.sbs.InputShow = false;
 
                 $rootScope.$broadcast("update-frontpage");
                 //$location.path("/");                    // show new value
