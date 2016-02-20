@@ -36,9 +36,9 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
             // set favorite star color
             for (var i = 0; i < s.HistoryArray.length; i++) {
                 var item = s.HistoryArray[i];
-                item.favorite === true ? item.StarColor = "Pics/FavoriteStarYellow.png" :
-                    item.StarColor = "Pics/FavoriteStarDark.png";
-                item.ArrowColor = "Pics/SmallArrowGrey.png";
+                item.favorite === true ? item.StarColor = "pages/Pics/FavoriteStarYellow.png" :
+                    item.StarColor = "pages/Pics/FavoriteStarDark.png";
+                item.ArrowColor = "pages/Pics/SmallArrowGrey.png";
                 item.TitelText = item.favorite === true ? "Unfavorite this content" :
                     "Make this content favorite";
             }
@@ -104,10 +104,10 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
     });
 
     s.SetInputEnter = function(item) {
-        item.ArrowColor = "Pics/SmallArrowBlack.png";
+        item.ArrowColor = "pages/Pics/SmallArrowBlack.png";
     };
     s.SetInputLeave = function(item) {
-        item.ArrowColor = "Pics/SmallArrowGrey.png";
+        item.ArrowColor = "pages/Pics/SmallArrowGrey.png";
     };
     s.SetInputClick = function (item) {
         if (s.cs.Page.CurrentContent.content != item.content) {
@@ -182,13 +182,13 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
 });
 
 var setHistoryStarToYellow = function(item) {
-    item.StarColor = "Pics/FavoriteStarYellow.png";
+    item.StarColor = "pages/Pics/FavoriteStarYellow.png";
 };
 var setHistoryStarToLightYellow = function(item) {
-    item.StarColor = "Pics/FavoriteStarLightYellow.png";
+    item.StarColor = "pages/Pics/FavoriteStarLightYellow.png";
 };
 var setHistoryStarToDark = function(item) {
-    item.StarColor = "Pics/FavoriteStarDark.png";
+    item.StarColor = "pages/Pics/FavoriteStarDark.png";
 };
 
 var NavBtn = function () {

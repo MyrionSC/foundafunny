@@ -1,18 +1,10 @@
 app.service('contentService', function ($http, $rootScope, $location, $window) {
     var that = this;
-    //var url = 'https://foundafunny.herokuapp.com';
     var url = document.location.hostname == "localhost" ? 'http://localhost:5000' :
         'https://foundafunny.herokuapp.com';
-    //var url = 'http://localhost:5000'; // when testing
     var httplock = true;
 
-    //if (document.location.hostname == "localhost")
-    //    var url = 'http://localhost:5000'; // when testing
-    //else
-    //    var url = 'https://foundafunny.herokuapp.com';
-
-
-    this.FavoriteStarColor = "Pics/FavoriteStarDark.png";
+    this.FavoriteStarColor = "pages/Pics/FavoriteStarDark.png";
     this.FavoriteStarTitel = "Set current content as favorite";
     this.Page = { // this is mainly so you can see what Page looks like
         Name: "",
@@ -207,13 +199,13 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
     };
 
     this.setStarToYellow = function() {
-        that.FavoriteStarColor = "Pics/FavoriteStarYellow.png";
+        that.FavoriteStarColor = "pages/Pics/FavoriteStarYellow.png";
     };
     this.setStarToLightYellow = function() {
-        that.FavoriteStarColor = "Pics/FavoriteStarLightYellow.png";
+        that.FavoriteStarColor = "pages/Pics/FavoriteStarLightYellow.png";
     };
     this.setStarToDark = function() {
-        that.FavoriteStarColor = "Pics/FavoriteStarDark.png";
+        that.FavoriteStarColor = "pages/Pics/FavoriteStarDark.png";
     };
 
     this.ConstructContentPackage = function(input) {
@@ -254,10 +246,10 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
             + hours + ":" + minutes + ":" + seconds;
     };
     var sockethandshake = function(socket) {
-        //console.log("Commencing handshake with server");
+        console.log("Commencing handshake with server");
         // extracting pagename from pathname
-        var pagename = $window.location.pathname.substring(7); // if pathname composition changes, this breaks
-        //console.log(pagename);
+        var pagename = $window.location.pathname.substring(1); // if pathname composition changes, this breaks
+        console.log(pagename);
         socket.emit("handshake", pagename);
     };
 });

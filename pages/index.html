@@ -9,8 +9,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-animate.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="Libs/checklist-model.js"></script>
-    <script src="Libs/ImageResolver.0.5.4.js" type="text/javascript"></script>
+    <script src="pages/Libs/checklist-model.js"></script>
+    <script src="pages/Libs/ImageResolver.0.5.4.js" type="text/javascript"></script>
 
     <!--DateTime picker-->
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
@@ -21,40 +21,40 @@
     <script type="text/javascript" src="https://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>
 
     <!-- Angular dialog -->
-    <script type="text/javascript" src="Libs/angular-dialog/angular-dialog.js"></script>
-    <link rel="stylesheet" type="text/css" href="Libs/angular-dialog/angular-dialog.css">
-    <link rel="stylesheet" type="text/css" href="Libs/angular-dialog/angular-dialog-default-theme.css">
+    <script type="text/javascript" src="pages/Libs/angular-dialog/angular-dialog.js"></script>
+    <link rel="stylesheet" type="text/css" href="pages/Libs/angular-dialog/angular-dialog.css">
+    <link rel="stylesheet" type="text/css" href="pages/Libs/angular-dialog/angular-dialog-default-theme.css">
 
     <!-- Angular timer -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
-    <script type="text/javascript" src="Libs/humanize-duration.js"></script>
-    <script type="text/javascript" src="Libs/angular-timer.js"></script>
+    <script type="text/javascript" src="pages/Libs/humanize-duration.js"></script>
+    <script type="text/javascript" src="pages/Libs/angular-timer.js"></script>
 
     <!-- Style files -->
-    <link rel="stylesheet" type="text/css" href="Style/MainStyle.css">
-    <link rel="stylesheet" type="text/css" href="Style/ContentStyle.css">
-    <link rel="stylesheet" type="text/css" href="Style/HistoryStyle.css">
-    <link rel="stylesheet" type="text/css" href="Style/SetTimerStyle.css">
-    <link rel="stylesheet" type="text/css" href="Style/TimersStyle.css">
-    <link rel="stylesheet" type="text/css" href="Style/SettingsStyle.css">
+    <link rel="stylesheet" type="text/css" href="pages/Style/MainStyle.css">
+    <link rel="stylesheet" type="text/css" href="pages/Style/ContentStyle.css">
+    <link rel="stylesheet" type="text/css" href="pages/Style/HistoryStyle.css">
+    <link rel="stylesheet" type="text/css" href="pages/Style/SetTimerStyle.css">
+    <link rel="stylesheet" type="text/css" href="pages/Style/TimersStyle.css">
+    <link rel="stylesheet" type="text/css" href="pages/Style/SettingsStyle.css">
 
     <!-- Script files -->
-    <script src="Scripts/app.js"></script>
+    <script src="pages/Scripts/app.js"></script>
     <!-- Controllers -->
-    <script src="Scripts/Controllers/MainCtrl.js"></script>
-    <script src="Scripts/Controllers/FrontPageCtrl.js"></script>
-    <script src="Scripts/Controllers/FavoriteCtrl.js"></script>
-    <script src="Scripts/Controllers/HistoryCtrl.js"></script>
-    <script src="Scripts/Controllers/TimersCtrl.js"></script>
-    <script src="Scripts/Controllers/SetTimerCtrl.js"></script>
-    <script src="Scripts/Controllers/SettingsCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/MainCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/FrontPageCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/FavoriteCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/HistoryCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/TimersCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/SetTimerCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/SettingsCtrl.js"></script>
     <!-- Services -->
-    <script src="Scripts/Services/ContentServ.js"></script>
-    <script src="Scripts/Services/SidebarServ.js"></script>
+    <script src="pages/Scripts/Services/ContentServ.js"></script>
+    <script src="pages/Scripts/Services/SidebarServ.js"></script>
     <!-- Directives -->
-    <script src="Scripts/Directives/imageLoadDir.js"></script>
-    <script src="Scripts/Directives/videoLoadDir.js"></script>
-    <script src="Scripts/Directives/resizeDir.js"></script>
+    <script src="pages/Scripts/Directives/imageLoadDir.js"></script>
+    <script src="pages/Scripts/Directives/videoLoadDir.js"></script>
+    <script src="pages/Scripts/Directives/resizeDir.js"></script>
 
     <title>Show Dat Meme!</title>
 </head>
@@ -81,11 +81,11 @@
      ng-show="FrameShow" ng-click="sbs.closeOptions()">
     <div style="display: table; height: 100%">
         <div style="display: table-row; height: 20px"></div>
-        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateAgainstClockClass]" src="Pics/SmallArrowBlack.png"/></div>
-        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateAgainstClockClass]" src="Pics/SmallArrowBlack.png"/></div>
+        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateAgainstClockClass]" src="pages/Pics/SmallArrowBlack.png"/></div>
+        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateAgainstClockClass]" src="pages/Pics/SmallArrowBlack.png"/></div>
         <div style="display: table-row; height: 100%"></div>
-        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateWithClockClass]" src="Pics/SmallArrowBlack.png"/></div>
-        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateWithClockClass]" src="Pics/SmallArrowBlack.png"/></div>
+        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateWithClockClass]" src="pages/Pics/SmallArrowBlack.png"/></div>
+        <div class="arrowDiv"><img ng-class="['arrowImg', sbs.rotateWithClockClass]" src="pages/Pics/SmallArrowBlack.png"/></div>
         <div style="display: table-row; height: 20px"></div>
     </div>
 </div>

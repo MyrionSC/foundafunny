@@ -24,7 +24,7 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
     s.GetTimers = function () {
         contentService.GetTimers(function (content) {
             for (var i = 0; i < content.length; i++) {
-                content[i].DeleteIconSrc = "Pics/TrashBinDarkGrey.png";
+                content[i].DeleteIconSrc = "pages/Pics/TrashBinDarkGrey.png";
             }
 
             // sort the timers into their respective arrays
@@ -72,15 +72,15 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
     };
 
     s.DeleteIconEnter = function(t) {
-        t.DeleteIconSrc = "Pics/TrashBinBlack.png";
+        t.DeleteIconSrc = "pages/Pics/TrashBinBlack.png";
     };
     s.DeleteIconLeave = function(t) {
-        t.DeleteIconSrc = "Pics/TrashBinDarkGrey.png";
+        t.DeleteIconSrc = "pages/Pics/TrashBinDarkGrey.png";
     };
     s.DeleteIconClick = function(t) {
         // Open dialog window to make sure deletion is intended
         var DeleteTimerDialog = ngDialog.open({
-            template: 'View/Dialogs/TimerDeleteDialog.html',
+            template: 'pages/View/Dialogs/TimerDeleteDialog.html',
             className: 'ngdialog-theme-default',
             scope: s
         });

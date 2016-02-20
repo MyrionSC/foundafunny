@@ -1,5 +1,15 @@
 ----- DOING -----
 
+- Change host/pages/userpage to host/userpage
+    Consider where host/logs should go. One solution is baring users to create page "logs", but logs shouldn't be
+    available to users anyway, so it should probably be moved to another address anyway.
+
+where to change:
+    server
+        app.js
+    userpage
+    generationpage
+
 
 
 ----- TO DO -----
@@ -15,9 +25,6 @@ todo userpage:
     Try to use iframe for everything
 - Make properties of timers able to be changed
 - Name favorites
-- Change host/pages/userpage to host/userpage
-    Consider where host/logs should go. One solution is baring users to create page "logs", but logs shouldn't be
-    available to users anyway, so it should probably be moved to another address anyway.
 
 todo generationpage:
 - Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
@@ -52,6 +59,7 @@ Could have:
 - If multiple timers have expired when starting server, not all is deleted
 
 - doesn't seem like resize works on youtube and twitch
+    Everything in rezise directive is commented, would be a good place to start..
 - Look what happens when you change timezone in the middle of a timer activation
 - Going from history to set timer sometimes destroy datetimepicker.
     It is $location.set({}) that does it. Try some combinations to fix it (currently disabled).

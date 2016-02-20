@@ -33,33 +33,37 @@ app.all('*',function(req,res,next)
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html');
 });
-app.use('/pages', function(req, res, next) {
-    var pagename = "";
-    if (req.originalUrl.match(/\./) === null) { // we don't want period in our strings. It shouldn't be possible either
-		pagename = req.originalUrl.substring(7); // todo: This is a really fickle system, if the path before it changes it breaks
-		console.log();
-		console.log("Client trying to connect to page " + pagename);
-		console.log("Checking if page " + pagename + " exists");
+app.use('/', function(req, res, next) {
+    var pagename = req.originalUrl.substring(1); // remove the initial slash
 
-		// check if page exists
-		if (pages.getPage(pagename) === undefined) {
-			console.log("Page " + pagename + " does not exist");
-			req.url = "/error/pagenotfound.html";
-		}
-		else {
-			console.log("Page " + pagename + " exists");
-			req.url = "/";
-		}
-		console.log();
+    // if the url contains . or / its probably a call to an internal resource, we pass that right along
+    if (/[\.\/]/.test(pagename) === false) {
+        console.log("Client trying to connect to page " + pagename);
+        console.log("Checking if page " + pagename + " exists");
+
+        console.log(req.url);
+        // check if page exists
+        if (pages.getPage(pagename) === undefined) {
+            console.log("Page " + pagename + " does not exist");
+            req.url = "/pages/error/pagenotfound.html";
+        }
+        else {
+            console.log("Page " + pagename + " exists");
+            req.url = "/pages/index.html";
+        }
+        console.log(req.url);
+        console.log("-");
     }
+
     next();
 });
+
 app.use(express.static(__dirname + '/'));
 app.use('/pages', express.static(__dirname + '/pages'));
 
 server.listen(app.get('port'), function () {
     console.log("server started. Listening on port " + app.get('port'));
 });
-// logging
 
-app.use('/logs', scribe.webPanel());
+// logging
+app.use('/dev/logs', scribe.webPanel());

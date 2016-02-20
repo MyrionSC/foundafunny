@@ -10,13 +10,13 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
     s.paraWidth = width + "px"; // used by text
     s.resolvedContent = "";
     s.templates =
-        [ { name: 'Loading', url: 'View/Frontpage-Templates/LoadingTemp.html'},
-        { name: 'Text', url: 'View/Frontpage-Templates/TextTemp.html'},
-        { name: 'Image', url: 'View/Frontpage-Templates/ImageTemp.html'},
-        { name: 'Video', url: 'View/Frontpage-Templates/VideoTemp.html'},
-        { name: 'Youtube', url: 'View/Frontpage-Templates/YoutubeTemp.html'},
-        { name: 'ResolvedImg', url: 'View/Frontpage-Templates/ResolvedImageTemp.html'},
-        { name: 'Twitch', url: 'View/Frontpage-Templates/TwitchTemp.html'}
+        [ { name: 'Loading', url: 'pages/View/Frontpage-Templates/LoadingTemp.html'},
+        { name: 'Text', url: 'pages/View/Frontpage-Templates/TextTemp.html'},
+        { name: 'Image', url: 'pages/View/Frontpage-Templates/ImageTemp.html'},
+        { name: 'Video', url: 'pages/View/Frontpage-Templates/VideoTemp.html'},
+        { name: 'Youtube', url: 'pages/View/Frontpage-Templates/YoutubeTemp.html'},
+        { name: 'ResolvedImg', url: 'pages/View/Frontpage-Templates/ResolvedImageTemp.html'},
+        { name: 'Twitch', url: 'pages/View/Frontpage-Templates/TwitchTemp.html'}
         ];
     s.template = s.templates[0];
 

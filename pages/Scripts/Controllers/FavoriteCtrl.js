@@ -28,10 +28,10 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
     });
 
     s.SetInputEnter = function(item) {
-        item.ArrowColor = "Pics/SmallArrowBlack.png";
+        item.ArrowColor = "pages/Pics/SmallArrowBlack.png";
     };
     s.SetInputLeave = function(item) {
-        item.ArrowColor = "Pics/SmallArrowGrey.png";
+        item.ArrowColor = "pages/Pics/SmallArrowGrey.png";
     };
     s.SetInputClick = function (item) {
         if (s.cs.Page.CurrentContent.content != item.content) {
@@ -50,10 +50,10 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
     };
 
     s.HistoryStarEnter = function(item) {
-        item.StarColor = "Pics/FavoriteStarDark.png";
+        item.StarColor = "pages/Pics/FavoriteStarDark.png";
     };
     s.HistoryStarLeave = function(item) {
-        item.StarColor = "Pics/FavoriteStarYellow.png";
+        item.StarColor = "pages/Pics/FavoriteStarYellow.png";
     };
     s.HistoryStarClick = function(item) {
         // update current content if applicable
@@ -72,8 +72,8 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
 
 var FavObj = function(Content) {
     this.content = Content;
-    this.StarColor = "Pics/FavoriteStarYellow.png";
-    this.ArrowColor = "Pics/SmallArrowGrey.png";
+    this.StarColor = "pages/Pics/FavoriteStarYellow.png";
+    this.ArrowColor = "pages/Pics/SmallArrowGrey.png";
 };
 
 var contentSearch = function(array, value) {
