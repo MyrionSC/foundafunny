@@ -152,7 +152,7 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
         }
     };
     var CheckImgUrl = function (url) {
-        return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+        return url.match(/\.(jpeg|jpg|gif|gifv|png)$/) != null;
     };
     var CheckVideoUrl = function (url) {
         return url.match(/\.(webm|mp4)$/) != null;
