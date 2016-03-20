@@ -1,15 +1,5 @@
 ----- DOING -----
 
-- Change host/pages/userpage to host/userpage
-    Consider where host/logs should go. One solution is baring users to create page "logs", but logs shouldn't be
-    available to users anyway, so it should probably be moved to another address anyway.
-
-where to change:
-    server
-        app.js
-    userpage
-    generationpage
-
 
 
 ----- TO DO -----
