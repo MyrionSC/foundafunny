@@ -1,6 +1,23 @@
 ----- DOING -----
 
-
+Add more input to timers, select randomly when activating
+    1: use arrays for timer input
+        - change server
+            - change schemas
+                string to array
+            - update db manually
+                change all timer input from string to array with single string
+            - change timerarray
+                - timers in ram
+                - timer activation
+                    - should choose one input randomly from array and send that to clients/db
+        - change client
+            - change new timer
+                - save activation content and end content as array of one input
+            - change show timers
+                in the start, just show input[0]. Later, new layout for showing multiple inputs should be made in some
+                kind of dropdown list
+    2: Allow for adding / deleting input
 
 ----- TO DO -----
 
