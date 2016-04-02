@@ -24,7 +24,7 @@ mongoose.connect(uristring, function (err, res) {
 var timerSchema = new mongoose.Schema({
     Name: String,
     PageName: String,
-    StartContent: String,
+    StartContent: Array,
     Type: String,
     ActivationDays: Array,
     ActivationDaysReadable: String,
@@ -32,7 +32,7 @@ var timerSchema = new mongoose.Schema({
     OriginalActivationTime: Number,
     ActivationTimeReadable: String,
     ActivationLength: Number,
-    EndContent: String,
+    EndContent: Array,
     Active: Boolean
 });
 var pageSchema = new mongoose.Schema({

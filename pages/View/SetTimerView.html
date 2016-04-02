@@ -8,7 +8,7 @@
         </label>
         <label class="SetTimerLabel" >
             Start Content*<br>
-            <input class="SetTimerInputText" ng-model="Timer.StartContent" type="text" placeholder="Content pushed at Activation Time"/>
+            <input class="SetTimerInputText" ng-model="StartContent" type="text" placeholder="Content pushed at Activation Time"/>
         </label>
         <p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
 
@@ -62,7 +62,7 @@
         <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
         <label class="SetTimerLabel" >
             End Content<br>
-            <input class="SetTimerInputText" ng-model="Timer.EndContent" type="text" placeholder="Content activates after Activation Length"/>
+            <input class="SetTimerInputText" ng-model="EndContent" type="text" placeholder="Content activates after Activation Length"/>
         </label>
         <p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>
         <p class="SetTimerAsterixInfo">* = Obligatory</p>

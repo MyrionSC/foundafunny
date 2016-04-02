@@ -6,11 +6,11 @@ var console = process.console; // for logs
 var exports = module.exports = {};
 var io, db; // are filled after handshake from socket.js
 var timers = [];
-var pages = require ("./Pages.js");
+var pages = require("./Pages.js");
 var TestNoTimers = false; // for testing the server without timers
 
 
-exports.SocketHandshake = function(IO) {
+exports.SocketHandshake = function (IO) {
     console.log("Starting socket handshake");
 
     io = IO;
@@ -23,10 +23,10 @@ exports.SocketHandshake = function(IO) {
 };
 
 // get timers in db, check if they are still good, insert the good ones in timer structure
-var InitTimerStruct = function() {
+var InitTimerStruct = function () {
     if (pages.initDone) {
         PrintInitTimerStructMessage();
-        db.getAllTimers(function(err, pages) {
+        db.getAllTimers(function (err, pages) {
             if (err) return console.error(err);
             console.log("Number of pages retrieved from db: " + pages.length);
             //console.log("return pages from db:");
@@ -37,7 +37,7 @@ var InitTimerStruct = function() {
             var n = 0;
             for (var i = 0; i < pages.length; i++) {
                 var p = pages[i];
-                console.log("---Checking " + p.Timers.length +  " timers in page: " + p.Name);
+                console.log("---Checking " + p.Timers.length + " timers in page: " + p.Name);
                 console.log("-");
                 for (var j = 0; j < p.Timers.length; j++) {
                     var t = p.Timers[j];
@@ -64,7 +64,7 @@ var InitTimerStruct = function() {
                     console.log("-");
                 }
 
-                p.save(function(err, obj) {
+                p.save(function (err, obj) {
                     if (err) {
                         console.log("An error occured in the saving of page:");
                         console.log(p);
@@ -90,13 +90,13 @@ var InitTimerStruct = function() {
     }
     else {
         // wait 50 seconds for page init to be done and try again
-        setTimeout(function() {
+        setTimeout(function () {
             InitTimerStruct();
         }, 50);
     }
 };
 
-var StartCheckInterval = function() {
+var StartCheckInterval = function () {
     console.log('*');
     console.log("Current Time is " + new Date().toString());
     console.log("Starting timer check interval");
@@ -105,18 +105,18 @@ var StartCheckInterval = function() {
     else
         console.log("There are currently no timers in the timer struct");
 
-    setInterval(function() {
+    setInterval(function () {
         CheckIfTimerActivation();
     }, 1000);
 };
 
 
-var getNextTimer = function() {
+var getNextTimer = function () {
     if (timers.length != 0)
         return timers[0];
     return -1;
 };
-var insertTimerInStruct = exports.insertTimerInStruct = function(timer) {
+var insertTimerInStruct = exports.insertTimerInStruct = function (timer) {
     console.log("Inserting timer with activation time into struct: " + new Date(timer.ActivationTime).toString());
     if (timers.length != 0) {
         for (var i = 0, j = timers.length; i < j; i++) {
@@ -148,12 +148,12 @@ var insertTimerInStruct = exports.insertTimerInStruct = function(timer) {
     if (anyTimers())
         console.log("Next timer activation: " + new Date(getNextTimer().ActivationTime).toString());
 };
-var removeTimerFromStruct = function() {
+var removeFrontTimerFromStruct = function () {
     if (timers.length != 0) {
         var timer = timers.shift();
         console.log("timer with id removed from timestruct " + timer._id);
 
-        if (getNextTimer() != -1)
+        if (anyTimers())
             console.log("Next timer activation: " + new Date(getNextTimer().ActivationTime).toString());
 
         console.log("Number of timers now in struct: " + timers.length);
@@ -162,7 +162,7 @@ var removeTimerFromStruct = function() {
     }
     return -1;
 };
-var removeTimerFromStructById = exports.removeTimerFromStructById = function(timerid) {
+var removeTimerFromStructById = exports.removeTimerFromStructById = function (timerid) {
     console.log("Trying to remove timer from timer struct");
     if (timers.length != 0) {
         var index = FindTimerIndexById(timers, timerid);
@@ -173,7 +173,7 @@ var removeTimerFromStructById = exports.removeTimerFromStructById = function(tim
         }
         else {
             console.log("Timer removal failed: No timer with id " + timerid + " exists in timer struct");
-            return-1
+            return -1
         }
     }
     console.log("Timer removal failed: No timers in struct");
@@ -204,35 +204,23 @@ exports.updateTimersTimezone = function (pagename, settings, offsetDiff) {
 };
 
 
-
-var anyTimers = function() {
+var anyTimers = function () {
     return timers.length != 0;
 };
-var CheckIfTimerActivation = function() {
+var CheckIfTimerActivation = function () {
     if (anyTimers()) {
         var now = Date.now();
         var NextTimer = getNextTimer();
 
-        if (NextTimer != -1 && now > NextTimer.ActivationTime){
+        if (now > NextTimer.ActivationTime) {
             console.log("*");
             console.log("Timer activation registered");
 
-            //console.log(now);
-            //console.log(NextTimer.ActivationTime);
-            //console.log("now: " + new Date(now).toString());
-            //console.log("next timer: " + new Date(NextTimer.ActivationTime).toString());
-
             // remove the timer from timerstruct
-            removeTimerFromStruct();
+            removeFrontTimerFromStruct();
 
             // Perform timer activation
             ActivateTimer(NextTimer);
-
-            //if (NextTimer.Type === "Weekly") {
-            //    // update and insert next timer activation date into timerstruct
-            //    UpdateActivationTime(NextTimer, true);
-            //    insertTimerInStruct(NextTimer);
-            //}
 
             // check again to see if any new timers have activated this second
             CheckIfTimerActivation();
@@ -240,31 +228,31 @@ var CheckIfTimerActivation = function() {
     }
 };
 
-var ActivateTimer = function(timer) {
+var ActivateTimer = function (timer) {
     if (timer.Type === "OneTime")
         ActivateOneTimeTimer(timer);
     else {
         ActivateWeeklyTimer(timer);
     }
 };
+
 var ActivateWeeklyTimer = function (timer) {
     console.log("Weekly timer activated:");
     console.log(timer);
-    var EndContentFlag = timer.EndContent != "";
+    var EndContentSet = timer.EndContent.length > 1 || timer.EndContent[0] != "";
 
-    if (!EndContentFlag) {
-        db.SaveContent(timer.PageName, timer.StartContent, function() {
-            io.PushTimerPackage(timer.PageName, timer.StartContent);
+    if (!EndContentSet) {
+        db.SaveContent(timer.PageName, timer.StartContent, function () {
+            io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
 
             UpdateActivationTime(timer, true);
             insertTimerInStruct(timer);
         });
-    }
-    else {
+    } else {
         // if there is endcontent, update timer activation time and status
         if (timer.Active != true) {
             db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-                io.PushTimerPackage(timer.PageName, timer.StartContent);
+                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
 
                 timer.Active = true;
                 timer.ActivationTime += timer.ActivationLength * 1000;
@@ -272,8 +260,8 @@ var ActivateWeeklyTimer = function (timer) {
                 insertTimerInStruct(timer);
             });
         } else {
-            db.SetPageTimerInactiveAndSaveContent(timer.PageName, timer._id, timer.EndContent, function() {
-                io.PushTimerPackage(timer.PageName, timer.EndContent);
+            db.SetPageTimerInactiveAndSaveContent(timer.PageName, timer._id, timer.EndContent, function () {
+                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.EndContent));
 
                 timer.Active = false;
 
@@ -283,22 +271,21 @@ var ActivateWeeklyTimer = function (timer) {
         }
     }
 };
-var ActivateOneTimeTimer = function(timer) {
+var ActivateOneTimeTimer = function (timer) {
     console.log("Single timer activated:");
     console.log(timer);
-    var EndContentFlag = timer.EndContent != "";
+    var EndContentSet = timer.EndContent.length > 1 || timer.EndContent[0] != "";
 
     // based on EndContentFlag, delete or set timer active, and push content update to user
-    if (!EndContentFlag) {
+    if (!EndContentSet) {
         db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-            io.PushTimerPackage(timer.PageName, timer.StartContent);
+            io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
         });
-    }
-    else {
+    } else {
         // if there is endcontent, update timer activation time and status
         if (timer.Active != true) {
             db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-                io.PushTimerPackage(timer.PageName, timer.StartContent);
+                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
 
                 timer.Active = true;
                 timer.ActivationTime += timer.ActivationLength * 1000;
@@ -307,14 +294,14 @@ var ActivateOneTimeTimer = function(timer) {
             });
         } else {
             db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.EndContent, function () {
-                io.PushTimerPackage(timer.PageName, timer.EndContent);
+                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.EndContent));
             });
         }
     }
 };
 
 // should only be called on weekly timers
-var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) {
+var UpdateActivationTime = exports.UpdateActivationTime = function (timer, saveToDb) {
     var today = new Date(Date.now()); // current date in utc
     var timerdate = new Date(timer.OriginalActivationTime);
 
@@ -323,6 +310,7 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
     // if timer Activation time is later today, and today is an activation day
     // then everything is fine. If not, find the next activation day from today
     // and add that to the timers date, in utc time
+    // todo: the calculations should be done in the pages local time, the algorithm gets it wrong when utc is in another day than the local page time
     var todayWeekday = today.getDay() === 0 ? 6 : today.getDay() - 1;
     if (timer.ActivationDays[todayWeekday].Selected != true ||
         (timer.ActivationDays[todayWeekday].Selected == true &&
@@ -334,7 +322,7 @@ var UpdateActivationTime = exports.UpdateActivationTime = function(timer, Save) 
     console.log("Activation Time of timer with id " + timer._id + " is now: " + timerdate.toString());
     timer.ActivationTime = timerdate.getTime();
 
-    if (Save)
+    if (saveToDb)
         db.UpdatePageTimerActivationTime(timer.PageName, timer._id, timer.ActivationTime);
 };
 
@@ -355,22 +343,28 @@ var FindDaysUntilNextActivation = function (timer) {
         res++;
     }
 };
-var AlignDates = function(date, today) {
+var AlignDates = function (date, today) {
     date.setDate(today.getDate());
     date.setMonth(today.getMonth());
     date.setFullYear(today.getFullYear());
 };
-
-var PrintInitTimerStructMessage = function() {
+var randomlySelectContent = function (contentarray) {
+    // select one of the array items randomly
+    return contentarray[0]; // todo: placeholder
+};
+var PrintInitTimerStructMessage = function () {
     console.log();
     console.log("----------------------------------------|");
     console.log("Starting Timer Structure Initialization |");
     console.log("----------------------------------------|");
     console.log();
 };
-var FindTimerIndexById = function(array, id) {
+var FindTimerIndexById = function (array, id) {
     for (var i = 0; i < array.length; i++) {
         if (array[i]._id.toString() === id.toString()) // toString is needed to remove quotations from input
             return i;
     }
 };
+function randomIntInc (low, high) {
+    return Math.floor(Math.random() * (high - low + 1) + low);
+}

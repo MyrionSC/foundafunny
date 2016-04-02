@@ -11,8 +11,6 @@ var exports = {};
 // ----------|
 
 var online = 0;
-var tempName = "third"; // todo: hardcoded
-
 io.sockets.on('connection', function (socket) {
     var Page = {};
 
@@ -38,8 +36,9 @@ io.sockets.on('connection', function (socket) {
         console.log("new timer from page " + Page.Name + " received:");
         console.log(timer);
 
-        if (timer.Type === "Weekly")
+        if (timer.Type === "Weekly") { // weekly timers activation starts near the epoke, it needs to be updated
             timerStruct.UpdateActivationTime(timer, false);
+        }
 
         db.AddNewTimer(Page.Name, timer, function(newtimer) {
             console.log("Timer with id inserted into db: " + newtimer._id);
@@ -138,14 +137,13 @@ io.sockets.on('connection', function (socket) {
 
 exports.db = db;
 // used by timerstructure to update clients on timerfire
-exports.PushTimerPackage = function(pagename, content) {
+exports.PushTimerPackage = function (pagename, content) {
     var page = pages.getPage(pagename);
 
     // emit content to connected page sockets
     if (page === undefined || page.ConnectedSockets.length === 0) {
         console.log("No users are connected to receive timer package. Where is everyone? :(");
-    }
-    else {
+    } else {
         var contentpackage = db.CreateContentPackage(page, content);
 
         for (var i = 0; i < page.ConnectedSockets.length; i++) {

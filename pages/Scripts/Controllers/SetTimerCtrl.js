@@ -4,6 +4,8 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
 
     // binding variables
     s.Timer = new TimerObject();
+    s.StartContent = "";
+    s.EndContent = "";
     s.WeekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     s.ShowWeeklyTypes = false;
     s.SelectedWeekDays = [];
@@ -37,21 +39,16 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
     s.SaveTimer = function () {
         // reset errors
         var Errors = false;
-        s.ShowStartContentError = false;
-        s.ShowAtleastOneWeekDayError = false;
-        s.ShowActivationTimeError = false;
-        s.ShowActivationLengthWithoutEndContentError = false;
-        s.ShowActivationLengthNaNError = false;
-        s.ShowEndContentWithoutActivationLengthError = false;
-        s.ShowTimerSavedFeedback = false;
+        resetErrors();
 
+        // extract chosen time
         var dpt = datepicker.data('datetimepicker').getDate();
         var hpt = hourpicker.data('datetimepicker').getDate();
         var at = s.Timer.Type === "OneTime" ? datepicker.data('datetimepicker').getDate()
             : hourpicker.data('datetimepicker').getDate();
 
         // determine if any errors with input
-        if (s.Timer.StartContent.length === 0) {
+        if (s.StartContent.length === 0) {
             s.ShowStartContentError = true;
             Errors = true;
         }
@@ -76,9 +73,11 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             Errors = true;
         }
 
-
         // if no errors, send input to server
         if (!Errors) {
+            s.Timer.StartContent.push(s.StartContent);
+            s.Timer.EndContent.push(s.EndContent);
+
             // readable
             s.Timer.ActivationTimeReadable = s.Timer.Type === "OneTime" ?
                 ConstructReadableDateString(at) : ConstructReadableHourString(at); // used for showcase, nothing else
@@ -126,6 +125,8 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         hourpicker.data('datetimepicker').setDate(ClientDate);
     };
     var resetValues = function () {
+        s.StartContent = "";
+        s.EndContent = "";
         s.ShowWeeklyTypes = false;
         s.SelectedWeekDays = [];
         s.ShowStartContentError = false;
@@ -141,6 +142,15 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             var cb = checkboxlist[i];
             cb.checked = false;
         }
+    };
+    var resetErrors = function() {
+        s.ShowStartContentError = false;
+        s.ShowAtleastOneWeekDayError = false;
+        s.ShowActivationTimeError = false;
+        s.ShowActivationLengthWithoutEndContentError = false;
+        s.ShowActivationLengthNaNError = false;
+        s.ShowEndContentWithoutActivationLengthError = false;
+        s.ShowTimerSavedFeedback = false;
     };
 
     // init
@@ -197,16 +207,10 @@ var DetectAndSortWeekdays = function (timer, SelectedWeekDays) {
         }
     }
 };
-var AlignDates = function(date, today) {
-    date.setDate(today.getDate());
-    date.setMonth(today.getMonth());
-    date.setFullYear(today.getFullYear());
-};
-
 var TimerObject = function () {
     this.PageName = "";
     this.Name = "";
-    this.StartContent = "";
+    this.StartContent = [];
     this.Type = "OneTime";
     this.ActivationDays = [];
     this.ActivationDaysReadable = "";
@@ -214,6 +218,6 @@ var TimerObject = function () {
     this.OriginalActivationTime = 0;
     this.ActivationTimeReadable = "";
     this.ActivationLength = 0;
-    this.EndContent = "";
+    this.EndContent = [];
     this.Active = false;
 };

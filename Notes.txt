@@ -39,6 +39,7 @@ todo generationpage:
 
 
 todo: server
+- Add "page last accessed" date attribute on page
 
 todo: all
 - remove fontcolour and bgcolour. It is replaced by theme
@@ -81,6 +82,7 @@ Could have:
     For single time timers: They should be deleted
     For weekly timers: they should be updated
 - When putting in new content after a timer activation the timer shouldn't activate its endcontent.
+- When changing timezones, hours are added when they should be removed
 
 ----- Notes -----
 
