@@ -33,7 +33,7 @@ var InitTimerStruct = function () {
             //console.log(pages);
             //console.log("\n"
             console.log("Current Time is " + new Date().toString());
-            console.log();
+            console.log("*");
             var n = 0;
             for (var i = 0; i < pages.length; i++) {
                 var p = pages[i];
@@ -82,7 +82,7 @@ var InitTimerStruct = function () {
                     console.log("id: " + timers[i]._id + ", Activation Time: " + new Date(timers[i].ActivationTime).toString());
                 }
             }
-            console.log();
+            console.log("*");
 
             // after all timers have been inserted or deleted, start interval
             StartCheckInterval();
@@ -97,13 +97,14 @@ var InitTimerStruct = function () {
 };
 
 var StartCheckInterval = function () {
-    console.log('*');
     console.log("Current Time is " + new Date().toString());
     console.log("Starting timer check interval");
-    if (anyTimers())
+
+    if (anyTimers()) {
         console.log("Next timer activation at: " + new Date(getNextTimer().ActivationTime).toString());
-    else
+    } else {
         console.log("There are currently no timers in the timer struct");
+    }
 
     setInterval(function () {
         CheckIfTimerActivation();
@@ -213,7 +214,6 @@ var CheckIfTimerActivation = function () {
         var NextTimer = getNextTimer();
 
         if (now > NextTimer.ActivationTime) {
-            console.log("*");
             console.log("Timer activation registered");
 
             // remove the timer from timerstruct
@@ -240,10 +240,12 @@ var ActivateWeeklyTimer = function (timer) {
     console.log("Weekly timer activated:");
     console.log(timer);
     var EndContentSet = timer.EndContent.length > 1 || timer.EndContent[0] != "";
+    var randomStartContent;
 
     if (!EndContentSet) {
-        db.SaveContent(timer.PageName, timer.StartContent, function () {
-            io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
+        randomStartContent = randomlySelectContent(timer.StartContent);
+        db.SaveContent(timer.PageName, randomStartContent, function () {
+            io.PushTimerPackage(timer.PageName, randomStartContent);
 
             UpdateActivationTime(timer, true);
             insertTimerInStruct(timer);
@@ -251,8 +253,9 @@ var ActivateWeeklyTimer = function (timer) {
     } else {
         // if there is endcontent, update timer activation time and status
         if (timer.Active != true) {
-            db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
+            randomStartContent = randomlySelectContent(timer.StartContent);
+            db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, randomStartContent, function () {
+                io.PushTimerPackage(timer.PageName, randomStartContent);
 
                 timer.Active = true;
                 timer.ActivationTime += timer.ActivationLength * 1000;
@@ -260,8 +263,9 @@ var ActivateWeeklyTimer = function (timer) {
                 insertTimerInStruct(timer);
             });
         } else {
-            db.SetPageTimerInactiveAndSaveContent(timer.PageName, timer._id, timer.EndContent, function () {
-                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.EndContent));
+            var randomEndContent = randomlySelectContent(timer.EndContent);
+            db.SetPageTimerInactiveAndSaveContent(timer.PageName, timer._id, randomEndContent, function () {
+                io.PushTimerPackage(timer.PageName, randomEndContent);
 
                 timer.Active = false;
 
@@ -275,17 +279,20 @@ var ActivateOneTimeTimer = function (timer) {
     console.log("Single timer activated:");
     console.log(timer);
     var EndContentSet = timer.EndContent.length > 1 || timer.EndContent[0] != "";
+    var randomStartContent;
 
     // based on EndContentFlag, delete or set timer active, and push content update to user
     if (!EndContentSet) {
-        db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-            io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
+        randomStartContent = randomlySelectContent(timer.StartContent);
+        db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, randomStartContent, function () {
+            io.PushTimerPackage(timer.PageName, randomStartContent);
         });
     } else {
         // if there is endcontent, update timer activation time and status
         if (timer.Active != true) {
-            db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, timer.StartContent, function () {
-                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.StartContent));
+            randomStartContent = randomlySelectContent(timer.StartContent);
+            db.SetPageTimerActiveAndSaveContent(timer.PageName, timer._id, randomStartContent, function () {
+                io.PushTimerPackage(timer.PageName, randomStartContent);
 
                 timer.Active = true;
                 timer.ActivationTime += timer.ActivationLength * 1000;
@@ -293,8 +300,9 @@ var ActivateOneTimeTimer = function (timer) {
                 insertTimerInStruct(timer);
             });
         } else {
-            db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, timer.EndContent, function () {
-                io.PushTimerPackage(timer.PageName, randomlySelectContent(timer.EndContent));
+            var randomEndContent = randomlySelectContent(timer.EndContent);
+            db.DeletePageTimerAndSaveContent(timer.PageName, timer._id, randomEndContent, function () {
+                io.PushTimerPackage(timer.PageName, randomEndContent);
             });
         }
     }
@@ -350,14 +358,16 @@ var AlignDates = function (date, today) {
 };
 var randomlySelectContent = function (contentarray) {
     // select one of the array items randomly
-    return contentarray[0]; // todo: placeholder
+    var itemnr = randomIntInc(0, contentarray.length - 1);
+    console.log("Item number " + itemnr + " randomly chosen");
+    return contentarray[itemnr]; // todo: placeholder
 };
 var PrintInitTimerStructMessage = function () {
-    console.log();
+    console.log("*");
     console.log("----------------------------------------|");
     console.log("Starting Timer Structure Initialization |");
     console.log("----------------------------------------|");
-    console.log();
+    console.log("*");
 };
 var FindTimerIndexById = function (array, id) {
     for (var i = 0; i < array.length; i++) {
@@ -366,5 +376,6 @@ var FindTimerIndexById = function (array, id) {
     }
 };
 function randomIntInc (low, high) {
+    // returns random number between low (inclusive) and high (inclusive)
     return Math.floor(Math.random() * (high - low + 1) + low);
 }

@@ -38,10 +38,9 @@ app.use('/', function(req, res, next) {
 
     // if the url contains . or / its probably a call to an internal resource, we pass that right along
     if (/[\.\/]/.test(pagename) === false) {
+        console.log("*");
         console.log("Client trying to connect to page " + pagename);
-        console.log("Checking if page " + pagename + " exists");
 
-        console.log(req.url);
         // check if page exists
         if (pages.getPage(pagename) === undefined) {
             console.log("Page " + pagename + " does not exist");
@@ -51,8 +50,6 @@ app.use('/', function(req, res, next) {
             console.log("Page " + pagename + " exists");
             req.url = "/pages/index.html";
         }
-        console.log(req.url);
-        console.log("-");
     }
 
     next();

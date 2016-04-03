@@ -4,6 +4,9 @@ Add more input to timers, select randomly when activating
     1: use arrays for timer input (DONE)
     2: Allow for adding / deleting input
         - on create timer
+            - create dialog with input field where one can add content
+                and listview where one can see and delete content.
+                Can be used for
 
 ----- TO DO -----
 
@@ -26,6 +29,7 @@ todo generationpage:
 
 todo: server
 - Add "page last accessed" date attribute on page
+- change logs so everything is correctly delimited. (print * at beginning of action)
 
 todo: all
 - remove fontcolour and bgcolour. It is replaced by theme

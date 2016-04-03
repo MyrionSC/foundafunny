@@ -60,7 +60,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             s.ShowActivationTimeError = true;
             Errors = true;
         }
-        if (s.Timer.EndContent.length != 0 && (s.Timer.ActivationLength === null || s.Timer.ActivationLength === 0)) {
+        if (s.EndContent.length != 0 && (s.Timer.ActivationLength === null || s.Timer.ActivationLength === 0)) {
             s.ShowActivationLengthWithoutEndContentError = true;
             Errors = true;
         }
@@ -68,7 +68,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             s.ShowActivationLengthNaNError = true;
             Errors = true;
         }
-        if (s.Timer.ActivationLength != 0 && (s.Timer.ActivationLength === null || s.Timer.EndContent.length === 0)) {
+        if (s.Timer.ActivationLength != 0 && s.EndContent.length === 0) {
             s.ShowEndContentWithoutActivationLengthError = true;
             Errors = true;
         }
@@ -77,6 +77,12 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         if (!Errors) {
             s.Timer.StartContent.push(s.StartContent);
             s.Timer.EndContent.push(s.EndContent);
+
+            //s.Timer.StartContent.push("extrainput");
+            //s.Timer.StartContent.push("yasdfjsdflkj");
+            //
+            //s.Timer.EndContent.push("halleluja");
+            //s.Timer.EndContent.push("daaaaaaaaaaaaaaaaamn");
 
             // readable
             s.Timer.ActivationTimeReadable = s.Timer.Type === "OneTime" ?

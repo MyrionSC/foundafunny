@@ -355,14 +355,13 @@ var InitPagesInRAM = function() {
         console.log("Page init done. Number of pages loaded into ram: " + pages.getNumberOfPages());
         console.log("Pages names are:");
         for (var i = 0; i < dbpages.length; i++) {
-            console.log(pages.pages[i].Name);
+            console.log("- " + pages.pages[i].Name);
         }
         pages.initDone = true;
     });
 };
 var CreateContentPackage = db.CreateContentPackage = function(page, content) {
     var d = new Date(Date.now() + page.Settings.offset * 60000);
-    console.log(page.Name);
     var ramPage = pages.getPage(page.Name);
 
     return {
@@ -379,9 +378,9 @@ var ConstructReadableDateString = function (date) {
         + hours + ":" + minutes + ":" + seconds;
 };
 var PrintRAMInitMsg = function() {
-    console.log();
+    console.log("*");
     console.log("---------------------------------|");
     console.log("Starting RAM Page Initialization |");
     console.log("---------------------------------|");
-    console.log();
+    console.log("*");
 };

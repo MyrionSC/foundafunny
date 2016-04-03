@@ -20,7 +20,7 @@ io.sockets.on('connection', function (socket) {
     });
     // if a client pushes new content, update db and other clients
     socket.on('pushcontent', function (newcontent) {
-        console.log();
+        console.log("*");
         console.log("New content received: ");
         console.log(newcontent);
 
@@ -32,7 +32,7 @@ io.sockets.on('connection', function (socket) {
     });
     // if a client pushes new timer, update db, add it to timerstructure and notify clients
     socket.on('savetimer', function (timer) {
-        console.log();
+        console.log("*");
         console.log("new timer from page " + Page.Name + " received:");
         console.log(timer);
 
@@ -48,7 +48,7 @@ io.sockets.on('connection', function (socket) {
     });
     // if a client pushes a timer delete, update db and delete it from timerstructure
     socket.on('deletetimer', function (timer) {
-        console.log();
+        console.log("*");
         console.log("Timer deletion requested from page: " + timer.PageName);
         console.log(timer);
 
@@ -61,7 +61,7 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on('favoritecontent', function (content) {
-        console.log();
+        console.log("*");
         console.log("Favorite request received on content " + content + " from page " + Page.Name);
 
         // change all instances of content in db to favorite, notify other clients in callback
@@ -73,7 +73,7 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on('unfavoritecontent', function (content) {
-        console.log();
+        console.log("*");
         console.log("Unfavorite request received on content " + content + " from page " + Page.Name);
 
         // change all instances of content in db to unfavorite, notify other clients in callback
@@ -85,7 +85,7 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on('savesettings', function(settings) {
-        console.log();
+        console.log("*");
         console.log("Save Settings request received from page " + Page.Name);
 
         var offsetDiff = findDifference(Page.Settings.offset, settings.offset);
@@ -101,6 +101,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function () {
+        console.log("*");
         online--;
         Page.ConnectedSockets.splice(Page.ConnectedSockets.indexOf(socket), 1);
         console.log("Client disconnected from page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
@@ -112,7 +113,8 @@ io.sockets.on('connection', function (socket) {
             Page = pages.getPage(pagename);
             Page.ConnectedSockets.push(socket);
             online++;
-            console.log("client connected to page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
+            console.log("*");
+            console.log("client connected to page " + Page.Name + ". Online in page: " + Page.ConnectedSockets.length +
                 ". Overall online: " + online );
 
             // sends the PageObj info to new client on init
@@ -120,7 +122,6 @@ io.sockets.on('connection', function (socket) {
             db.GetInitPage(pagename, function(page) {
                 page.Favorites = Page.Favorites;
 
-                console.log();
                 console.log("sent init content to client:");
                 console.log(page);
                 socket.emit('pageinit', page);

@@ -40,7 +40,7 @@ app.get('/get/timers', function (request, response) {
 });
 
 app.post('/post/createpage', function(req, res) {
-    console.log();
+    console.log("*");
     console.log("Trying to create new page with name " + req.body.pagename);
 
     // check if page already exists
