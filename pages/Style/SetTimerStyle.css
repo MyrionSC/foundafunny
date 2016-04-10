@@ -4,6 +4,12 @@
     background-color: #eee;
     padding: 15px;
 }
+.SetTimerInputTextWithAddon {
+    padding: 3px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 272px;
+}
 .SetTimerInputText {
     padding: 3px;
     font-size: 14px;

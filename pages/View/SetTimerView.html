@@ -8,7 +8,12 @@
         </label>
         <label class="SetTimerLabel" >
             Start Content*<br>
-            <input class="SetTimerInputText" ng-model="StartContent" type="text" placeholder="Content pushed at Activation Time"/>
+            <div style="padding-bottom: 10px" class="input-append">
+                <input class="SetTimerInputTextWithAddon" ng-model="StartContent" type="text" placeholder="Content pushed at Activation Time"/>
+                <span class="add-on">
+                    <img style="width: 16px; height: 16px;" src="pages/Pics/AdditionDarkGreen.png"/>
+                </span>
+            </div>
         </label>
         <p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
 
@@ -37,7 +42,7 @@
         <label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">
             Activation Time*<br>
             <div style="padding-bottom: 10px" id="datetimepicker_date" class="input-append date">
-                <input type="text"/>
+                <input class="SetTimerInputTextWithAddon" type="text"/>
                 <span class="add-on">
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
@@ -46,7 +51,7 @@
         <label class="SetTimerLabel" ng-show="ShowWeeklyTypes">
             Activation Time*<br>
             <div style="padding-bottom: 10px" id="datetimepicker_hour" class="input-append date">
-                <input type="text"/>
+                <input class="SetTimerInputTextWithAddon" type="text"/>
                 <span class="add-on">
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
@@ -62,7 +67,12 @@
         <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
         <label class="SetTimerLabel" >
             End Content<br>
-            <input class="SetTimerInputText" ng-model="EndContent" type="text" placeholder="Content activates after Activation Length"/>
+            <div style="padding-bottom: 10px" class="input-append">
+                <input class="SetTimerInputTextWithAddon" ng-model="EndContent" type="text" placeholder="Content activates after Activation Length"/>
+                <span class="add-on">
+                    <img style="width: 16px; height: 16px;" src="pages/Pics/AdditionDarkGreen.png"/>
+                </span>
+            </div>
         </label>
         <p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>
         <p class="SetTimerAsterixInfo">* = Obligatory</p>

@@ -86,15 +86,11 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
         });
         DeleteTimerDialog.closePromise.then(function(data) {
             if (data.value === 1) {
-                console.log("Timer deletion assured");
-                DeleteDialogAssured(t);
-            }
-            else {
-                console.log("Timer deletion denied");
+                deleteTimer(t);
             }
         });
     };
-    var DeleteDialogAssured = function (t) {
+    var deleteTimer = function (t) {
         console.log("Deleting timer locally");
 
         if (t.Type === "OneTime")
