@@ -64,7 +64,8 @@
 </div>
 
 <div id="inputBoxContainer" ng-show="sbs.InputShow">
-    <input id="inputBox" type="text" placeholder="Input media-url or text to share" />
+    <input id="inputBox" type="text" placeholder="Input media-url or text to share"
+            ng-model="Content" ng-keypress="MainInputKeyPress($event)" />
     <img title="{{cs.FavoriteStarTitel}}" id="favoriteStar" ng-src="{{cs.FavoriteStarColor}}" ng-mouseenter="StarEnter()" ng-mouseleave="StarLeave()" ng-click="StarClick()">
 </div>
 

@@ -3,25 +3,22 @@ app.controller('MainCtrl', function ($scope, $rootScope, $location, $window, sid
     s.sbs = sidebarService;
     s.cs = contentService;
     s.FrameShow = false;
+    s.Content = "";
 
     var lastMousePosX = 0;
     var lastMousePosY = 0;
     var TimeoutVar = 0;
 
-    // push content in content input field on enter press
-    $window.addEventListener("keypress",function(evt) {
-        evt = evt || window.event;
-        var charCode = evt.keyCode || evt.which;
-        var InputEle = document.getElementById("inputBox");
+    s.MainInputKeyPress = function(event) {
+        event = event || window.event;
+        var charCode = event.keyCode || event.which;
 
-        if (charCode == 13 && document.activeElement == InputEle) {
-            var val = InputEle.value;
-            if (val != "" && contentService.Page.CurrentContent.content != val) {
-                contentService.Page.CurrentContent = s.cs.ConstructContentPackage(val);     // set new value locally
-                contentService.PushContentToServer(val);      // push new value to db
+        if (charCode == 13) {
+            if (s.Content != "" && contentService.Page.CurrentContent.content != s.Content) {
+                contentService.Page.CurrentContent = s.cs.ConstructContentPackage(s.Content);     // set new value locally
+                contentService.PushContentToServer(s.Content);      // push new value to db
 
                 // removes focus and hide frame / input element
-                InputEle.blur();
                 s.FrameShow = false;
                 s.sbs.InputShow = false;
 
@@ -29,9 +26,9 @@ app.controller('MainCtrl', function ($scope, $rootScope, $location, $window, sid
                 //$location.path("/");                    // show new value
                 //s.$apply(); // TODO: check if necessary
             }
-            InputEle.value = "";
+            s.Content = "";
         }
-    },false);
+    };
 
     var en = 0;
     s.mousemove = function (e) {
