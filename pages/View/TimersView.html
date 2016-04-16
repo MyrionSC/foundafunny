@@ -21,7 +21,6 @@
                         <th>Activation Time</th>
                         <th>Activation Length</th>
                         <th>End Content</th>
-                        <th>Active</th>
                         <th>Time until next activation</th>
                     </tr>
                     </thead>
@@ -32,7 +31,6 @@
                         <td>{{t.ActivationTimeReadable}}</td>
                         <td>{{t.ActivationLength}}</td>
                         <td>{{t.EndContent}}</td>
-                        <td>{{t.Active}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
                         <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
                     </tr>
@@ -52,7 +50,6 @@
                         <th>Activation Time</th>
                         <th>Activation Length</th>
                         <th>End Content</th>
-                        <th>Active</th>
                         <th>Time until next activation</th>
                     </tr>
                     </thead>
@@ -64,7 +61,6 @@
                         <td>{{t.ActivationTimeReadable}}</td>
                         <td>{{t.ActivationLength}}</td>
                         <td>{{t.EndContent}}</td>
-                        <td>{{t.Active}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
                         <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
                     </tr>

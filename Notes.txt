@@ -1,27 +1,17 @@
 ----- DOING -----
 
-Add more input to timers, select randomly when activating
-    1: use arrays for timer input (DONE)
-    2: Allow for adding / deleting input
-        - on create timer
-            - create dialog with input field where one can add content
-                and listview where one can see and delete content.
-                Can be used for
-
 ----- TO DO -----
 
 todo userpage:
 - Do something about showing a lot of timers (limit gotten amount or slider)
     slider for favorites as well
 - communicate error messages to client when db operations fail etc.
-- Make small notification popups (in a not annoying way) for everything (incoming and local changes)
 - enable / disable timer option
 - See if it is possible to determine what kind of resource something is with a http call before deciding what to do
     Regex is not too good, because it is impossible to catch everything
     Try to use iframe for everything
 - Make properties of timers able to be changed
 - Name favorites
-- Timers: Do not show "active" attribute, it is ambiguous what it means
 - Make documentation page in sidebar
     - explain multiple timer content
 
@@ -29,10 +19,9 @@ todo generationpage:
 - Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
 - On page creation, print new page url in textbox with copy-to-clipboard button in side
 
-
 todo: server
 - Add "page last accessed" date attribute on page
-- change logs so everything is correctly delimited. (print * at beginning of action)
+- change logs so everything is correctly separated. (print * at beginning of action)
 
 todo: all
 - remove fontcolour and bgcolour. It is replaced by theme
