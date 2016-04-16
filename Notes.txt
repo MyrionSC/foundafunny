@@ -21,6 +21,9 @@ todo userpage:
     Try to use iframe for everything
 - Make properties of timers able to be changed
 - Name favorites
+- Timers: Do not show "active" attribute, it is ambiguous what it means
+- Make documentation page in sidebar
+    - explain multiple timer content
 
 todo generationpage:
 - Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
@@ -42,6 +45,10 @@ Could have:
 - 9gag support (have to be tested, doesn't seem to work)
 - Option to have more minimised option bar
 - Slack plugin, to add content without going to faf page
+- Commands: Introduce some kind of start symbol (: or /)
+    - timer command: show current page time in hh:mm:ss
+    - emote command: hijack some emojis somewhere to show
+    - giphy command: giphy api
 
 ----- BUGS -----
 

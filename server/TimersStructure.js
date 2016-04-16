@@ -239,7 +239,7 @@ var ActivateTimer = function (timer) {
 var ActivateWeeklyTimer = function (timer) {
     console.log("Weekly timer activated:");
     console.log(timer);
-    var EndContentSet = timer.EndContent.length > 1 || timer.EndContent[0] != "";
+    var EndContentSet = timer.EndContent.length > 1 && timer.EndContent[0] != "";
     var randomStartContent;
 
     if (!EndContentSet) {
@@ -278,7 +278,7 @@ var ActivateWeeklyTimer = function (timer) {
 var ActivateOneTimeTimer = function (timer) {
     console.log("Single timer activated:");
     console.log(timer);
-    var EndContentSet = timer.EndContent.length > 1 || timer.EndContent[0] != "";
+    var EndContentSet = timer.EndContent.length > 0 && timer.EndContent[0] != "";
     var randomStartContent;
 
     // based on EndContentFlag, delete or set timer active, and push content update to user
@@ -359,7 +359,7 @@ var AlignDates = function (date, today) {
 var randomlySelectContent = function (contentarray) {
     // select one of the array items randomly
     var itemnr = randomIntInc(0, contentarray.length - 1);
-    console.log("Item number " + itemnr + " randomly chosen");
+    //console.log("Item number " + itemnr + " randomly chosen");
     return contentarray[itemnr]; // todo: placeholder
 };
 var PrintInitTimerStructMessage = function () {

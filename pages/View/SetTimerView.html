@@ -4,21 +4,24 @@
     </div>
     <div class="SetTimerOuterBorderDiv">
         <label class="SetTimerLabel" >
-            Name<br><input class="SetTimerInputText" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
+            Name<br>
+            <input class="SetTimerInputText" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
         </label>
         <label class="SetTimerLabel" >
             Start Content*<br>
             <div style="padding-bottom: 10px" class="input-append">
-                <input class="SetTimerInputTextWithAddon" ng-model="StartContent" type="text" placeholder="Content pushed at Activation Time"/>
-                <span class="add-on">
-                    <img style="width: 16px; height: 16px;" src="pages/Pics/AdditionDarkGreen.png"/>
+                <input class="SetTimerInputTextWithAddon" type="text" placeholder="Content pushed at Activation Time"
+                       ng-model="StartContent" ng-disabled="StartContentDisabled"/>
+                <span class="add-on" ng-mouseenter="StartContentMouseEnter()"
+                      ng-mouseleave="StartContentMouseLeave()" ng-click="AddAdditionalStartContent()">
+                    <img style="width: 16px; height: 16px;" ng-src={{StartContentAddIcon}} />
                 </span>
             </div>
         </label>
         <p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
 
         Type*<br>
-        <div class="SetTimerRadioDiv">
+        <div class="SetTimerBorderBox">
             <div class="SetTimerRadioSubDiv" style="margin: 3px; padding: 3px">
                 <label class="SetTimerLabel" style="margin-right: 30px">
                     One time
@@ -68,9 +71,11 @@
         <label class="SetTimerLabel" >
             End Content<br>
             <div style="padding-bottom: 10px" class="input-append">
-                <input class="SetTimerInputTextWithAddon" ng-model="EndContent" type="text" placeholder="Content activates after Activation Length"/>
-                <span class="add-on">
-                    <img style="width: 16px; height: 16px;" src="pages/Pics/AdditionDarkGreen.png"/>
+                <input class="SetTimerInputTextWithAddon" type="text" placeholder="Content activates after Activation Length"
+                       ng-model="EndContent" ng-disabled="EndContentDisabled"/>
+                <span class="add-on" ng-mouseenter="EndContentMouseEnter()"
+                      ng-mouseleave="EndContentMouseLeave()" ng-click="AddAdditionalEndContent()">
+                    <img style="width: 16px; height: 16px;" ng-src={{EndContentAddIcon}} />
                 </span>
             </div>
         </label>
@@ -78,9 +83,7 @@
         <p class="SetTimerAsterixInfo">* = Obligatory</p>
     </div>
     <div style="padding: 10px">
-        <button class="SetTimerButton" ng-click="SaveTimer()">
-            Save Timer
-        </button>
+        <button class="SetTimerButton" ng-click="SaveTimer()">Save Timer</button>
         <span class="SetTimerSavedFeedback" ng-show="ShowTimerSavedFeedback">New Timer Saved</span>
     </div>
 </div>

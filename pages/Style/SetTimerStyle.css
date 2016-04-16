@@ -4,16 +4,10 @@
     background-color: #eee;
     padding: 15px;
 }
-.SetTimerInputTextWithAddon {
-    padding: 3px;
-    font-size: 14px;
-    border-radius: 5px;
+input[type="text"].SetTimerInputTextWithAddon {
     width: 272px;
 }
-.SetTimerInputText {
-    padding: 3px;
-    font-size: 14px;
-    border-radius: 5px;
+input[type="text"].SetTimerInputText {
     width: 300px;
 }
 .SetTimerLabel{
@@ -44,14 +38,14 @@
     color: #888888;
     margin-bottom: -10px;
 }
-.SetTimerRadioDiv {
+.SetTimerBorderBox {
     padding: 5px;
     border-radius: 5px;
     border: solid 1px #cccccc;
     background-color: #fafafa;
     margin-bottom: 10px;
 }
-.SetTimerRadioDiv * {
+.SetTimerBorderBox * {
     margin: 0;
 }
 .SetTimerRadioSubDiv {
@@ -68,4 +62,17 @@
 .SetTimerErrorMessage {
     color: red;
     margin-top: -10px;
+}
+
+input[type="text"].SetTimerDialogInput {
+    font-size: 14px;
+    height: 30px;
+    width: 394px;
+}
+.SetTimerDialogListItem {
+    width: 370px;
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }

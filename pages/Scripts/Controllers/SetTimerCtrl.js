@@ -1,4 +1,4 @@
-app.controller('SetTimerCtrl', function($scope, $location, sidebarService, contentService) {
+app.controller('SetTimerCtrl', function($scope, $location, sidebarService, contentService, ngDialog) {
     var s = $scope;
     var optionobj = sidebarService.stInfoObj;
 
@@ -7,6 +7,14 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
     s.StartContent = "";
     s.EndContent = "";
     s.WeekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
+    s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
+    s.AddDialogContentArray = [];
+    s.AddDialogInput = "";
+    s.StartContentDisabled = false;
+    s.EndContentDisabled = false;
+
     s.ShowWeeklyTypes = false;
     s.SelectedWeekDays = [];
     s.ShowStartContentError = false;
@@ -75,16 +83,16 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
 
         // if no errors, send input to server
         if (!Errors) {
-            s.Timer.StartContent.push(s.StartContent);
-            s.Timer.EndContent.push(s.EndContent);
+            if (s.Timer.StartContent < 2) {
+                s.Timer.StartContent = [];
+                s.Timer.StartContent.push(s.StartContent);
+            }
+            if (s.Timer.EndContent < 2 && s.EndContent != "") {
+                s.Timer.EndContent = [];
+                s.Timer.EndContent.push(s.EndContent);
+            }
 
-            //s.Timer.StartContent.push("extrainput");
-            //s.Timer.StartContent.push("yasdfjsdflkj");
-            //
-            //s.Timer.EndContent.push("halleluja");
-            //s.Timer.EndContent.push("daaaaaaaaaaaaaaaaamn");
-
-            // readable
+            // readable time
             s.Timer.ActivationTimeReadable = s.Timer.Type === "OneTime" ?
                 ConstructReadableDateString(at) : ConstructReadableHourString(at); // used for showcase, nothing else
 
@@ -118,11 +126,112 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
     };
 
 
+    // -------------------|
+    // ADD DIALOG METHODS |
+    // -------------------|
+
+    s.AddAdditionalStartContent = function() {
+        s.AddDialogContentArray = s.Timer.StartContent.slice(); // copies timers StartContent array
+        if (s.Timer.StartContent < 2) {
+            s.AddDialogInput = s.StartContent;
+        } else {
+            s.AddDialogInput = "";
+        }
+
+        var AddStartContentDialog = ngDialog.open({
+            template: 'pages/View/Dialogs/AddContentDialog.html',
+            className: 'ngdialog-theme-default',
+            scope: s
+        });
+        AddStartContentDialog.closePromise.then(function(data) {
+            if (data.value === 1) {
+                s.Timer.StartContent = s.AddDialogContentArray.slice();
+                console.log(s.Timer.StartContent.length);
+
+                if (s.Timer.StartContent.length > 1) {
+                    s.StartContentDisabled = true;
+                    s.StartContent = s.Timer.StartContent.length + " content in list";
+                } else {
+                    s.StartContentDisabled = false;
+                    if (s.Timer.StartContent.length === 0) {
+                        s.StartContent = "";
+                    } else { // if length === 1
+                        s.StartContent = s.Timer.StartContent[0];
+                    }
+                }
+
+                s.AddDialogContentArray = [];
+            }
+        });
+    };
+    s.StartContentMouseEnter = function() {
+        s.StartContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
+    };
+    s.StartContentMouseLeave = function() {
+        s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
+    };
+
+    s.AddAdditionalEndContent = function() {
+        s.AddDialogContentArray = s.Timer.EndContent.slice(); // copies timers StartContent array
+        if (s.Timer.EndContent < 2) {
+            s.AddDialogInput = s.EndContent;
+        } else {
+            s.AddDialogInput = "";
+        }
+
+        var AddStartContentDialog = ngDialog.open({
+            template: 'pages/View/Dialogs/AddContentDialog.html',
+            className: 'ngdialog-theme-default',
+            scope: s
+        });
+        AddStartContentDialog.closePromise.then(function(data) {
+            if (data.value === 1) {
+                s.Timer.EndContent = s.AddDialogContentArray.slice();
+                console.log(s.Timer.EndContent.length);
+
+                if (s.Timer.EndContent.length > 1) {
+                    s.EndContentDisabled = true;
+                    s.EndContent = s.Timer.EndContent.length + " content in list";
+                } else {
+                    s.EndContentDisabled = false;
+                    if (s.Timer.EndContent.length === 0) {
+                        s.EndContent = "";
+                    } else { // if length === 1
+                        s.EndContent = s.Timer.EndContent[0];
+                    }
+                }
+
+                s.AddDialogContentArray = [];
+            }
+        });
+    };
+    s.EndContentMouseEnter = function() {
+        s.EndContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
+    };
+    s.EndContentMouseLeave = function() {
+        s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
+    };
+
+    s.DialogAddContent = function() {
+        s.AddDialogContentArray.push(s.AddDialogInput);
+        s.AddDialogInput = "";
+    };
+    s.DialogAddContentKeyPress = function(event) {
+        if (event.keyCode === 13) { // enter key
+            s.DialogAddContent();
+        }
+    };
+    s.DialogRemoveListItem = function(index) {
+        s.AddDialogContentArray.splice(index, 1);
+    };
+
+
     // broadcast receivers
     s.$on('update-set-timer', function () {
         setDatePickerToPageTime();
     });
 
+    // local functions
     var setDatePickerToPageTime = function() {
         var utc = Date.now();
         var ClientDate = new Date(utc + contentService.Page.Settings.offset * 60000);
@@ -135,6 +244,8 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         s.EndContent = "";
         s.ShowWeeklyTypes = false;
         s.SelectedWeekDays = [];
+        s.StartContentDisabled = false;
+        s.EndContentDisabled = false;
         s.ShowStartContentError = false;
         s.ShowAtleastOneWeekDayError = false;
         s.ShowActivationTimeError = false;
