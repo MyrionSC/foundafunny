@@ -1,8 +1,9 @@
-app.controller('FavoriteCtrl', function($scope, $location, sidebarService, contentService) {
+app.controller('FavoriteCtrl', function($scope, $location, $document, sidebarService, contentService) {
     var s = $scope, l = $location;
     var optionobj = sidebarService.faInfoObj;
 
     s.FavoriteArray = [];
+    s.FavListMaxHeight = $document[0].body.clientHeight - 100 + "px";
     s.ShowFavoriteList = false;
 
     optionobj.SetSelected();

@@ -14,6 +14,10 @@ todo userpage:
 - Name favorites (this involves a change of how favorites are handled on backend)
 - Make documentation page in sidebar
     - explain multiple timer content
+- handle window resize
+    - frontpage
+    - favorites
+    - timers
 
 todo generationpage:
 - Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
