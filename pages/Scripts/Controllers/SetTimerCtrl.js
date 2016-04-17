@@ -14,6 +14,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
     s.AddDialogInput = "";
     s.StartContentDisabled = false;
     s.EndContentDisabled = false;
+    s.DialogCaller = "";
 
     s.ShowWeeklyTypes = false;
     s.SelectedWeekDays = [];
@@ -137,6 +138,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         } else {
             s.AddDialogInput = "";
         }
+        s.DialogCaller = "start";
 
         var AddStartContentDialog = ngDialog.open({
             template: 'pages/View/Dialogs/AddContentDialog.html',
@@ -178,6 +180,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         } else {
             s.AddDialogInput = "";
         }
+        s.DialogCaller = "end";
 
         var AddStartContentDialog = ngDialog.open({
             template: 'pages/View/Dialogs/AddContentDialog.html',
