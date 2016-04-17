@@ -7,16 +7,14 @@
         </span>
 </label>
 
-<div class="SetTimerBorderBox SetTimerDialogScrollBar">
-    <!--<div style="">-->
-        <div ng-repeat="c in AddDialogContentArray track by $index" style="padding-bottom: 3px">
-            <label style="display: inline-flex;" ng-click="DialogRemoveListItem($index)">
-                <p class="SetTimerDialogListItem">{{c}}</p>
-                <img src="pages/Pics/TrashBinBlack.png">
-            </label>
-            <div style="height: 1px; width: 400px; background: #999;"></div>
-        </div>
-    <!--</div>-->
+<div class="SetTimerBorderBox VerticalScroll" style="height: 150px;">
+    <div ng-repeat="c in AddDialogContentArray track by $index" style="padding-bottom: 3px">
+        <label style="display: inline-flex;" ng-click="DialogRemoveListItem($index)">
+            <p class="SetTimerDialogListItem">{{c}}</p>
+            <img src="pages/Pics/TrashBinBlack.png">
+        </label>
+        <div style="height: 1px; width: 400px; background: #999;"></div>
+    </div>
 </div>
 
 <div class="ngdialog-buttons">

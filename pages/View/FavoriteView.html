@@ -2,7 +2,7 @@
     <div style="padding: 10px">
         <p style="font-size: 24px">Favorite Contents</p>
     </div>
-    <div ng-show="ShowFavoriteList" class="SetTimerOuterBorderDiv">
+    <div ng-show="ShowFavoriteList" class="OuterBorderDiv">
         <div class="container">
             <table class="table table-striped">
                 <thead>
@@ -15,8 +15,12 @@
                 <tr ng-repeat="item in FavoriteArray track by $index">
                     <td>
                         <div style="width: 100px;">
-                            <img title="Select this content" class="ChooseBtn" ng-src="{{item.ArrowColor}}" ng-mouseenter="SetInputEnter(item)" ng-mouseleave="SetInputLeave(item)" ng-click="SetInputClick(item)"/>
-                            <img title="Remove this content from favorites" class="HistoryFavoriteStar" ng-src="{{item.StarColor}}" ng-mouseenter="HistoryStarEnter(item)" ng-mouseleave="HistoryStarLeave(item)" ng-click="HistoryStarClick(item)">
+                            <img title="Select this content" class="ChooseBtn"
+                                 ng-src="{{item.ArrowColor}}" ng-mouseenter="SetInputEnter(item)"
+                                 ng-mouseleave="SetInputLeave(item)" ng-click="SetInputClick(item)"/>
+                            <img title="Remove this content from favorites" class="HistoryFavoriteStar"
+                                 ng-src="{{item.StarColor}}" ng-mouseenter="HistoryStarEnter(item)"
+                                 ng-mouseleave="HistoryStarLeave(item)" ng-click="HistoryStarClick(item)">
                         </div>
                     </td>
                     <td>{{item.content}}</td>

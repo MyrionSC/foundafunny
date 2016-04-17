@@ -1,4 +1,4 @@
-app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sidebarService, contentService) {
+app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, $document, sidebarService, contentService) {
     var s = $scope;
     s.cs = contentService;
     var optionobj = sidebarService.fpInfoObj;
@@ -6,7 +6,7 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
     s.finalWidth = "";
     s.resizeReady = false;
     s.videoUrl = ""; // used by video
-    var width = document.body.clientWidth - 100;
+    var width = $document[0].body.clientWidth - 100;
     s.paraWidth = width + "px"; // used by text
     s.resolvedContent = "";
     s.templates =
@@ -48,52 +48,54 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
         s.$apply();
     });
     s.$on('$includeContentLoaded', function(){ // is emitted when templates switch, in Navigate function
-        if (s.template.name == "Video") {
-            // ensures that video can be played according to sce restriction
-            s.videoUrl = $sce.trustAsResourceUrl(s.cs.Page.CurrentContent.content);
-        }
-        else if (s.template.name == "Youtube") {
-            s.resizeReady = true;
+        switch (s.template.name) {
+            case "Video":
+                // ensures that video can be played according to sce restriction
+                s.videoUrl = $sce.trustAsResourceUrl(s.cs.Page.CurrentContent.content);
+                break;
+            case "Youtube":
+                s.resizeReady = true;
 
-            var YTvideoURL = "";
-            var str = s.cs.Page.CurrentContent.content;
+                var YTvideoURL = "";
+                var str = s.cs.Page.CurrentContent.content;
 
-            // extracts the video id from player
-            var VideoID = "";
-            if (str.match(/www\.Youtube\.com/i)!= null)
-                VideoID = (str.match(/watch\?v=([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
-            else
-                VideoID = (str.match(/youtu\.be\/([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
+                // extracts the video id from player
+                var VideoID = "";
+                if (str.match(/www\.Youtube\.com/i)!= null)
+                    VideoID = (str.match(/watch\?v=([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
+                else
+                    VideoID = (str.match(/youtu\.be\/([^&?]+)/i) || [" ", "dQw4w9WgXcQ"])[1];
 
-            var PlayListID = (str.match(/list=([^&?]+)/i) || [" ", null])[1];
-            var VideoStartTime = (str.match(/t=([^&?]+)/i) || [" ", null])[1];
+                var PlayListID = (str.match(/list=([^&?]+)/i) || [" ", null])[1];
+                var VideoStartTime = (str.match(/t=([^&?]+)/i) || [" ", null])[1];
 
-            // construct youtube video URL
-            YTvideoURL = "https://www.youtube.com/embed/" + VideoID + "?autoplay=true";
-            if (PlayListID != null) YTvideoURL += "&loop=1&listType=playlist&list=" + PlayListID;
-            if (VideoStartTime != null) YTvideoURL += "&start=" + StartTimeInSec(VideoStartTime);
+                // construct youtube video URL
+                YTvideoURL = "https://www.youtube.com/embed/" + VideoID + "?autoplay=true";
+                if (PlayListID != null) YTvideoURL += "&loop=1&listType=playlist&list=" + PlayListID;
+                if (VideoStartTime != null) YTvideoURL += "&start=" + StartTimeInSec(VideoStartTime);
 
-            console.log("new youtube video url: " + YTvideoURL);
-            s.videoUrl=$sce.trustAsResourceUrl(YTvideoURL);
+                console.log("new youtube video url: " + YTvideoURL);
+                s.videoUrl=$sce.trustAsResourceUrl(YTvideoURL);
 
-            // also sets height and width to almost screensize while we're at it
-            var w = document.body.clientWidth - 25,
-                h = document.body.clientHeight - 25;
-            s.finalWidth = w + "px";
-            s.finalHeight = h + "px";
-        }
-        else if (s.template.name == "Twitch") {
-            s.resizeReady = true;
+                // also sets height and width to almost screensize while we're at it
+                var w = $document[0].body.clientWidth - 25,
+                    h = $document[0].body.clientHeight - 25;
+                s.finalWidth = w + "px";
+                s.finalHeight = h + "px";
+                break;
+            case "Twitch":
+                s.resizeReady = true;
 
-            var str = s.cs.Page.CurrentContent.content;
-            var TwitchVideoURL = (str.match(/twitch\.tv\/([a-zA-Z0-9_]+)/i) || [" ", "bobross"])[1];
-            s.videoUrl = $sce.trustAsResourceUrl("http://player.twitch.tv/?channel=" + TwitchVideoURL);
+                var str = s.cs.Page.CurrentContent.content;
+                var TwitchVideoURL = (str.match(/twitch\.tv\/([a-zA-Z0-9_]+)/i) || [" ", "bobross"])[1];
+                s.videoUrl = $sce.trustAsResourceUrl("http://player.twitch.tv/?channel=" + TwitchVideoURL);
 
-            // sets height and width to almost screensize
-            var w = document.body.clientWidth - 25,
-                h = document.body.clientHeight - 25;
-            s.finalWidth = w + "px";
-            s.finalHeight = h + "px";
+                // sets height and width to almost screensize
+                var w = $document[0].body.clientWidth - 25,
+                    h = $document[0].body.clientHeight - 25;
+                s.finalWidth = w + "px";
+                s.finalHeight = h + "px";
+                break;
         }
     });
 
@@ -106,15 +108,15 @@ app.controller('FrontPageCtrl', function($scope, $window, $location, $sce, sideb
 
     // used by image and video to fill screen correctly
     $scope.calcAndApplyDimensions = function (initHeight, initWidth) {
-        var bodyDim = document.body.clientHeight / document.body.clientWidth;
+        var bodyDim = $document[0].body.clientHeight / $document[0].body.clientWidth;
         var imgDim = initHeight / initWidth;
 
         if (bodyDim > imgDim) {
-            var w = document.body.clientWidth;
+            var w = $document[0].body.clientWidth;
             s.finalWidth = w + "px";
         }
         else {
-            var h = document.body.clientHeight;
+            var h = $document[0].body.clientHeight;
             s.finalHeight = h + "px";
         }
 

@@ -1,9 +1,3 @@
-.SetTimerOuterBorderDiv {
-    /*border: 1px black ridge;*/
-    border-radius: 10px;
-    background-color: #eee;
-    padding: 15px;
-}
 input[type="text"].SetTimerInputTextWithAddon {
     width: 272px;
 }
@@ -64,15 +58,11 @@ input[type="text"].SetTimerInputText {
     margin-top: -10px;
 }
 
+/*Dialog styles*/
 input[type="text"].SetTimerDialogInput {
     font-size: 14px;
     height: 30px;
     width: 394px;
-}
-.SetTimerDialogScrollBar {
-    height: 150px;
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 .SetTimerDialogListItem {
     width: 370px;

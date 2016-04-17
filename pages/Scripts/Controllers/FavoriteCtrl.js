@@ -21,6 +21,7 @@ app.controller('FavoriteCtrl', function($scope, $location, sidebarService, conte
     PrepareFavorites();
     UpdateView();
 
+
     s.$on('update-favorites', function () {
         PrepareFavorites();
         UpdateView();

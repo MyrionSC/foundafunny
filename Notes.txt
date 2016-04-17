@@ -11,7 +11,7 @@ todo userpage:
     Regex is not too good, because it is impossible to catch everything
     Try to use iframe for everything
 - Make properties of timers able to be changed
-- Name favorites
+- Name favorites (this involves a change of how favorites are handled on backend)
 - Make documentation page in sidebar
     - explain multiple timer content
 
@@ -22,6 +22,7 @@ todo generationpage:
 todo: server
 - Add "page last accessed" date attribute on page
 - change logs so everything is correctly separated. (print * at beginning of action)
+- Find some way to log exceptions and shutdowns
 
 todo: all
 - remove fontcolour and bgcolour. It is replaced by theme
