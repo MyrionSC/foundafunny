@@ -1,20 +1,35 @@
 ----- DOING -----
 
+- Make properties of timers able to be changed
+    - frontend
+        - Create array to store copy of gotten timers. When timers are changed they are changed in the shown timer
+            array, not in the copy. When a timer is changed, show "save changes" and "revert changes" buttons.
+            If "save changes" is pushed, push changes to server, copy shown timer array into copy timer array and hide buttons.
+            If "revert changes" is pushed, copy copy timer array to shown timer array and hide buttons.
+        - Reuse date dialogs, multiple content dialog etc. to update timers
+        - Make GUI for changing timers (clickable textboxes etc.)
+        - Send array of changed timers, to server. Find array by comparing every shown timer array to its equivalent
+            copy timer array, looking for changes.
+    - backend
+        - receive array of changed timers and pagename
+        - foreach received timer
+            - find equivalent timer in db and update it
+            - with db callback, take out and insert timer in timerstructure (if activation time should be changed)
+
 ----- TO DO -----
 
 todo userpage:
 - Do something about showing a lot of timers (limit gotten amount or slider)
-    slider for favorites as well
 - communicate error messages to client when db operations fail etc.
 - enable / disable timer option
 - See if it is possible to determine what kind of resource something is with a http call before deciding what to do
     Regex is not too good, because it is impossible to catch everything
     Try to use iframe for everything
-- Make properties of timers able to be changed
 - Name favorites (this involves a change of how favorites are handled on backend)
 - Make documentation page in sidebar
     - explain multiple timer content
 - handle window resize
+    - 
     - frontpage
     - favorites
     - timers
@@ -39,10 +54,13 @@ Could have:
 - 9gag support (have to be tested, doesn't seem to work)
 - Option to have more minimised option bar
 - Slack plugin, to add content without going to faf page
-- Commands: Introduce some kind of start symbol (: or /)
-    - timer command: show current page time in hh:mm:ss
-    - emote command: hijack some emojis somewhere to show
-    - giphy command: giphy api
+- Commands: Introduce some kind of start symbol (":-)" or "/")
+    - timer: show current page time in hh:mm:ss
+    - emote: hijack some emojis somewhere to show
+    - giphy: giphy api
+    - history: select x history from the top
+        fx: ":-)history 10" would select the 10th content from the top in history
+        If x > number of content in history, take
 
 ----- BUGS -----
 

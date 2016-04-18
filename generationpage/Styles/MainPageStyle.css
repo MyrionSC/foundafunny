@@ -11,12 +11,3 @@ p {
     border-radius: 5px;
     background: #eee;
 }
-.VerticalScroll {
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-.OuterBorderDiv {
-    border-radius: 10px;
-    background-color: #eee;
-    padding: 15px;
-}
