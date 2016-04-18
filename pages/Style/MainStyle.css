@@ -21,13 +21,6 @@ html, body {
 
     cursor: default;
 }
-.container {
-    padding: 15px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    background: #eee;
-}
 .VerticalScroll {
     overflow-y: auto;
     overflow-x: hidden;
