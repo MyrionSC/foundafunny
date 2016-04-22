@@ -240,7 +240,7 @@ var ActivateTimer = function (timer) {
 var ActivateWeeklyTimer = function (timer) {
     console.log("Weekly timer activated:");
     console.log(timer);
-    var EndContentSet = timer.EndContent.length > 1 && timer.EndContent[0] != "";
+    var EndContentSet = timer.EndContent.length > 0 && timer.EndContent[0] != "";
     var randomStartContent;
 
     if (!EndContentSet) {
