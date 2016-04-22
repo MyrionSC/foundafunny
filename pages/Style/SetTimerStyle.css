@@ -64,10 +64,11 @@ input[type="text"].SetTimerDialogInput {
     height: 30px;
     width: 394px;
 }
+.SetTimerDialogItemSeparater {
+    height: 1px;
+    width: 400px;
+    background: #999;
+}
 .SetTimerDialogListItem {
     width: 370px;
-    overflow: hidden;
-    white-space: nowrap;
-    -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
 }

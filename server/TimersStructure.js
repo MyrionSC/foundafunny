@@ -82,7 +82,8 @@ var InitTimerStruct = function () {
                     console.log("id: " + timers[i]._id + ", Activation Time: " + new Date(timers[i].ActivationTime).toString());
                 }
             }
-            console.log("*");
+
+            PrintInitDoneMessage();
 
             // after all timers have been inserted or deleted, start interval
             StartCheckInterval();
@@ -369,6 +370,15 @@ var PrintInitTimerStructMessage = function () {
     console.log("----------------------------------------|");
     console.log("*");
 };
+
+function PrintInitDoneMessage() {
+    console.log("*");
+    console.log("---------------------------|");
+    console.log("Server Initialization Done |");
+    console.log("---------------------------|");
+    console.log("*");
+}
+
 var FindTimerIndexById = function (array, id) {
     for (var i = 0; i < array.length; i++) {
         if (array[i]._id.toString() === id.toString()) // toString is needed to remove quotations from input

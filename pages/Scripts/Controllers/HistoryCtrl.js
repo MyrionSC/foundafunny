@@ -2,9 +2,7 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
     var s = $scope, l = $location;
     var optionobj = sidebarService.vhInfoObj;
 
-    // used to set proper width
-    var w = window.innerWidth * 0.75;
-    s.WrapperWidth = w + "px";
+    s.ContentWidth = window.innerWidth - 500 + "px";
 
     s.ShowHistoryList = false;
     s.skip = 0;
@@ -209,21 +207,12 @@ var NavBtn = function () {
     };
 
     this.IsLightGreen = function () {
-        if (this.Color == lightgreenrgb)
-            return true
-        else
-            return false
+        return this.Color == lightgreenrgb;
     };
     this.IsLightGrey = function () {
-        if (this.Color == lightgreyrgb)
-            return true
-        else
-            return false
+        return this.Color == lightgreyrgb;
     };
     this.IsGreen = function () {
-        if (this.Color == greenrgb)
-            return true
-        else
-            return false
+        return this.Color == greenrgb;
     };
 };

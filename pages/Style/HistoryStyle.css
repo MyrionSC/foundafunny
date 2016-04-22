@@ -28,7 +28,12 @@
     width: 100%;
 }
 
-
+.HistorySeparater {
+    background-color: black;
+    width: 100%;
+    height: 1px;
+    margin-top: -20px;
+}
 .HistoryFooter {
 margin-top: 8px;
 display: table;
@@ -38,6 +43,9 @@ width: 100%;
 .HistoryFooter > div {
 display: table-cell;
 }
+.HistoryInfo {
+    text-align: center;
+}
 .NavBtn {
     width: 100px;
     text-align: center;
@@ -46,7 +54,4 @@ display: table-cell;
     border-width: 2px;
     border-color: black;
     border-style: ridge;
-}
-.HistoryInfo {
-    text-align: center;
 }
