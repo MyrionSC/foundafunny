@@ -17,7 +17,8 @@ app.service('sidebarService', function ($location) {
     t.vtInfoObj = new OptionsInfo();
     t.stInfoObj = new OptionsInfo();
     t.csInfoObj = new OptionsInfo();
-    t.OptionInfoArray = [t.fpInfoObj, t.faInfoObj, t.vhInfoObj, t.vtInfoObj, t.stInfoObj, t.csInfoObj];
+    t.dtInfoObj = new OptionsInfo();
+    t.OptionInfoArray = [t.fpInfoObj, t.faInfoObj, t.vhInfoObj, t.vtInfoObj, t.stInfoObj, t.csInfoObj, t.dtInfoObj];
 
     // set navigation for each option
     t.fpInfoObj.Functionality = function () {
@@ -37,6 +38,9 @@ app.service('sidebarService', function ($location) {
     };
     t.csInfoObj.Functionality = function () {
         $location.path('settings');
+    };
+    t.dtInfoObj.Functionality = function () {
+        $location.path('documentation');
     };
 
 

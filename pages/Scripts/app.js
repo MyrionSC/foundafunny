@@ -8,5 +8,6 @@ app.config(function ($routeProvider) {
         .when('/timers', { templateUrl: 'pages/View/TimersView.html', controller: 'TimersCtrl'})
         .when('/settimer', { templateUrl: 'pages/View/SetTimerView.html', controller: 'SetTimerCtrl'})
         .when('/settings', { templateUrl: 'pages/View/SettingsView.html', controller: 'SettingsCtrl'})
+        .when('/documentation', { templateUrl: 'pages/View/DocumentationView.html', controller: 'DocumentationCtrl'})
         .otherwise({ redirectTo: '/frontpage' });
 });

@@ -48,6 +48,7 @@
     <script src="pages/Scripts/Controllers/TimersCtrl.js"></script>
     <script src="pages/Scripts/Controllers/SetTimerCtrl.js"></script>
     <script src="pages/Scripts/Controllers/SettingsCtrl.js"></script>
+    <script src="pages/Scripts/Controllers/DocumentationCtrl.js"></script>
     <!-- Services -->
     <script src="pages/Scripts/Services/ContentServ.js"></script>
     <script src="pages/Scripts/Services/SidebarServ.js"></script>
@@ -76,6 +77,7 @@
     <div ng-mouseenter="sbs.OptionsMouseEnter(sbs.vtInfoObj)" ng-mouseleave="sbs.OptionsMouseLeave(sbs.vtInfoObj)" ng-click="sbs.setOption(sbs.vtInfoObj)" ng-style="{'background-color': sbs.vtInfoObj.BgColor}" class="optionButtons"><span class="noSelect">Timers</span></div>
     <div ng-mouseenter="sbs.OptionsMouseEnter(sbs.stInfoObj)" ng-mouseleave="sbs.OptionsMouseLeave(sbs.stInfoObj)" ng-click="sbs.setOption(sbs.stInfoObj)" ng-style="{'background-color': sbs.stInfoObj.BgColor}" class="optionButtons"><span class="noSelect">Set Timer</span></div>
     <div ng-mouseenter="sbs.OptionsMouseEnter(sbs.csInfoObj)" ng-mouseleave="sbs.OptionsMouseLeave(sbs.csInfoObj)" ng-click="sbs.setOption(sbs.csInfoObj)" ng-style="{'background-color': sbs.csInfoObj.BgColor}" class="optionButtons"><span class="noSelect">Settings</span></div>
+    <div ng-mouseenter="sbs.OptionsMouseEnter(sbs.dtInfoObj)" ng-mouseleave="sbs.OptionsMouseLeave(sbs.dtInfoObj)" ng-click="sbs.setOption(sbs.dtInfoObj)" ng-style="{'background-color': sbs.dtInfoObj.BgColor}" class="optionButtons"><span class="noSelect">Docs</span></div>
 </div>
 
 <div id="rightSelector" class="right" ng-mouseenter="sbs.openOptions()" ng-style="{'background-color': sbs.OptionsSelectorBgColor}"
