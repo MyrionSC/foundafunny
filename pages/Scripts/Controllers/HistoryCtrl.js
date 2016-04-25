@@ -1,8 +1,10 @@
-app.controller('HistoryCtrl', function($scope, $location, sidebarService, contentService) {
+app.controller('HistoryCtrl', function($scope, $location, $window, sidebarService, contentService) {
     var s = $scope, l = $location;
     var optionobj = sidebarService.vhInfoObj;
 
-    s.ContentWidth = window.innerWidth - 500 + "px";
+    var pageWidth = $window.innerWidth;
+    s.ContainerWidth = pageWidth - 200 + "px";
+    s.ContentWidth = pageWidth - 500 + "px";
 
     s.ShowHistoryList = false;
     s.skip = 0;
@@ -99,6 +101,14 @@ app.controller('HistoryCtrl', function($scope, $location, sidebarService, conten
 
     s.$on('update-history', function () {
         s.GetHistory(s.skip, s.limit);
+    });
+
+    $scope.$watch(function(){
+        return $window.innerWidth;
+    }, function(value) {
+        var pageWidth = $window.innerWidth;
+        s.ContainerWidth = pageWidth - 200 + "px";
+        s.ContentWidth = pageWidth - 500 + "px";
     });
 
     s.SetInputEnter = function(item) {

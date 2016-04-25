@@ -1,5 +1,8 @@
 ----- DOING -----
 
+Bug: History overflow does not work
+
+**
 - Make properties of timers able to be changed
     - frontend
         - Create array to store copy of gotten timers. When timers are changed they are changed in the shown timer
@@ -30,6 +33,7 @@ todo userpage:
 - Make documentation page in sidebar
     - explain multiple timer content
 - handle window resize. This might be via a watch in the controller, but a directive would be more fancy!
+    - history
     - frontpage
     - favorites
     - timers
