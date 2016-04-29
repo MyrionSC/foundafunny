@@ -1,7 +1,13 @@
 ----- DOING -----
 
-- Make documentation page in sidebar
-    - explain multiple timer content
+- fix weekly timers
+    When the client and servers date don't match, the UpdateActivationTime function does
+        not calculate the time correctly. Most likely line 313 is the problem.
+            Exibit 1 (client two hours ahead):
+                Client time: wednesday 01.00
+                Server time: tuesday 11.00
+                The server shoots wrong by one day
+            possible solution: use time of client to calculate new activation time
 
 **
 - Make properties of timers able to be changed
@@ -27,8 +33,9 @@ todo userpage:
 - communicate error messages to client when db operations fail etc.
 - enable / disable timer option
 - See if it is possible to determine what kind of resource something is with a http call before deciding what to do
-    Regex is not too good, because it is impossible to catch everything
-    Try to use iframe for everything
+    - Regex is not too good, because it is impossible to catch everything
+    - Try to use iframe for everything
+    - evt. implement some kind of CFG approach
 - Name favorites (this involves a change of how favorites are handled on backend)
 - Refactor AddContentDialog into service so it can be used in Timers to change timers
 - handle window resize. This might be via a watch in the controller, but a directive would be more fancy!
@@ -45,6 +52,7 @@ todo: server
 - Add "page last accessed" date attribute on page
 - change logs so everything is correctly separated. (print * at beginning of action)
 - Find some way to log exceptions and shutdowns
+- make youtube content mutable
 
 todo: all
 - remove fontcolour and bgcolour. It is replaced by theme
@@ -68,14 +76,6 @@ Could have:
 ----- BUGS -----
 
 -- Important --
-- fix weekly timers
-    When the client and servers date don't match, the UpdateActivationTime function does
-        not calculate the time correctly. Most likely line 313 is the problem.
-            Exibit 1 (client two hours ahead):
-                Client time: wednesday 01.00
-                Server time: tuesday 11.00
-                The server shoots wrong by one day
-            possible solution: use time of client to calculate new activation time
 - If multiple timers have expired when starting server, not all is deleted
 
 - doesn't seem like resize works on youtube and twitch

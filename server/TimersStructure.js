@@ -313,19 +313,23 @@ var ActivateOneTimeTimer = function (timer) {
 var UpdateActivationTime = exports.UpdateActivationTime = function (timer, saveToDb) {
     var today = new Date(Date.now()); // current date in utc
     var timerdate = new Date(timer.OriginalActivationTime);
+    var timerOffset = pages.getPage(timer.PageName).Settings.offset;
 
     AlignDates(timerdate, today);
+
+    // to compare at pagetime, not utc, we have to get the construct date objects at pagetime
+    var todayPageTime = new Date(today.getTime() + timerMillisecOffset(timerOffset));
+    var timerdatePageTime = new Date(timerdate.getTime() + timerMillisecOffset(timerOffset));
 
     // if timer Activation time is later today, and today is an activation day
     // then everything is fine. If not, find the next activation day from today
     // and add that to the timers date, in utc time
-    // todo: the calculations should be done in the pages local time, the algorithm gets it wrong when utc is in another day than the local page time
-    var todayWeekday = today.getDay() === 0 ? 6 : today.getDay() - 1;
-    if (timer.ActivationDays[todayWeekday].Selected != true ||
-        (timer.ActivationDays[todayWeekday].Selected == true &&
-        today.getTime() > timerdate.getTime())) {
+    var todayPageTimeWeekday = todayPageTime.getDay() === 0 ? 6 : todayPageTime.getDay() - 1; // fucking americans
+    if (timer.ActivationDays[todayPageTimeWeekday].Selected != true ||
+        (timer.ActivationDays[todayPageTimeWeekday].Selected == true &&
+        todayPageTime.getTime() > timerdatePageTime.getTime())) {
 
-        timerdate.setDate(today.getDate() + FindDaysUntilNextActivation(timer));
+        timerdate.setDate(today.getDate() + FindDaysUntilNextActivation(timer, timerOffset));
     }
 
     console.log("Activation Time of timer with id " + timer._id + " is now: " + timerdate.toString());
@@ -335,21 +339,17 @@ var UpdateActivationTime = exports.UpdateActivationTime = function (timer, saveT
         db.UpdatePageTimerActivationTime(timer.PageName, timer._id, timer.ActivationTime);
 };
 
-var FindDaysUntilNextActivation = function (timer) {
-    var today = new Date();
-    var todayWeekday = today.getDay() === 0 ? 6 : today.getDay() - 1;
+var FindDaysUntilNextActivation = function (timer, offset) {
+    var todayPageTime = new Date(Date.now() + timerMillisecOffset(offset));
+    var todayPageTimeWeekday = todayPageTime.getDay() === 0 ? 6 : todayPageTime.getDay() - 1;
 
-    var res = 1;
+    var result = 1; // we start at one day past the current page date
     for (var i = 0; i < timer.ActivationDays.length; i++) {
-        var index = ((todayWeekday + 1 + i) % 7);
-        var obj = timer.ActivationDays[index];
-
-        if (obj.Selected === true) {
-            //console.log("Next Activation time in " + res + " days");
-            return res;
+        var index = ((todayPageTimeWeekday + 1 + i) % 7);
+        if (timer.ActivationDays[index].Selected === true) {
+            return result;
         }
-        // else
-        res++;
+        result++;
     }
 };
 var AlignDates = function (date, today) {
@@ -357,6 +357,7 @@ var AlignDates = function (date, today) {
     date.setMonth(today.getMonth());
     date.setFullYear(today.getFullYear());
 };
+
 var randomlySelectContent = function (contentarray) {
     // select one of the array items randomly
     var itemnr = randomIntInc(0, contentarray.length - 1);
@@ -388,4 +389,7 @@ var FindTimerIndexById = function (array, id) {
 function randomIntInc (low, high) {
     // returns random number between low (inclusive) and high (inclusive)
     return Math.floor(Math.random() * (high - low + 1) + low);
+}
+function timerMillisecOffset (offset) {
+    return offset * 60 * 1000;
 }
