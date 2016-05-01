@@ -1,4 +1,4 @@
-app.controller('SetTimerCtrl', function($scope, $location, sidebarService, contentService, ngDialog) {
+app.controller('SetTimerCtrl', function($scope, $location, sidebarService, contentService, dialogService, ngDialog) {
     var s = $scope;
     var optionobj = sidebarService.stInfoObj;
 
@@ -126,45 +126,29 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
         }
     };
 
-
     // -------------------|
     // ADD DIALOG METHODS |
     // -------------------|
 
     s.AddAdditionalStartContent = function() {
-        s.AddDialogContentArray = s.Timer.StartContent.slice(); // copies timers StartContent array
-        if (s.Timer.StartContent < 2) {
-            s.AddDialogInput = s.StartContent;
-        } else {
-            s.AddDialogInput = "";
-        }
-        s.DialogCaller = "start";
+        var AddDialogInput = s.Timer.StartContent < 2 ? s.StartContent : "";
+        dialogService.AddOrRemoveContentDialog(s, "start", AddDialogInput, s.Timer.StartContent.slice(),
+            function (contentArray) {
+                s.Timer.StartContent = contentArray.slice();
 
-        var AddStartContentDialog = ngDialog.open({
-            template: 'pages/View/Dialogs/AddContentDialog.html',
-            className: 'ngdialog-theme-default',
-            scope: s
-        });
-        AddStartContentDialog.closePromise.then(function(data) {
-            if (data.value === 1) {
-                s.Timer.StartContent = s.AddDialogContentArray.slice();
-                console.log(s.Timer.StartContent.length);
-
-                if (s.Timer.StartContent.length > 1) {
+                console.log(s.Timer.StartContent);
+                if (contentArray.length > 1) {
                     s.StartContentDisabled = true;
-                    s.StartContent = s.Timer.StartContent.length + " content in list";
+                    s.StartContent = contentArray.length + " content in list";
                 } else {
                     s.StartContentDisabled = false;
-                    if (s.Timer.StartContent.length === 0) {
+                    if (contentArray.length === 0) {
                         s.StartContent = "";
                     } else { // if length === 1
-                        s.StartContent = s.Timer.StartContent[0];
+                        s.StartContent = contentArray[0];
                     }
                 }
-
-                s.AddDialogContentArray = [];
-            }
-        });
+            }, function () {});
     };
     s.StartContentMouseEnter = function() {
         s.StartContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
@@ -174,58 +158,30 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
     };
 
     s.AddAdditionalEndContent = function() {
-        s.AddDialogContentArray = s.Timer.EndContent.slice(); // copies timers StartContent array
-        if (s.Timer.EndContent < 2) {
-            s.AddDialogInput = s.EndContent;
-        } else {
-            s.AddDialogInput = "";
-        }
-        s.DialogCaller = "end";
+        var AddDialogInput = s.Timer.EndContent < 2 ? s.EndContent : "";
+        dialogService.AddOrRemoveContentDialog(s, "end", AddDialogInput, s.Timer.EndContent.slice(),
+            function (contentArray) {
+                s.Timer.EndContent = contentArray.slice();
 
-        var AddStartContentDialog = ngDialog.open({
-            template: 'pages/View/Dialogs/AddContentDialog.html',
-            className: 'ngdialog-theme-default',
-            scope: s
-        });
-        AddStartContentDialog.closePromise.then(function(data) {
-            if (data.value === 1) {
-                s.Timer.EndContent = s.AddDialogContentArray.slice();
-                console.log(s.Timer.EndContent.length);
-
-                if (s.Timer.EndContent.length > 1) {
+                console.log(s.Timer.EndContent);
+                if (contentArray.length > 1) {
                     s.EndContentDisabled = true;
-                    s.EndContent = s.Timer.EndContent.length + " content in list";
+                    s.EndContent = contentArray.length + " content in list";
                 } else {
                     s.EndContentDisabled = false;
-                    if (s.Timer.EndContent.length === 0) {
+                    if (contentArray.length === 0) {
                         s.EndContent = "";
                     } else { // if length === 1
-                        s.EndContent = s.Timer.EndContent[0];
+                        s.EndContent = contentArray[0];
                     }
                 }
-
-                s.AddDialogContentArray = [];
-            }
-        });
+            }, function () {});
     };
     s.EndContentMouseEnter = function() {
         s.EndContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
     };
     s.EndContentMouseLeave = function() {
         s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
-    };
-
-    s.DialogAddContent = function() {
-        s.AddDialogContentArray.push(s.AddDialogInput);
-        s.AddDialogInput = "";
-    };
-    s.DialogAddContentKeyPress = function(event) {
-        if (event.keyCode === 13) { // enter key
-            s.DialogAddContent();
-        }
-    };
-    s.DialogRemoveListItem = function(index) {
-        s.AddDialogContentArray.splice(index, 1);
     };
 
 

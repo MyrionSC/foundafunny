@@ -15,3 +15,11 @@ ADDING NEW TEMPLATE TO FRONTPAGE
 2: Add path to html file to s.Templates in Scripts/Controllers/FrontPageCtrl.js
 3: Add navigation logic to new template in FrontPage.js
 
+-------------------
+
+ADDING NEW SERVICE
+
+1: Create js file
+2: Copy service syntax from another service file
+3: Rename the service
+4: Add the js file to index.html

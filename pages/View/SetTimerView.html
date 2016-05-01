@@ -1,18 +1,18 @@
-<div ng-class="['AbsoluteCenter']">
+<div class="AbsoluteCenter">
     <div style="padding: 10px">
         <p style="font-size: 24px">Set New Timer</p>
     </div>
     <div class="OuterBorderDiv">
         <label class="SetTimerLabel" >
             Name<br>
-            <input class="SetTimerInputText" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
+            <input class="SetTimerInput" ng-model="Timer.Name" type="text" placeholder="Name of new Timer"/>
         </label>
         <label class="SetTimerLabel" >
             Start Content*<br>
             <div style="padding-bottom: 10px" class="input-append">
-                <input class="SetTimerInputTextWithAddon" type="text" placeholder="Content pushed at Activation Time"
+                <input class="SetTimerInputWithAddon" type="text" placeholder="Content pushed at Activation Time"
                        ng-model="StartContent" ng-disabled="StartContentDisabled"/>
-                <span class="add-on" ng-mouseenter="StartContentMouseEnter()"
+                <span class="add-on" title="Add or remove timer start content" ng-mouseenter="StartContentMouseEnter()"
                       ng-mouseleave="StartContentMouseLeave()" ng-click="AddAdditionalStartContent()">
                     <img style="width: 16px; height: 16px;" ng-src={{StartContentAddIcon}} />
                 </span>
@@ -45,7 +45,7 @@
         <label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">
             Activation Time*<br>
             <div style="padding-bottom: 10px" id="datetimepicker_date" class="input-append date">
-                <input class="SetTimerInputTextWithAddon" type="text"/>
+                <input class="SetTimerInputWithAddon" type="text"/>
                 <span class="add-on">
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
@@ -54,7 +54,7 @@
         <label class="SetTimerLabel" ng-show="ShowWeeklyTypes">
             Activation Time*<br>
             <div style="padding-bottom: 10px" id="datetimepicker_hour" class="input-append date">
-                <input class="SetTimerInputTextWithAddon" type="text"/>
+                <input class="SetTimerInputWithAddon" type="text"/>
                 <span class="add-on">
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                 </span>
@@ -64,16 +64,17 @@
 
         <label class="SetTimerLabel">
             Activation Length (in seconds)<br>
-            <input class="SetTimerInputText" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
+            <input class="SetTimerInput" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
         </label>
         <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthWithoutEndContentError">If End Content is filled so must Activation Length</p>
         <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
+
         <label class="SetTimerLabel" >
             End Content<br>
             <div style="padding-bottom: 10px" class="input-append">
-                <input class="SetTimerInputTextWithAddon" type="text" placeholder="Content activates after Activation Length"
+                <input class="SetTimerInputWithAddon" type="text" placeholder="Content activates after Activation Length"
                        ng-model="EndContent" ng-disabled="EndContentDisabled"/>
-                <span class="add-on" ng-mouseenter="EndContentMouseEnter()"
+                <span class="add-on" title="Add or remove timer end content" ng-mouseenter="EndContentMouseEnter()"
                       ng-mouseleave="EndContentMouseLeave()" ng-click="AddAdditionalEndContent()">
                     <img style="width: 16px; height: 16px;" ng-src={{EndContentAddIcon}} />
                 </span>
@@ -82,6 +83,7 @@
         <p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>
         <p class="SetTimerAsterixInfo">* = Obligatory</p>
     </div>
+
     <div style="padding: 10px">
         <button class="SetTimerButton" ng-click="SaveTimer()">Save Timer</button>
         <span class="SetTimerSavedFeedback" ng-show="ShowTimerSavedFeedback">New Timer Saved</span>

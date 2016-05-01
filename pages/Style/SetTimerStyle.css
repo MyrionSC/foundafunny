@@ -1,7 +1,7 @@
-input[type="text"].SetTimerInputTextWithAddon {
+.SetTimerInputWithAddon {
     width: 272px;
 }
-input[type="text"].SetTimerInputText {
+.SetTimerInput {
     width: 300px;
 }
 .SetTimerLabel{
@@ -56,19 +56,4 @@ input[type="text"].SetTimerInputText {
 .SetTimerErrorMessage {
     color: red;
     margin-top: -10px;
-}
-
-/*Dialog styles*/
-input[type="text"].SetTimerDialogInput {
-    font-size: 14px;
-    height: 30px;
-    width: 394px;
-}
-.SetTimerDialogItemSeparater {
-    height: 1px;
-    width: 400px;
-    background: #999;
-}
-.SetTimerDialogListItem {
-    width: 370px;
 }

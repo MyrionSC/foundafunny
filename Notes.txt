@@ -1,15 +1,8 @@
 ----- DOING -----
 
-- fix weekly timers
-    When the client and servers date don't match, the UpdateActivationTime function does
-        not calculate the time correctly. Most likely line 313 is the problem.
-            Exibit 1 (client two hours ahead):
-                Client time: wednesday 01.00
-                Server time: tuesday 11.00
-                The server shoots wrong by one day
-            possible solution: use time of client to calculate new activation time
+- Refactor AddContentDialog into service so it can be used in Timers to change timers
+-
 
-**
 - Make properties of timers able to be changed
     - frontend
         - Create array to store copy of gotten timers. When timers are changed they are changed in the shown timer
@@ -37,12 +30,12 @@ todo userpage:
     - Try to use iframe for everything
     - evt. implement some kind of CFG approach
 - Name favorites (this involves a change of how favorites are handled on backend)
-- Refactor AddContentDialog into service so it can be used in Timers to change timers
 - handle window resize. This might be via a watch in the controller, but a directive would be more fancy!
     - history
     - frontpage
     - favorites
     - timers
+- make youtube content mutable
 
 todo generationpage:
 - Rework the design, test out bootstrap styles. Check out some framework pages for inspiration (emberjs, angular, react)
@@ -52,7 +45,6 @@ todo: server
 - Add "page last accessed" date attribute on page
 - change logs so everything is correctly separated. (print * at beginning of action)
 - Find some way to log exceptions and shutdowns
-- make youtube content mutable
 
 todo: all
 - remove fontcolour and bgcolour. It is replaced by theme
@@ -77,6 +69,8 @@ Could have:
 
 -- Important --
 - If multiple timers have expired when starting server, not all is deleted
+- When changing timezones, hours are added when they should be removed
+
 
 - doesn't seem like resize works on youtube and twitch
     Everything in rezise directive is commented, would be a good place to start..
@@ -94,7 +88,6 @@ Could have:
     For single time timers: They should be deleted
     For weekly timers: they should be updated
 - When putting in new content after a timer activation the timer shouldn't activate its endcontent.
-- When changing timezones, hours are added when they should be removed
 
 ----- Notes -----
 

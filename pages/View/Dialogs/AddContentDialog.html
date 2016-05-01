@@ -1,6 +1,6 @@
 <p>Add/delete timer {{DialogCaller}} content</p>
 <label style="padding-bottom: 10px" class="input-append">
-        <input class="SetTimerDialogInput" type="text" placeholder="Add Content To List"
+        <input class="AddRemoveContentDialogInput" type="text" placeholder="Add Content To List"
                ng-model="$parent.AddDialogInput" ng-keypress="DialogAddContentKeyPress($event)"/>
             <span class="add-on" style="height: 30px;" ng-click="DialogAddContent()">
             <img style="width: 16px; height: 16px;" src="pages/Pics/AdditionGreen.png" />
@@ -10,10 +10,10 @@
 <div class="SetTimerBorderBox VerticalScroll" style="height: 150px;">
     <div ng-repeat="c in AddDialogContentArray track by $index" style="padding-bottom: 3px">
         <label style="display: inline-flex;" ng-click="DialogRemoveListItem($index)">
-            <p class="SetTimerDialogListItem EllipsisOverflow">{{c}}</p>
+            <p class="AddRemoveContentDialogListItem EllipsisOverflow">{{c}}</p>
             <img src="pages/Pics/TrashBinBlack.png">
         </label>
-        <div class="SetTimerDialogItemSeparater"></div>
+        <div class="AddRemoveContentDialogItemSeparater"></div>
     </div>
 </div>
 

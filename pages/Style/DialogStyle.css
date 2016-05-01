@@ -1,0 +1,13 @@
+input[type="text"].AddRemoveContentDialogInput {
+    font-size: 14px;
+    height: 30px;
+    width: 394px;
+}
+.AddRemoveContentDialogItemSeparater {
+    height: 1px;
+    width: 400px;
+    background: #999;
+}
+.AddRemoveContentDialogListItem {
+    width: 370px;
+}
