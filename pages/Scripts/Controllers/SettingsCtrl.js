@@ -23,6 +23,7 @@ app.controller('SettingsCtrl', function($scope, $location, sidebarService, conte
             return;
         }
 
+        // something has changed! Show settings saved feedback
         s.ShowSettingsSavedFeedback = true;
         setTimeout(function () {
             s.ShowSettingsSavedFeedback = false;

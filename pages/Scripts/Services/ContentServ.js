@@ -218,12 +218,15 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
     };
 
     this.UpdateFrontPageStyle = function () {
-        if (this.Page.Settings.theme == "Light") {
-            this.FrontPageStyle.bgColor = "white";
-            this.FrontPageStyle.pColor = "black";
-        } else {
+        if (this.Page.Settings.theme == "Dark") {
             this.FrontPageStyle.bgColor = "black";
             this.FrontPageStyle.pColor = "white";
+        } else if (this.Page.Settings.theme == "Purple") {
+            this.FrontPageStyle.bgColor = "#ff99ff";
+            this.FrontPageStyle.pColor = "#33cc33";
+        } else { // default "Light"
+            this.FrontPageStyle.bgColor = "white";
+            this.FrontPageStyle.pColor = "black";
         }
     };
 
