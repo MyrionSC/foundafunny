@@ -1,3 +1,57 @@
 <div class="AbsoluteCenter">
-    <p>Documentation!!!!</p>
+    <div style="padding: 10px">
+        <p style="font-size: 24px">Documentation</p>
+    </div>
+    <div id="DocsContainer" ng-style="{'height': height}">
+        <p>
+            Found a Funny is a synchronizong resource shower webpage. On the frontpage you can add new content,
+            which is then shown on all open instances of the page. Content can be things in url format, such as an image,
+            webm or youtube url. Content types, as well as other functionality, are explained below.
+        </p>
+        <br>
+        <p><b>Content types</b></p>
+        <ul>
+            <li>Resources: jpg, png, gif, webm
+                <ul>
+                    <li>Putting in a file url will cause the files content to be displayed</li>
+                </ul>
+            </li>
+            <li>API: Youtube, Twitch, imgur
+                <ul>
+                    <li>Putting a url to one of the listed webservices will show content from the corresponding service</li>
+                </ul>
+            </li>
+            <li>Commands
+                <ul>
+                    <li>Coming Soon</li>
+                </ul>
+            </li>
+            <li>Text
+                <ul>
+                    <li>If nothing else fits, the content is parsed as text</li>
+                </ul>
+            </li>
+        </ul>
+        <br>
+        <p><b>Favorites</b></p>
+        <ul>
+            <li>Favorites can be set by selecting the star next to the input bar. They can then be found in the favorites tab</li>
+            <li>Each item can easily be set as the current content</li>
+        </ul>
+        <br>
+        <p><b>History</b></p>
+        <ul>
+            <li>A list of the last contents can be seen in the History tab</li>
+            <li>Each item can be set as a favorite or set as the current content</li>
+        </ul>
+        <br>
+        <p><b>Timers</b></p>
+        <ul>
+            <li>A timer can be set in the Set Timers tab. At a chosen activation time the associated content will be selected</li>
+            <li>Timers come in a single timer variant, that only activates once, and a weekly timer variant, which will activate at the chosen days each week</li>
+            <li>It is possible to specify an end content as well, which will be selected a set number of seconds after the first content has activated</li>
+            <li>Multiple timer contents can be set. If this is the case, one of them will randomly be chosen when the timer activates</li>
+        </ul>
+        <br>
+    </div>
 </div>
