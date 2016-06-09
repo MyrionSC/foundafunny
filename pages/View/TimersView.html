@@ -63,6 +63,7 @@
                         <td>{{t.EndContent}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
                         <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
+                        <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="EditIconLeave(t)" ng-click="EditIconClick(t)"><img ng-src="{{t.EditIconSrc}}"></img></th>
                     </tr>
                     </tbody>
                 </table>

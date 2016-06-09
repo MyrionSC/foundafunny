@@ -25,6 +25,7 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
         contentService.GetTimers(function (content) {
             for (var i = 0; i < content.length; i++) {
                 content[i].DeleteIconSrc = "pages/Pics/TrashBinDarkGrey.png";
+                content[i].EditIconSrc = "pages/Pics/EditIconDarkGrey.png";
             }
 
             // sort the timers into their respective arrays
@@ -71,6 +72,7 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
         }
     };
 
+    // delete timer
     s.DeleteIconEnter = function(t) {
         t.DeleteIconSrc = "pages/Pics/TrashBinBlack.png";
     };
@@ -104,6 +106,19 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
         console.log("Requesting deletion of timer on server");
         contentService.PushTimerDeleteToServer(t);
     };
+
+    // edit timer
+    s.EditIconEnter = function(t) {
+        t.EditIconSrc = "pages/Pics/EditIconBlack.png";
+    };
+    s.EditIconLeave = function(t) {
+        t.EditIconSrc = "pages/Pics/EditIconDarkGrey.png";
+    };
+    s.EditIconClick = function(t) {
+        // Open dialog window to make sure deletion is intended
+        alert("edit icon clicked");
+    };
+
 
     // init
     s.GetTimers();
