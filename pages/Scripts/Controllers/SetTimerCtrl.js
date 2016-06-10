@@ -1,9 +1,9 @@
-app.controller('SetTimerCtrl', function($scope, $location, sidebarService, contentService, dialogService, ngDialog) {
+app.controller('SetTimerCtrl', function($scope, $location, TimerObj, sidebarService, contentService, dialogService) {
     var s = $scope;
     var optionobj = sidebarService.stInfoObj;
 
     // binding variables
-    s.Timer = new TimerObject();
+    s.Timer = new TimerObj();
     s.StartContent = "";
     s.EndContent = "";
     s.WeekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -120,7 +120,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
             contentService.PushNewTimerToServer(s.Timer);
 
             // reset values
-            s.Timer = new TimerObject();
+            s.Timer = new TimerObj();
             setDatePickerToPageTime();
             resetValues();
         }
@@ -132,7 +132,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
 
     s.AddAdditionalStartContent = function() {
         var AddDialogInput = s.Timer.StartContent < 2 ? s.StartContent : "";
-        dialogService.AddOrRemoveContentDialog(s, "start", AddDialogInput, s.Timer.StartContent.slice(),
+        dialogService.ModifyContentDialog(s, "start", AddDialogInput, s.Timer.StartContent.slice(),
             function (contentArray) {
                 s.Timer.StartContent = contentArray.slice();
 
@@ -159,7 +159,7 @@ app.controller('SetTimerCtrl', function($scope, $location, sidebarService, conte
 
     s.AddAdditionalEndContent = function() {
         var AddDialogInput = s.Timer.EndContent < 2 ? s.EndContent : "";
-        dialogService.AddOrRemoveContentDialog(s, "end", AddDialogInput, s.Timer.EndContent.slice(),
+        dialogService.ModifyContentDialog(s, "end", AddDialogInput, s.Timer.EndContent.slice(),
             function (contentArray) {
                 s.Timer.EndContent = contentArray.slice();
 
@@ -283,17 +283,17 @@ var DetectAndSortWeekdays = function (timer, SelectedWeekDays) {
         }
     }
 };
-var TimerObject = function () {
-    this.PageName = "";
-    this.Name = "";
-    this.StartContent = [];
-    this.Type = "OneTime";
-    this.ActivationDays = [];
-    this.ActivationDaysReadable = "";
-    this.ActivationTime = 0;
-    this.OriginalActivationTime = 0;
-    this.ActivationTimeReadable = "";
-    this.ActivationLength = 0;
-    this.EndContent = [];
-    this.Active = false;
-};
+// var timerObject = function () {
+//     this.PageName = "";
+//     this.Name = "";
+//     this.StartContent = [];
+//     this.Type = "OneTime";
+//     this.ActivationDays = [];
+//     this.ActivationDaysReadable = "";
+//     this.ActivationTime = 0;
+//     this.OriginalActivationTime = 0;
+//     this.ActivationTimeReadable = "";
+//     this.ActivationLength = 0;
+//     this.EndContent = [];
+//     this.Active = false;
+// };

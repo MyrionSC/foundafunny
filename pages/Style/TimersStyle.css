@@ -32,5 +32,6 @@
     /*margin-right: auto;*/
     /*width: 350px;*/
 }
-.TimersDialogButton {
+.TimersListItemIcon{
+    height: 24px;
 }

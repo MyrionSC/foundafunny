@@ -22,6 +22,8 @@
                         <th>Activation Length</th>
                         <th>End Content</th>
                         <th>Time until next activation</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -32,7 +34,10 @@
                         <td>{{t.ActivationLength}}</td>
                         <td>{{t.EndContent}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
-                        <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
+                        <td ng-mouseenter="EditIconEnter(t)" ng-mouseleave="EditIconLeave(t)" ng-click="EditIconClick(t)">
+                            <img class="TimersListItemIcon" ng-src="{{t.EditIconSrc}}"/></td>
+                        <td ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)">
+                            <img class="TimersListItemIcon" ng-src="{{t.DeleteIconSrc}}"/></td>
                     </tr>
                     </tbody>
                 </table>
@@ -51,6 +56,8 @@
                         <th>Activation Length</th>
                         <th>End Content</th>
                         <th>Time until next activation</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -62,8 +69,10 @@
                         <td>{{t.ActivationLength}}</td>
                         <td>{{t.EndContent}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
-                        <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)"><img ng-src="{{t.DeleteIconSrc}}"></img></th>
-                        <th ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="EditIconLeave(t)" ng-click="EditIconClick(t)"><img ng-src="{{t.EditIconSrc}}"></img></th>
+                        <td ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)">
+                            <img class="TimersListItemIcon" ng-src="{{t.DeleteIconSrc}}"/></td>
+                        <td ng-mouseenter="EditIconEnter(t)" ng-mouseleave="EditIconLeave(t)" ng-click="EditIconClick(t)">
+                            <img class="TimersListItemIcon" ng-src="{{t.EditIconSrc}}"/></td>
                     </tr>
                     </tbody>
                 </table>

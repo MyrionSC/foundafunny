@@ -1,4 +1,4 @@
-app.controller('TimersCtrl', function($scope, $location, sidebarService, contentService, ngDialog) {
+app.controller('TimersCtrl', function($scope, $location, sidebarService, contentService, dialogService) {
     var s = $scope;
     var optionobj = sidebarService.vtInfoObj;
 
@@ -81,12 +81,7 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
     };
     s.DeleteIconClick = function(t) {
         // Open dialog window to make sure deletion is intended
-        var DeleteTimerDialog = ngDialog.open({
-            template: 'pages/View/Dialogs/TimerDeleteDialog.html',
-            className: 'ngdialog-theme-default',
-            scope: s
-        });
-        DeleteTimerDialog.closePromise.then(function(data) {
+        dialogService.DeleteTimerConfirmDialog(s, function (data) {
             if (data.value === 1) {
                 deleteTimer(t);
             }
@@ -116,10 +111,17 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
     };
     s.EditIconClick = function(t) {
         // Open dialog window to make sure deletion is intended
-        alert("edit icon clicked");
+        dialogService.ModifyTimerDialog(s, t, function (timer) {
+            alert(timer.ActivationTime);
+        })
     };
 
 
+    
+    
+    
+    
+    
     // init
     s.GetTimers();
 

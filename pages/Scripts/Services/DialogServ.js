@@ -1,4 +1,4 @@
-app.service('dialogService', function (ngDialog) {
+app.service('dialogService', function (ngDialog, TimerObj) {
     var that = this;
 
     /**
@@ -10,7 +10,7 @@ app.service('dialogService', function (ngDialog) {
      * @param acceptCallback Function(Array<String> returnArray): The callback on dialog accept
      * @param rejectCallback Function(): The callback on dialog reject
      */
-    this.AddOrRemoveContentDialog = function (callerScope, caller, textInput, contentArray, acceptCallback, rejectCallback) {
+    this.ModifyContentDialog = function (callerScope, caller, textInput, contentArray, acceptCallback, rejectCallback) {
         // create new scope to pass to dialog
         var s = createNewAddDialogScope(callerScope, caller, textInput, contentArray);
 
@@ -59,59 +59,36 @@ app.service('dialogService', function (ngDialog) {
         return s;
     };
 
+    /**
+     * A dialog for conforming whether a user really wants to delete a timer
+     * @param scope The calling scope
+     * @param callback the callback. if data.value === 1, dialog was accepted, otherwise denied
+     */
+    this.DeleteTimerConfirmDialog = function (scope, callback) {
+        var dialog = ngDialog.open({
+            template: 'pages/View/Dialogs/TimerDeleteDialog.html',
+            className: 'ngdialog-theme-default',
+            scope: scope
+        });
+        dialog.closePromise.then(function(data) {
+            callback(data);
+        });
+    };
 
-    // s.AddAdditionalEndContent = function() {
-    //     s.AddDialogContentArray = s.Timer.EndContent.slice(); // copies timers StartContent array
-    //     if (s.Timer.EndContent < 2) {
-    //         s.AddDialogInput = s.EndContent;
-    //     } else {
-    //         s.AddDialogInput = "";
-    //     }
-    //     s.DialogCaller = "end";
-    //
-    //     var AddStartContentDialog = ngDialog.open({
-    //         template: 'pages/View/Dialogs/AddContentDialog.html',
-    //         className: 'ngdialog-theme-default',
-    //         scope: s
-    //     });
-    //     AddStartContentDialog.closePromise.then(function(data) {
-    //         if (data.value === 1) {
-    //             s.Timer.EndContent = s.AddDialogContentArray.slice();
-    //             console.log(s.Timer.EndContent.length);
-    //
-    //             if (s.Timer.EndContent.length > 1) {
-    //                 s.EndContentDisabled = true;
-    //                 s.EndContent = s.Timer.EndContent.length + " content in list";
-    //             } else {
-    //                 s.EndContentDisabled = false;
-    //                 if (s.Timer.EndContent.length === 0) {
-    //                     s.EndContent = "";
-    //                 } else { // if length === 1
-    //                     s.EndContent = s.Timer.EndContent[0];
-    //                 }
-    //             }
-    //
-    //             s.AddDialogContentArray = [];
-    //         }
-    //     });
-    // };
-    // s.EndContentMouseEnter = function() {
-    //     s.EndContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
-    // };
-    // s.EndContentMouseLeave = function() {
-    //     s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
-    // };
-    //
-    // s.DialogAddContent = function() {
-    //     s.AddDialogContentArray.push(s.AddDialogInput);
-    //     s.AddDialogInput = "";
-    // };
-    // s.DialogAddContentKeyPress = function(event) {
-    //     if (event.keyCode === 13) { // enter key
-    //         s.DialogAddContent();
-    //     }
-    // };
-    // s.DialogRemoveListItem = function(index) {
-    //     s.AddDialogContentArray.splice(index, 1);
-    // };
+    this.ModifyTimerDialog = function (scope, timer, callback) {
+        var newTimer = new TimerObj(timer);
+
+        callback(newTimer);
+
+
+
+        // var dialog = ngDialog.open({
+        //     template: 'pages/View/Dialogs/TimerDeleteDialog.html',
+        //     className: 'ngdialog-theme-default',
+        //     scope: scope
+        // });
+        // dialog.closePromise.then(function(data) {
+        //     callback(data);
+        // });
+    }
 });
