@@ -283,17 +283,3 @@ var DetectAndSortWeekdays = function (timer, SelectedWeekDays) {
         }
     }
 };
-// var timerObject = function () {
-//     this.PageName = "";
-//     this.Name = "";
-//     this.StartContent = [];
-//     this.Type = "OneTime";
-//     this.ActivationDays = [];
-//     this.ActivationDaysReadable = "";
-//     this.ActivationTime = 0;
-//     this.OriginalActivationTime = 0;
-//     this.ActivationTimeReadable = "";
-//     this.ActivationLength = 0;
-//     this.EndContent = [];
-//     this.Active = false;
-// };

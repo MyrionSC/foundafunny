@@ -11,3 +11,8 @@ input[type="text"].AddRemoveContentDialogInput {
 .AddRemoveContentDialogListItem {
     width: 370px;
 }
+.InitialBoxSizing{
+    -webkit-box-sizing:initial;
+    -moz-box-sizing:initial;
+    box-sizing:initial
+}

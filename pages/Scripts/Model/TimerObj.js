@@ -21,6 +21,7 @@ app.factory('TimerObj', function () {
             this.ActivationLength = src.ActivationLength;
             this.EndContent = angular.copy(src.EndContent);
             this.Active = src.Active;
+            this._id = src._id;
         },
         newTimer: function () {
             this.PageName = "";

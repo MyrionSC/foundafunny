@@ -33,12 +33,13 @@ app.service('dialogService', function (ngDialog, TimerObj) {
         s.DialogCaller = caller;
         s.AddDialogInput = textInput;
         s.AddDialogContentArray = contentArray;
+        s.AdditionIconSrc = "pages/Pics/AdditionGreen.png";
 
-        s.EndContentMouseEnter = function() {
-            s.EndContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
+        s.AdditionIconMouseEnter = function() {
+            s.AdditionIconSrc = "pages/Pics/AdditionDarkGreen.png";
         };
-        s.EndContentMouseLeave = function() {
-            s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
+        s.AdditionIconMouseLeave = function() {
+            s.AdditionIconSrc = "pages/Pics/AdditionGreen.png";
         };
 
         s.DialogAddContent = function() {
@@ -66,7 +67,7 @@ app.service('dialogService', function (ngDialog, TimerObj) {
      */
     this.DeleteTimerConfirmDialog = function (scope, callback) {
         var dialog = ngDialog.open({
-            template: 'pages/View/Dialogs/TimerDeleteDialog.html',
+            template: 'pages/View/Dialogs/TimerDeleteConfirmDialog.html',
             className: 'ngdialog-theme-default',
             scope: scope
         });
@@ -76,19 +77,21 @@ app.service('dialogService', function (ngDialog, TimerObj) {
     };
 
     this.ModifyTimerDialog = function (scope, timer, callback) {
-        var newTimer = new TimerObj(timer);
+        // copy of the timer to be modified
+        scope.newTimer = new TimerObj(timer);
 
-        callback(newTimer);
+        // call dialog
+        var dialog = ngDialog.open({
+            template: 'pages/View/Dialogs/TimerEditDialog.html',
+            className: 'ngdialog-theme-default InitialBoxSizing',
+            scope: scope
+        });
 
-
-
-        // var dialog = ngDialog.open({
-        //     template: 'pages/View/Dialogs/TimerDeleteDialog.html',
-        //     className: 'ngdialog-theme-default',
-        //     scope: scope
-        // });
-        // dialog.closePromise.then(function(data) {
-        //     callback(data);
-        // });
+        // if accept return the modified timer
+        dialog.closePromise.then(function(data) {
+            if (data.value === 1) {
+                callback(scope.newTimer);
+            }
+        });
     }
 });

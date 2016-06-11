@@ -2,8 +2,9 @@
 <label style="padding-bottom: 10px" class="input-append">
         <input class="AddRemoveContentDialogInput" type="text" placeholder="Add Content To List"
                ng-model="$parent.AddDialogInput" ng-keypress="DialogAddContentKeyPress($event)"/>
-            <span class="add-on" style="height: 30px;" ng-click="DialogAddContent()">
-            <img style="width: 16px; height: 16px;" src="pages/Pics/AdditionGreen.png" />
+        <span class="add-on" style="height: 30px;" ng-mouseenter="AdditionIconMouseEnter()"
+              ng-mouseleave="AdditionIconMouseLeave()" ng-click="DialogAddContent()">
+            <img style="width: 16px; height: 16px;" ng-src="{{AdditionIconSrc}}" />
         </span>
 </label>
 
