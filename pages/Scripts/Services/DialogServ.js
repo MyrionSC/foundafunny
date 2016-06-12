@@ -80,18 +80,111 @@ app.service('dialogService', function (ngDialog, TimerObj) {
         // copy of the timer to be modified
         scope.newTimer = new TimerObj(timer);
 
+        prepareModifyTimerScope(scope);
+
+        scope.checkInput = function () {
+            console.log("checking input");
+            return true;
+        };
+
         // call dialog
         var dialog = ngDialog.open({
             template: 'pages/View/Dialogs/TimerEditDialog.html',
-            className: 'ngdialog-theme-default InitialBoxSizing',
+            className: 'ngdialog-timer-edit InitialBoxSizing',
+            closeByDocument: false,
             scope: scope
         });
-
         // if accept return the modified timer
         dialog.closePromise.then(function(data) {
             if (data.value === 1) {
                 callback(scope.newTimer);
             }
         });
+    };
+    function prepareModifyTimerScope (s) {
+        s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
+        s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
+        s.StartContent = "";
+        s.EndContent = "";
+        s.ShowWeeklyTypes = false;
+        s.SelectedWeekDays = [];
+        s.StartContentDisabled = false;
+        s.EndContentDisabled = false;
+        s.ShowStartContentError = false;
+        s.ShowAtleastOneWeekDayError = false;
+        s.ShowActivationTimeError = false;
+        s.ShowActivationLengthWithoutEndContentError = false;
+        s.ShowActivationLengthNaNError = false;
+        s.ShowEndContentWithoutActivationLengthError = false;
+
+        if (s.newTimer.StartContent.length === 1) {
+            s.StartContent = s.newTimer.StartContent[0];
+        } else {
+            s.StartContent = s.newTimer.StartContent.length + " content in list";
+            s.StartContentDisabled = true;
+        }
+        if (s.newTimer.EndContent.length === 0) {
+            s.EndContent = "";
+        } else if (s.newTimer.EndContent.length === 1) {
+            s.EndContent = s.newTimer.EndContent[0];
+        } else {
+            s.EndContent = s.newTimer.EndContent.length + " content in list";
+            s.EndContentContentDisabled = true;
+        }
+
+
+        s.StartContentMouseEnter = function() {
+            s.StartContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
+        };
+        s.StartContentMouseLeave = function() {
+            s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
+        };
+        s.AddAdditionalStartContent = function() {
+            var AddDialogInput = s.newTimer.StartContent < 2 ? s.StartContent : "";
+            that.ModifyContentDialog(s, "start", AddDialogInput, s.newTimer.StartContent.slice(),
+                function (contentArray) {
+                    s.newTimer.StartContent = contentArray.slice();
+
+                    console.log(s.newTimer.StartContent);
+                    if (contentArray.length > 1) {
+                        s.StartContentDisabled = true;
+                        s.StartContent = contentArray.length + " content in list";
+                    } else {
+                        s.StartContentDisabled = false;
+                        if (contentArray.length === 0) {
+                            s.StartContent = "";
+                        } else { // if length === 1
+                            s.StartContent = contentArray[0];
+                        }
+                    }
+                }, function () {});
+        };
+
+        s.EndContentMouseEnter = function() {
+            s.EndContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
+        };
+        s.EndContentMouseLeave = function() {
+            s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
+        };
+        s.AddAdditionalEndContent = function() {
+            var AddDialogInput = s.newTimer.EndContent < 2 ? s.EndContent : "";
+            that.ModifyContentDialog(s, "end", AddDialogInput, s.newTimer.EndContent.slice(),
+                function (contentArray) {
+                    s.newTimer.EndContent = contentArray.slice();
+
+                    console.log(s.newTimer.EndContent);
+                    if (contentArray.length > 1) {
+                        s.EndContentDisabled = true;
+                        s.EndContent = contentArray.length + " content in list";
+                    } else {
+                        s.EndContentDisabled = false;
+                        if (contentArray.length === 0) {
+                            s.EndContent = "";
+                        } else { // if length === 1
+                            s.EndContent = contentArray[0];
+                        }
+                    }
+                }, function () {});
+        };
     }
 });

@@ -1,11 +1,12 @@
+<h4>Edit Timer</h4>
 <label class="SetTimerLabel" >
     Name<br>
-    <input class="SetTimerInput" ng-model="newTimer.Name" type="text" placeholder="Name of new Timer"/>
+    <input class="SetTimerInput" ng-model="newTimer.Name" type="text" placeholder="Name of timer (not required)"/>
 </label>
 <label class="SetTimerLabel" >
-    Start Content*<br>
+    Start Content<br>
     <div style="padding-bottom: 10px" class="input-append">
-        <input class="SetTimerInputWithAddon" type="text" placeholder="Content pushed at Activation Time"
+        <input class="SetTimerInputWithAddon" type="text"
                ng-model="StartContent" ng-disabled="StartContentDisabled"/>
         <span class="add-on" title="Add or remove timer start content" ng-mouseenter="StartContentMouseEnter()"
               ng-mouseleave="StartContentMouseLeave()" ng-click="AddAdditionalStartContent()">
@@ -13,9 +14,9 @@
         </span>
     </div>
 </label>
-<!--<p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>-->
+<p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
 
-<!--Type*<br>-->
+<!--Type<br>-->
 <!--<div class="SetTimerBorderBox">-->
     <!--<div class="SetTimerRadioSubDiv" style="margin: 3px; padding: 3px">-->
         <!--<label class="SetTimerLabel" style="margin-right: 30px">-->
@@ -36,49 +37,48 @@
 <!--</div>-->
 <!--<p class="SetTimerErrorMessage" ng-show="ShowAtleastOneWeekDayError">Atleast one weekday must be specified</p>-->
 
-<!--&lt;!&ndash;Date time pickers&ndash;&gt;-->
-<!--<label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">-->
-    <!--Activation Time*<br>-->
-    <!--<div style="padding-bottom: 10px" id="datetimepicker_date" class="input-append date">-->
-        <!--<input class="SetTimerInputWithAddon" type="text"/>-->
-        <!--<span class="add-on">-->
-            <!--<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>-->
-        <!--</span>-->
-    <!--</div>-->
-<!--</label>-->
-<!--<label class="SetTimerLabel" ng-show="ShowWeeklyTypes">-->
-    <!--Activation Time*<br>-->
-    <!--<div style="padding-bottom: 10px" id="datetimepicker_hour" class="input-append date">-->
-        <!--<input class="SetTimerInputWithAddon" type="text"/>-->
-        <!--<span class="add-on">-->
-            <!--<i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>-->
-        <!--</span>-->
-    <!--</div>-->
-<!--</label>-->
-<!--<p class="SetTimerErrorMessage" ng-show="ShowActivationTimeError">Activation Time must be after current time</p>-->
+<!--Date time pickers-->
+<label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">
+    Activation Time<br>
+    <div style="padding-bottom: 10px" id="datetimepicker_date" class="input-append date">
+        <input class="SetTimerInputWithAddon" type="text"/>
+        <span class="add-on">
+            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+        </span>
+    </div>
+</label>
+<label class="SetTimerLabel" ng-show="ShowWeeklyTypes">
+    Activation Time<br>
+    <div style="padding-bottom: 10px" id="datetimepicker_hour" class="input-append date">
+        <input class="SetTimerInputWithAddon" type="text"/>
+        <span class="add-on">
+            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+        </span>
+    </div>
+</label>
+<p class="SetTimerErrorMessage" ng-show="ShowActivationTimeError">Activation Time must be after current time</p>
 
-<!--<label class="SetTimerLabel">-->
-    <!--Activation Length (in seconds)<br>-->
-    <!--<input class="SetTimerInput" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>-->
-<!--</label>-->
-<!--<p class="SetTimerErrorMessage" ng-show="ShowActivationLengthWithoutEndContentError">If End Content is filled so must Activation Length</p>-->
-<!--<p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>-->
+<label class="SetTimerLabel">
+    Activation Length (in seconds)<br>
+    <input class="SetTimerInput" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
+</label>
+<p class="SetTimerErrorMessage" ng-show="ShowActivationLengthWithoutEndContentError">If End Content is filled so must Activation Length</p>
+<p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
 
-<!--<label class="SetTimerLabel" >-->
-    <!--End Content<br>-->
-    <!--<div style="padding-bottom: 10px" class="input-append">-->
-        <!--<input class="SetTimerInputWithAddon" type="text" placeholder="Content activates after Activation Length"-->
-               <!--ng-model="EndContent" ng-disabled="EndContentDisabled"/>-->
-        <!--<span class="add-on" title="Add or remove timer end content" ng-mouseenter="EndContentMouseEnter()"-->
-              <!--ng-mouseleave="EndContentMouseLeave()" ng-click="AddAdditionalEndContent()">-->
-            <!--<img style="width: 16px; height: 16px;" ng-src={{EndContentAddIcon}} />-->
-        <!--</span>-->
-    <!--</div>-->
-<!--</label>-->
-<!--<p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>-->
-<!--<p class="SetTimerAsterixInfo">* = Obligatory</p>-->
+<label class="SetTimerLabel" >
+    End Content<br>
+    <div style="padding-bottom: 10px" class="input-append">
+        <input class="SetTimerInputWithAddon" type="text" placeholder="Content activates after Activation Length"
+               ng-model="EndContent" ng-disabled="EndContentDisabled"/>
+        <span class="add-on" title="Add or remove timer end content" ng-mouseenter="EndContentMouseEnter()"
+              ng-mouseleave="EndContentMouseLeave()" ng-click="AddAdditionalEndContent()">
+            <img style="width: 16px; height: 16px;" ng-src={{EndContentAddIcon}} />
+        </span>
+    </div>
+</label>
+<p class="SetTimerErrorMessage" ng-show="ShowEndContentWithoutActivationLengthError">If Activation Length is filled so must End Content</p>
 
 <div class="ngdialog-buttons">
     <button ng-click="closeThisDialog(0)" class="ngdialog-button ngdialog-button-secondary">Revert</button>
-    <button ng-click="closeThisDialog(1)" class="ngdialog-button ngdialog-button-primary">Save</button>
+    <button ng-click="checkInput() && closeThisDialog(1)" class="ngdialog-button ngdialog-button-primary">Save</button>
 </div>

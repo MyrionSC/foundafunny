@@ -35,9 +35,9 @@
                         <td>{{t.EndContent}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
                         <td ng-mouseenter="EditIconEnter(t)" ng-mouseleave="EditIconLeave(t)" ng-click="EditIconClick(t)">
-                            <img class="TimersListItemIcon" ng-src="{{t.EditIconSrc}}"/></td>
+                            <img class="TimersListItemIcon" ng-src="{{t.EditIconSrc}}" title="Edit this timer"/></td>
                         <td ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)">
-                            <img class="TimersListItemIcon" ng-src="{{t.DeleteIconSrc}}"/></td>
+                            <img class="TimersListItemIcon" ng-src="{{t.DeleteIconSrc}}" title="Delete this timer"/></td>
                     </tr>
                     </tbody>
                 </table>
@@ -70,9 +70,9 @@
                         <td>{{t.EndContent}}</td>
                         <td><timer end-time="t.ActivationTime">{{days}} days, {{hours}} hours, {{minutes}} minutes, {{seconds}} seconds</timer></td>
                         <td ng-mouseenter="DeleteIconEnter(t)" ng-mouseleave="DeleteIconLeave(t)" ng-click="DeleteIconClick(t)">
-                            <img class="TimersListItemIcon" ng-src="{{t.DeleteIconSrc}}"/></td>
+                            <img class="TimersListItemIcon" ng-src="{{t.DeleteIconSrc}}" title="Edit this timer"/></td>
                         <td ng-mouseenter="EditIconEnter(t)" ng-mouseleave="EditIconLeave(t)" ng-click="EditIconClick(t)">
-                            <img class="TimersListItemIcon" ng-src="{{t.EditIconSrc}}"/></td>
+                            <img class="TimersListItemIcon" ng-src="{{t.EditIconSrc}}" title="Delete this timer"/></td>
                     </tr>
                     </tbody>
                 </table>
