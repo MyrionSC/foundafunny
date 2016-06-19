@@ -1,4 +1,4 @@
-app.controller('SetTimerCtrl', function($scope, $location, TimerObj, sidebarService, contentService, dialogService) {
+app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, contentService, dialogService) {
     var s = $scope;
     var optionobj = sidebarService.stInfoObj;
 
@@ -10,8 +10,6 @@ app.controller('SetTimerCtrl', function($scope, $location, TimerObj, sidebarServ
 
     s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
     s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
-    s.AddDialogContentArray = [];
-    s.AddDialogInput = "";
     s.StartContentDisabled = false;
     s.EndContentDisabled = false;
     s.DialogCaller = "";
@@ -51,8 +49,6 @@ app.controller('SetTimerCtrl', function($scope, $location, TimerObj, sidebarServ
         resetErrors();
 
         // extract chosen time
-        var dpt = datepicker.data('datetimepicker').getDate();
-        var hpt = hourpicker.data('datetimepicker').getDate();
         var at = s.Timer.Type === "OneTime" ? datepicker.data('datetimepicker').getDate()
             : hourpicker.data('datetimepicker').getDate();
 
@@ -131,24 +127,19 @@ app.controller('SetTimerCtrl', function($scope, $location, TimerObj, sidebarServ
     // -------------------|
 
     s.AddAdditionalStartContent = function() {
-        var AddDialogInput = s.Timer.StartContent < 2 ? s.StartContent : "";
+        var AddDialogInput = s.Timer.StartContent.length === 0 ? s.StartContent : "";
         dialogService.ModifyContentDialog(s, "start", AddDialogInput, s.Timer.StartContent.slice(),
             function (contentArray) {
                 s.Timer.StartContent = contentArray.slice();
-
-                console.log(s.Timer.StartContent);
-                if (contentArray.length > 1) {
+                if (contentArray.length > 0) {
                     s.StartContentDisabled = true;
                     s.StartContent = contentArray.length + " content in list";
                 } else {
                     s.StartContentDisabled = false;
-                    if (contentArray.length === 0) {
-                        s.StartContent = "";
-                    } else { // if length === 1
-                        s.StartContent = contentArray[0];
-                    }
+                    s.StartContent = "";
                 }
-            }, function () {});
+            }
+        );
     };
     s.StartContentMouseEnter = function() {
         s.StartContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
@@ -158,24 +149,21 @@ app.controller('SetTimerCtrl', function($scope, $location, TimerObj, sidebarServ
     };
 
     s.AddAdditionalEndContent = function() {
-        var AddDialogInput = s.Timer.EndContent < 2 ? s.EndContent : "";
+        var AddDialogInput = s.Timer.EndContent.length === 0 ? s.EndContent : "";
         dialogService.ModifyContentDialog(s, "end", AddDialogInput, s.Timer.EndContent.slice(),
             function (contentArray) {
                 s.Timer.EndContent = contentArray.slice();
 
                 console.log(s.Timer.EndContent);
-                if (contentArray.length > 1) {
+                if (contentArray.length > 0) {
                     s.EndContentDisabled = true;
                     s.EndContent = contentArray.length + " content in list";
                 } else {
                     s.EndContentDisabled = false;
-                    if (contentArray.length === 0) {
-                        s.EndContent = "";
-                    } else { // if length === 1
-                        s.EndContent = contentArray[0];
-                    }
+                    s.EndContent = "";
                 }
-            }, function () {});
+            }
+        );
     };
     s.EndContentMouseEnter = function() {
         s.EndContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
@@ -249,7 +237,7 @@ var ConstructReadableDateString = function (date) {
     var hours = date.getUTCHours().toString().length === 1 ? "0" + date.getUTCHours() : date.getUTCHours();
     var minutes = date.getUTCMinutes().toString().length === 1 ? "0" + date.getUTCMinutes() : date.getUTCMinutes();
     var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
-    return date.getUTCDate() + "/" + date.getUTCMonth() + "/" + date.getUTCFullYear() + " "
+    return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() + " "
         + hours + ":" + minutes + ":" + seconds;
 };
 var ConstructReadableHourString = function (date) {

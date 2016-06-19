@@ -1,4 +1,4 @@
-app.service('dialogService', function (ngDialog, TimerObj) {
+app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentService) {
     var that = this;
 
     /**
@@ -10,9 +10,9 @@ app.service('dialogService', function (ngDialog, TimerObj) {
      * @param acceptCallback Function(Array<String> returnArray): The callback on dialog accept
      * @param rejectCallback Function(): The callback on dialog reject
      */
-    this.ModifyContentDialog = function (callerScope, caller, textInput, contentArray, acceptCallback, rejectCallback) {
+    this.ModifyContentDialog = function (callerScope, caller, textInput, contentArray, acceptCallback) {
         // create new scope to pass to dialog
-        var s = createNewAddDialogScope(callerScope, caller, textInput, contentArray);
+        var s = PrepareNewAddDialogScope(callerScope, caller, textInput, contentArray);
 
         var dialog = ngDialog.open({
             template: 'pages/View/Dialogs/AddContentDialog.html',
@@ -22,14 +22,10 @@ app.service('dialogService', function (ngDialog, TimerObj) {
         dialog.closePromise.then(function(data) {
             if (data.value === 1) {
                 acceptCallback(s.AddDialogContentArray)
-            } else if (data.value === 0) {
-                rejectCallback();
             }
         });
     };
-    var createNewAddDialogScope = function (callerScope, caller, textInput, contentArray) {
-        var s = callerScope.$new();
-
+    var PrepareNewAddDialogScope = function (s, caller, textInput, contentArray) {
         s.DialogCaller = caller;
         s.AddDialogInput = textInput;
         s.AddDialogContentArray = contentArray;
@@ -76,6 +72,12 @@ app.service('dialogService', function (ngDialog, TimerObj) {
         });
     };
 
+    /**
+     * A dialog for editing a timer object
+     * @param scope The calling scope
+     * @param timer The timer to be edited
+     * @param callback The function to be called when done editing timer. arg1 is the modified timer object.
+     */
     this.ModifyTimerDialog = function (scope, timer, callback) {
         // copy of the timer to be modified
         scope.newTimer = new TimerObj(timer);
@@ -83,9 +85,30 @@ app.service('dialogService', function (ngDialog, TimerObj) {
         prepareModifyTimerScope(scope);
 
         scope.checkInput = function () {
+            // todo
             console.log("checking input");
             return true;
         };
+
+        // init datepickers when dialog finish opening
+        var diaOpenListener = $rootScope.$on('ngDialog.opened', function (e, $dialog) {
+            var dialogDatepicker = $('#datetimepicker_date_dialog');
+            var dialogHourpicker = $('#datetimepicker_hour_dialog');
+
+            dialogDatepicker.datetimepicker({
+                format: 'dd/MM/yyyy hh:mm:ss',
+                language: 'en'
+            });
+            dialogHourpicker.datetimepicker({
+                pickDate: false,
+                format: 'hh:mm:ss',
+                language: 'en'
+            });
+
+            var ClientDate = new Date(timer.OriginalActivationTime + contentService.Page.Settings.offset * 60000);
+            dialogDatepicker.data('datetimepicker').setDate(ClientDate);
+            dialogHourpicker.data('datetimepicker').setDate(ClientDate);
+        });
 
         // call dialog
         var dialog = ngDialog.open({
@@ -94,8 +117,13 @@ app.service('dialogService', function (ngDialog, TimerObj) {
             closeByDocument: false,
             scope: scope
         });
+
         // if accept return the modified timer
         dialog.closePromise.then(function(data) {
+            // calculate new timer values
+            // todo
+
+            diaOpenListener(); // unsubscribes from broadcast
             if (data.value === 1) {
                 callback(scope.newTimer);
             }
@@ -104,34 +132,18 @@ app.service('dialogService', function (ngDialog, TimerObj) {
     function prepareModifyTimerScope (s) {
         s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
         s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
-        s.StartContent = "";
-        s.EndContent = "";
-        s.ShowWeeklyTypes = false;
+        s.StartContent = s.newTimer.StartContent.length + " content in list";
+        s.EndContent = s.newTimer.EndContent.length === 0 ? "" : s.newTimer.EndContent.length + " content in list";
+        s.ShowWeeklyTypes = s.newTimer.Type === "Weekly";
         s.SelectedWeekDays = [];
-        s.StartContentDisabled = false;
-        s.EndContentDisabled = false;
+        s.StartContentDisabled = s.newTimer.StartContent.length > 0;
+        s.EndContentDisabled = s.newTimer.EndContent.length > 0;
         s.ShowStartContentError = false;
         s.ShowAtleastOneWeekDayError = false;
         s.ShowActivationTimeError = false;
         s.ShowActivationLengthWithoutEndContentError = false;
         s.ShowActivationLengthNaNError = false;
         s.ShowEndContentWithoutActivationLengthError = false;
-
-        if (s.newTimer.StartContent.length === 1) {
-            s.StartContent = s.newTimer.StartContent[0];
-        } else {
-            s.StartContent = s.newTimer.StartContent.length + " content in list";
-            s.StartContentDisabled = true;
-        }
-        if (s.newTimer.EndContent.length === 0) {
-            s.EndContent = "";
-        } else if (s.newTimer.EndContent.length === 1) {
-            s.EndContent = s.newTimer.EndContent[0];
-        } else {
-            s.EndContent = s.newTimer.EndContent.length + " content in list";
-            s.EndContentContentDisabled = true;
-        }
-
 
         s.StartContentMouseEnter = function() {
             s.StartContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
@@ -140,24 +152,21 @@ app.service('dialogService', function (ngDialog, TimerObj) {
             s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
         };
         s.AddAdditionalStartContent = function() {
-            var AddDialogInput = s.newTimer.StartContent < 2 ? s.StartContent : "";
+            var AddDialogInput = s.newTimer.StartContent.length === 0 ? s.StartContent : "";
             that.ModifyContentDialog(s, "start", AddDialogInput, s.newTimer.StartContent.slice(),
                 function (contentArray) {
                     s.newTimer.StartContent = contentArray.slice();
 
                     console.log(s.newTimer.StartContent);
-                    if (contentArray.length > 1) {
+                    if (contentArray.length > 0) {
                         s.StartContentDisabled = true;
                         s.StartContent = contentArray.length + " content in list";
                     } else {
                         s.StartContentDisabled = false;
-                        if (contentArray.length === 0) {
-                            s.StartContent = "";
-                        } else { // if length === 1
-                            s.StartContent = contentArray[0];
-                        }
+                        s.StartContent = "";
                     }
-                }, function () {});
+                }
+            );
         };
 
         s.EndContentMouseEnter = function() {
@@ -167,24 +176,21 @@ app.service('dialogService', function (ngDialog, TimerObj) {
             s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
         };
         s.AddAdditionalEndContent = function() {
-            var AddDialogInput = s.newTimer.EndContent < 2 ? s.EndContent : "";
+            var AddDialogInput = s.newTimer.EndContent.length === 0 ? s.EndContent : "";
             that.ModifyContentDialog(s, "end", AddDialogInput, s.newTimer.EndContent.slice(),
                 function (contentArray) {
                     s.newTimer.EndContent = contentArray.slice();
 
                     console.log(s.newTimer.EndContent);
-                    if (contentArray.length > 1) {
+                    if (contentArray.length > 0) {
                         s.EndContentDisabled = true;
                         s.EndContent = contentArray.length + " content in list";
                     } else {
                         s.EndContentDisabled = false;
-                        if (contentArray.length === 0) {
-                            s.EndContent = "";
-                        } else { // if length === 1
-                            s.EndContent = contentArray[0];
-                        }
+                        s.EndContent = "";
                     }
-                }, function () {});
+                }
+            );
         };
     }
 });

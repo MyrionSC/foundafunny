@@ -22,6 +22,7 @@
 ----- TO DO -----
 
 todo userpage:
+- add information icon to modifytimer dialog with explanation in the title
 - Do something about showing a lot of timers (limit gotten amount or slider)
 - communicate error messages to client when db operations fail etc.
 - enable / disable timer option
@@ -102,6 +103,10 @@ Could have:
     I'm thinking that people can shift the pagetime themselves when their time shifts
     I just have to provide the functionality of course.
 - If I delete pages from the db manually the server cracks if someone were on them.
+
+
+
+
 
 ---- Before Release -----
 
