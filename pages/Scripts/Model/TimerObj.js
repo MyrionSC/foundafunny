@@ -28,7 +28,15 @@ app.factory('TimerObj', function () {
             this.Name = "";
             this.StartContent = [];
             this.Type = "OneTime";
-            this.ActivationDays = [];
+            this.ActivationDays = [
+                {Day: "Mon", Selected: false},
+                {Day: "Tue", Selected: false},
+                {Day: "Wed", Selected: false},
+                {Day: "Thu", Selected: false},
+                {Day: "Fri", Selected: false},
+                {Day: "Sat", Selected: false},
+                {Day: "Sun", Selected: false}
+            ];
             this.ActivationDaysReadable = "";
             this.ActivationTime = 0;
             this.OriginalActivationTime = 0;

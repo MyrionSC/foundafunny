@@ -1,4 +1,4 @@
-var app = angular.module('FaFApp', ['ngRoute', 'ngAnimate','checklist-model', 'timer', 'ngDialog']);
+var app = angular.module('FaFApp', ['ngRoute', 'ngAnimate', 'timer', 'ngDialog']);
 
 app.config(function ($routeProvider) {
     $routeProvider

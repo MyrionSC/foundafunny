@@ -9,12 +9,36 @@
         <input class="SetTimerInputWithAddon" type="text"
                ng-model="$parent.StartContent" ng-disabled="StartContentDisabled"/>
         <span class="add-on" title="Add or remove timer start content" ng-mouseenter="StartContentMouseEnter()"
-              ng-mouseleave="StartContentMouseLeave()" ng-click="AddAdditionalStartContent()">
+              ng-mouseleave="StartContentMouseLeave()" ng-click="AddAdditionalStartContent(newTimer)">
             <img style="width: 16px; height: 16px;" ng-src={{StartContentAddIcon}} />
         </span>
     </div>
 </label>
 <p class="SetTimerErrorMessage" ng-show="ShowStartContentError">Start Content must be filled</p>
+
+Type<br>
+<div class="SetTimerBorderBox SetTimerInput">
+    <div class="SetTimerRadioSubDiv" style="margin: 3px; padding: 3px">
+        <label class="SetTimerLabel" style="margin-right: 30px">
+            One time
+            <input ng-model="newTimer.Type" value="OneTime" type="radio" name="TimerType"
+                   ng-change="setShowWeeklyTypes(false)" style="margin: 0"/>
+        </label>
+        <label class="SetTimerLabel">
+            Weekly
+            <input ng-model="newTimer.Type" value="Weekly" type="radio" name="TimerType"
+                   ng-change="setShowWeeklyTypes(true)" style="margin: 0"/>
+        </label>
+    </div>
+    <div class="SetTimerRadioSubDiv" ng-show="ShowWeeklyTypes">
+        <label class="SetTimerWeekRadioLabel" ng-repeat="d in ActivationDays track by $index">
+            {{d.Day}}<br>
+            <input type="checkbox" class="SetTimerWeekRadio" ng-model="d.Selected" style="margin: 0 auto"/>
+        </label>
+    </div>
+</div>
+<p class="SetTimerErrorMessage" ng-show="ShowAtleastOneWeekDayError">Atleast one weekday must be specified</p>
+
 
 <!--Date time pickers-->
 <label class="SetTimerLabel" ng-hide="ShowWeeklyTypes">
@@ -50,7 +74,7 @@
         <input class="SetTimerInputWithAddon" type="text" placeholder="Content activates after Activation Length"
                ng-model="$parent.EndContent" ng-disabled="EndContentDisabled"/>
         <span class="add-on" title="Add or remove timer end content" ng-mouseenter="EndContentMouseEnter()"
-              ng-mouseleave="EndContentMouseLeave()" ng-click="AddAdditionalEndContent()">
+              ng-mouseleave="EndContentMouseLeave()" ng-click="AddAdditionalEndContent(newTimer)">
             <img style="width: 16px; height: 16px;" ng-src={{EndContentAddIcon}} />
         </span>
     </div>

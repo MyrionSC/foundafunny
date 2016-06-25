@@ -6,7 +6,6 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
     s.Timer = new TimerObj();
     s.StartContent = "";
     s.EndContent = "";
-    s.WeekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
     s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
@@ -15,7 +14,6 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
     s.DialogCaller = "";
 
     s.ShowWeeklyTypes = false;
-    s.SelectedWeekDays = [];
     s.ShowStartContentError = false;
     s.ShowAtleastOneWeekDayError = false;
     s.ShowActivationTimeError = false;
@@ -24,10 +22,9 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
     s.ShowEndContentWithoutActivationLengthError = false;
     s.ShowTimerSavedFeedback = false;
 
-    // when Timer.Type switches to Weekly, show weekly checkboxes
-    $scope.$watch('Timer.Type', function() {
-        s.ShowWeeklyTypes = s.Timer.Type === "Weekly";
-    });
+    s.setShowWeeklyTypes = function (val) {
+        s.ShowWeeklyTypes = val;
+    };
 
     // datetime pickers
     var datepicker = $('#datetimepicker_date');
@@ -57,7 +54,7 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
             s.ShowStartContentError = true;
             Errors = true;
         }
-        if (s.Timer.Type === "Weekly" && s.SelectedWeekDays.length === 0) {
+        if (s.Timer.Type === "Weekly" && !anyActivationsDaysSelected(s.Timer.ActivationDays)) {
             s.ShowAtleastOneWeekDayError = true;
             Errors = true;
         }
@@ -98,8 +95,9 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
             s.Timer.ActivationTime = at.getTime() + timeDiffNeg * 60000;
             s.Timer.OriginalActivationTime = s.Timer.ActivationTime;
 
-            // if weekly timer, fill activation days in order
-            if (s.Timer.Type === "Weekly") DetectAndSortWeekdays(s.Timer, s.SelectedWeekDays);
+            if (s.Timer.Type === "Weekly") {
+                s.Timer.ActivationDaysReadable = createReadableActivationDaysString(s.Timer.ActivationDays);
+            }
 
             s.Timer.PageName = contentService.Page.Name;
 
@@ -126,11 +124,11 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
     // ADD DIALOG METHODS |
     // -------------------|
 
-    s.AddAdditionalStartContent = function() {
-        var AddDialogInput = s.Timer.StartContent.length === 0 ? s.StartContent : "";
-        dialogService.ModifyContentDialog(s, "start", AddDialogInput, s.Timer.StartContent.slice(),
+    s.AddAdditionalStartContent = function(timer) {
+        var AddDialogInput = timer.StartContent.length === 0 ? s.StartContent : "";
+        dialogService.ModifyContentDialog(s, "start", AddDialogInput, timer.StartContent.slice(),
             function (contentArray) {
-                s.Timer.StartContent = contentArray.slice();
+                timer.StartContent = contentArray.slice();
                 if (contentArray.length > 0) {
                     s.StartContentDisabled = true;
                     s.StartContent = contentArray.length + " content in list";
@@ -148,13 +146,13 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
         s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
     };
 
-    s.AddAdditionalEndContent = function() {
-        var AddDialogInput = s.Timer.EndContent.length === 0 ? s.EndContent : "";
-        dialogService.ModifyContentDialog(s, "end", AddDialogInput, s.Timer.EndContent.slice(),
+    s.AddAdditionalEndContent = function(timer) {
+        var AddDialogInput = timer.EndContent.length === 0 ? s.EndContent : "";
+        dialogService.ModifyContentDialog(s, "end", AddDialogInput, timer.EndContent.slice(),
             function (contentArray) {
-                s.Timer.EndContent = contentArray.slice();
+                timer.EndContent = contentArray.slice();
 
-                console.log(s.Timer.EndContent);
+                console.log(timer.EndContent);
                 if (contentArray.length > 0) {
                     s.EndContentDisabled = true;
                     s.EndContent = contentArray.length + " content in list";
@@ -190,7 +188,6 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
         s.StartContent = "";
         s.EndContent = "";
         s.ShowWeeklyTypes = false;
-        s.SelectedWeekDays = [];
         s.StartContentDisabled = false;
         s.EndContentDisabled = false;
         s.ShowStartContentError = false;
@@ -199,13 +196,6 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
         s.ShowActivationLengthWithoutEndContentError = false;
         s.ShowActivationLengthNaNError = false;
         s.ShowEndContentWithoutActivationLengthError = false;
-
-        // reset all weekly timer radio buttons. The checkbox library doesn't support automatic databinding, so dom manipulation is necessary.
-        var checkboxlist = document.getElementsByClassName("SetTimerWeekRadio");
-        for (var i = 0; i < checkboxlist.length; i++) {
-            var cb = checkboxlist[i];
-            cb.checked = false;
-        }
     };
     var resetErrors = function() {
         s.ShowStartContentError = false;
@@ -247,27 +237,20 @@ var ConstructReadableHourString = function (date) {
     return hours + ":" + minutes + ":" + seconds;
 };
 var isInt = function(n) { return parseInt(n) === n };
-var DetectAndSortWeekdays = function (timer, SelectedWeekDays) {
-    // init ActivationDays array
-    timer.ActivationDays = [
-        {Day: "Mon", Selected: false},
-        {Day: "Tue", Selected: false},
-        {Day: "Wed", Selected: false},
-        {Day: "Thu", Selected: false},
-        {Day: "Fri", Selected: false},
-        {Day: "Sat", Selected: false},
-        {Day: "Sun", Selected: false}
-    ];
-
-    // determine selected weekdays
-    for (var i = 0, j = 0; i < timer.ActivationDays.length; i++) {
-        var obj = timer.ActivationDays[i];
-
-        if (SelectedWeekDays.indexOf(obj.Day) != -1) {
-            obj.Selected = true;
-            timer.ActivationDaysReadable += obj.Day;
-            j++;
-            if (SelectedWeekDays.length != j) timer.ActivationDaysReadable += ", ";
+var createReadableActivationDaysString = function (activationDays) {
+    var result = "";
+    for (var i = 0; i < activationDays.length; i++) {
+        var d = activationDays[i];
+        if (d.Selected) {
+            result += d.Day + ", ";
         }
     }
+    return result.substring(0, result.length - 2); // cut off last ", "
 };
+function anyActivationsDaysSelected(ActivationsDays) {
+    for (var i = 0; i < ActivationsDays.length; i++) {
+        var d = ActivationsDays[i];
+        if (d.Selected) return true;
+    }
+    return false;
+}

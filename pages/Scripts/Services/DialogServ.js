@@ -8,7 +8,6 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
      * @param textInput String: The string starting in the input field
      * @param contentArray Array<String>: The Array starting in the array field
      * @param acceptCallback Function(Array<String> returnArray): The callback on dialog accept
-     * @param rejectCallback Function(): The callback on dialog reject
      */
     this.ModifyContentDialog = function (callerScope, caller, textInput, contentArray, acceptCallback) {
         // create new scope to pass to dialog
@@ -132,10 +131,10 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
     function prepareModifyTimerScope (s) {
         s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
         s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
+        s.ActivationDays = angular.copy(s.newTimer.ActivationDays);
         s.StartContent = s.newTimer.StartContent.length + " content in list";
         s.EndContent = s.newTimer.EndContent.length === 0 ? "" : s.newTimer.EndContent.length + " content in list";
         s.ShowWeeklyTypes = s.newTimer.Type === "Weekly";
-        s.SelectedWeekDays = [];
         s.StartContentDisabled = s.newTimer.StartContent.length > 0;
         s.EndContentDisabled = s.newTimer.EndContent.length > 0;
         s.ShowStartContentError = false;
@@ -145,19 +144,23 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
         s.ShowActivationLengthNaNError = false;
         s.ShowEndContentWithoutActivationLengthError = false;
 
+
+        s.setShowWeeklyTypes = function (val) {
+            s.ShowWeeklyTypes = val;
+        };
         s.StartContentMouseEnter = function() {
             s.StartContentAddIcon = "pages/Pics/AdditionDarkGreen.png";
         };
         s.StartContentMouseLeave = function() {
             s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
         };
-        s.AddAdditionalStartContent = function() {
-            var AddDialogInput = s.newTimer.StartContent.length === 0 ? s.StartContent : "";
-            that.ModifyContentDialog(s, "start", AddDialogInput, s.newTimer.StartContent.slice(),
+        s.AddAdditionalStartContent = function(timer) {
+            var AddDialogInput = timer.StartContent.length === 0 ? s.StartContent : "";
+            that.ModifyContentDialog(s, "start", AddDialogInput, timer.StartContent.slice(),
                 function (contentArray) {
-                    s.newTimer.StartContent = contentArray.slice();
+                    timer.StartContent = contentArray.slice();
 
-                    console.log(s.newTimer.StartContent);
+                    console.log(timer.StartContent);
                     if (contentArray.length > 0) {
                         s.StartContentDisabled = true;
                         s.StartContent = contentArray.length + " content in list";
@@ -175,13 +178,13 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
         s.EndContentMouseLeave = function() {
             s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
         };
-        s.AddAdditionalEndContent = function() {
-            var AddDialogInput = s.newTimer.EndContent.length === 0 ? s.EndContent : "";
-            that.ModifyContentDialog(s, "end", AddDialogInput, s.newTimer.EndContent.slice(),
+        s.AddAdditionalEndContent = function(timer) {
+            var AddDialogInput = timer.EndContent.length === 0 ? s.EndContent : "";
+            that.ModifyContentDialog(s, "end", AddDialogInput, timer.EndContent.slice(),
                 function (contentArray) {
-                    s.newTimer.EndContent = contentArray.slice();
+                    timer.EndContent = contentArray.slice();
 
-                    console.log(s.newTimer.EndContent);
+                    console.log(timer.EndContent);
                     if (contentArray.length > 0) {
                         s.EndContentDisabled = true;
                         s.EndContent = contentArray.length + " content in list";
