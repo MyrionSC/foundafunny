@@ -40,10 +40,26 @@ io.sockets.on('connection', function (socket) {
             timerStruct.UpdateActivationTime(timer, false);
         }
 
-        db.AddNewTimer(Page.Name, timer, function(newtimer) {
+        db.UpdateTimer(Page.Name, timer, function(newtimer) {
             console.log("Timer with id inserted into db: " + newtimer._id);
             timerStruct.insertTimerInStruct(newtimer);
             NotifyClients(Page, socket, "timerupdate", {}, false);
+        });
+    });
+    // if a client pushes new timer, update db, add it to timerstructure and notify clients
+    socket.on('updatetimer', function (updatedTimer) {
+        console.log("*");
+        console.log("Timer update from page " + Page.Name + " requested:");
+        console.log(updatedTimer);
+
+        // if (updatedTimer.Type === "Weekly") { // weekly timers activation starts near the epoke, it needs to be updated
+        //     timerStruct.UpdateActivationTime(updatedTimer, false);
+        // }
+
+        db.AddNewTimer(Page.Name, timer, function(newtimer) {
+            console.log("Timer with id inserted into db: " + newtimer._id);
+            // timerStruct.insertTimerInStruct(newtimer);
+            // NotifyClients(Page, socket, "timerupdate", {}, false);
         });
     });
     // if a client pushes a timer delete, update db and delete it from timerstructure

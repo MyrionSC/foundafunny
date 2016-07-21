@@ -31,7 +31,7 @@ Type<br>
         </label>
     </div>
     <div class="SetTimerRadioSubDiv" ng-show="ShowWeeklyTypes">
-        <label class="SetTimerWeekRadioLabel" ng-repeat="d in ActivationDays track by $index">
+        <label class="SetTimerWeekRadioLabel" ng-repeat="d in newTimer.ActivationDays track by $index">
             {{d.Day}}<br>
             <input type="checkbox" class="SetTimerWeekRadio" ng-model="d.Selected" style="margin: 0 auto"/>
         </label>
@@ -63,7 +63,7 @@ Type<br>
 
 <label class="SetTimerLabel">
     Activation Length (in seconds)<br>
-    <input class="SetTimerInput" ng-model="Timer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
+    <input class="SetTimerInput" ng-model="newTimer.ActivationLength" type="number" min="0" placeholder="Seconds until End Content activates"/>
 </label>
 <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthWithoutEndContentError">If End Content is filled so must Activation Length</p>
 <p class="SetTimerErrorMessage" ng-show="ShowActivationLengthNaNError">Activation Length must be a whole number</p>
@@ -83,5 +83,5 @@ Type<br>
 
 <div class="ngdialog-buttons">
     <button ng-click="closeThisDialog(0)" class="ngdialog-button ngdialog-button-secondary">Revert</button>
-    <button ng-click="checkInput() && closeThisDialog(1)" class="ngdialog-button ngdialog-button-primary">Save</button>
+    <button ng-click="!anyErrors() && closeThisDialog(1)" class="ngdialog-button ngdialog-button-primary">Save</button>
 </div>

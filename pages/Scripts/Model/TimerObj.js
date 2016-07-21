@@ -1,4 +1,4 @@
-// contains the models of the found a funny client
+// contains the Timer object
 app.factory('TimerObj', function () {
     function TimerObj (oldTimer) {
         if (oldTimer) {
@@ -44,7 +44,50 @@ app.factory('TimerObj', function () {
             this.ActivationLength = 0;
             this.EndContent = [];
             this.Active = false;
+        },
+
+        calculateValues: function (sc, ec, actiTime, page) {
+            if (this.StartContent.length === 0) {
+                this.StartContent.push(sc);
+            }
+            if (this.EndContent.length === 0 && ec != "") {
+                this.EndContent.push(ec);
+            }
+            this.ActivationTimeReadable = this.Type === "OneTime" ?
+                ConstructReadableDateString(actiTime) : ConstructReadableHourString(actiTime);
+
+            // // convert datetimepicker time back to utc, which is the only thing the server deals in
+            var timeDiffNeg = page.Settings.offset * -1;
+            this.OriginalActivationTime = this.ActivationTime = actiTime.getTime() + timeDiffNeg * 60000;
+            if (this.Type === "Weekly") {
+                this.ActivationDaysReadable = createReadableActivationDaysString(this.ActivationDays);
+            }
+            this.PageName = page.Name;
         }
+    };
+
+    var ConstructReadableDateString = function (date) {
+        var hours = date.getUTCHours().toString().length === 1 ? "0" + date.getUTCHours() : date.getUTCHours();
+        var minutes = date.getUTCMinutes().toString().length === 1 ? "0" + date.getUTCMinutes() : date.getUTCMinutes();
+        var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
+        return date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() + " "
+            + hours + ":" + minutes + ":" + seconds;
+    };
+    var ConstructReadableHourString = function (date) {
+        var hours = date.getUTCHours().toString().length === 1 ? "0" + date.getUTCHours() : date.getUTCHours();
+        var minutes = date.getUTCMinutes().toString().length === 1 ? "0" + date.getUTCMinutes() : date.getUTCMinutes();
+        var seconds = date.getUTCSeconds().toString().length === 1 ? "0" + date.getUTCSeconds() : date.getUTCSeconds();
+        return hours + ":" + minutes + ":" + seconds;
+    };
+    var createReadableActivationDaysString = function (activationDays) {
+        var result = "";
+        for (var i = 0; i < activationDays.length; i++) {
+            var d = activationDays[i];
+            if (d.Selected) {
+                result += d.Day + ", ";
+            }
+        }
+        return result.substring(0, result.length - 2); // cut off last ", "
     };
 
     return TimerObj;

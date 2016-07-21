@@ -4,7 +4,6 @@ var server = require('http').Server(app);
 var scribe = require('scribe-js')();
 var console = process.console; // for logs
 var path = require('path');
-var db = require('./server/mongoDB.js');
 var pages = require('./server/Pages.js');
 var bodyParser = require('body-parser');
 

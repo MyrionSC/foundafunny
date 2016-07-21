@@ -50,8 +50,8 @@ var pageSchema = new mongoose.Schema({
     },
     Timers: [timerSchema]
 });
-var FaFPage = mongoose.model("sdmpage", pageSchema);
-var FaFTimer = mongoose.model("sdmtimer", timerSchema);
+var FaFPage = mongoose.model("fafpage", pageSchema);
+var FaFTimer = mongoose.model("faftimer", timerSchema);
 
 
 // db methods
@@ -258,6 +258,22 @@ db.AddNewTimer = function(Name, timer, callback) {
         }
     );
 };
+db.UpdateTimer = function(Name, timer, callback) {
+    FaFPage.findOne({'Name': Name}, function(err, page) {
+        if (err) return console.log(err);
+
+        var index = findById(page.Timers, timer._id);
+        page.Timers[index] = timer;
+
+        page.save(function(err, obj) {
+            if (err) {
+                console.error("UpdatePageSettings operation failed with error:");
+                return console.error(err);
+            }
+            callback();
+        });
+    });
+};
 db.UpdatePageSettings = function (Name, settings, offsetDiff, callback) {
     FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
@@ -384,3 +400,11 @@ var PrintRAMInitMsg = function() {
     console.log("---------------------------------|");
     console.log("*");
 };
+function findById(source, id) {
+    for (var i = 0; i < source.length; i++) {
+        if (source[i]._id === id) {
+            return i;
+        }
+    }
+    throw "Couldn't find object with id: " + id;
+}

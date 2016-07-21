@@ -73,26 +73,60 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
 
     /**
      * A dialog for editing a timer object
-     * @param scope The calling scope
+     * @param s The calling scope
      * @param timer The timer to be edited
      * @param callback The function to be called when done editing timer. arg1 is the modified timer object.
      */
-    this.ModifyTimerDialog = function (scope, timer, callback) {
+    this.ModifyTimerDialog = function (s, timer, callback) {
         // copy of the timer to be modified
-        scope.newTimer = new TimerObj(timer);
+        s.newTimer = new TimerObj(timer);
+        var dialogDatepicker;
+        var dialogHourpicker;
+        var at;
 
-        prepareModifyTimerScope(scope);
+        prepareModifyTimerScope(s);
 
-        scope.checkInput = function () {
-            // todo
-            console.log("checking input");
-            return true;
+        // returns true if errors in input
+        s.anyErrors = function () {
+            resetErrors(s);
+            var Errors = false;
+
+            at = s.newTimer.Type === "OneTime" ? dialogDatepicker.data('datetimepicker').getDate()
+                : dialogHourpicker.data('datetimepicker').getDate();
+
+            // determine if any errors in input
+            if (s.StartContent.length === 0) {
+                s.ShowStartContentError = true;
+                Errors = true;
+            }
+            if (s.newTimer.Type === "Weekly" && !anyActivationsDaysSelected(s.newTimer.ActivationDays)) {
+                s.ShowAtleastOneWeekDayError = true;
+                Errors = true;
+            }
+            if (s.newTimer.Type === "OneTime" && !ActivationTimeMoreThanCurrentTime(contentService.Page.Settings.offset, at)) {
+                s.ShowActivationTimeError = true;
+                Errors = true;
+            }
+            if (s.EndContent.length != 0 && (s.newTimer.ActivationLength === null || s.newTimer.ActivationLength === 0)) {
+                s.ShowActivationLengthWithoutEndContentError = true;
+                Errors = true;
+            }
+            if (!isInt(s.newTimer.ActivationLength)) {
+                s.ShowActivationLengthNaNError = true;
+                Errors = true;
+            }
+            if (s.newTimer.ActivationLength != 0 && s.EndContent.length === 0) {
+                s.ShowEndContentWithoutActivationLengthError = true;
+                Errors = true;
+            }
+
+            return Errors;
         };
 
         // init datepickers when dialog finish opening
         var diaOpenListener = $rootScope.$on('ngDialog.opened', function (e, $dialog) {
-            var dialogDatepicker = $('#datetimepicker_date_dialog');
-            var dialogHourpicker = $('#datetimepicker_hour_dialog');
+            dialogDatepicker = $('#datetimepicker_date_dialog');
+            dialogHourpicker = $('#datetimepicker_hour_dialog');
 
             dialogDatepicker.datetimepicker({
                 format: 'dd/MM/yyyy hh:mm:ss',
@@ -114,24 +148,25 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
             template: 'pages/View/Dialogs/TimerEditDialog.html',
             className: 'ngdialog-timer-edit InitialBoxSizing',
             closeByDocument: false,
-            scope: scope
+            scope: s
         });
 
         // if accept return the modified timer
         dialog.closePromise.then(function(data) {
-            // calculate new timer values
-            // todo
-
             diaOpenListener(); // unsubscribes from broadcast
+
             if (data.value === 1) {
-                callback(scope.newTimer);
+                // calculate new timer values
+                s.newTimer.calculateValues(s.StartContent, s.EndContent, at, contentService.Page,
+                    contentService.Page);
+
+                callback(s.newTimer);
             }
         });
     };
     function prepareModifyTimerScope (s) {
         s.StartContentAddIcon = "pages/Pics/AdditionGreen.png";
         s.EndContentAddIcon = "pages/Pics/AdditionGreen.png";
-        s.ActivationDays = angular.copy(s.newTimer.ActivationDays);
         s.StartContent = s.newTimer.StartContent.length + " content in list";
         s.EndContent = s.newTimer.EndContent.length === 0 ? "" : s.newTimer.EndContent.length + " content in list";
         s.ShowWeeklyTypes = s.newTimer.Type === "Weekly";
@@ -146,6 +181,7 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
 
 
         s.setShowWeeklyTypes = function (val) {
+            s.ShowAtleastOneWeekDayError = false;
             s.ShowWeeklyTypes = val;
         };
         s.StartContentMouseEnter = function() {
@@ -195,5 +231,26 @@ app.service('dialogService', function ($rootScope, ngDialog, TimerObj, contentSe
                 }
             );
         };
+    }
+    function anyActivationsDaysSelected(ActivationsDays) {
+        for (var i = 0; i < ActivationsDays.length; i++) {
+            var d = ActivationsDays[i];
+            if (d.Selected) return true;
+        }
+        return false;
+    }
+    function ActivationTimeMoreThanCurrentTime(diff, at) {
+        var utc = Date.now();
+        var ClientDate = new Date(utc + diff * 60000);
+        return ClientDate < at;
+    }
+
+    function resetErrors(s) {
+        s.ShowStartContentError = false;
+        s.ShowAtleastOneWeekDayError = false;
+        s.ShowActivationTimeError = false;
+        s.ShowActivationLengthWithoutEndContentError = false;
+        s.ShowActivationLengthNaNError = false;
+        s.ShowEndContentWithoutActivationLengthError = false;
     }
 });

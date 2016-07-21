@@ -121,6 +121,11 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         console.log(newtimer);
         socket.emit('savetimer', newtimer);
     };
+    this.UpdateTimer = function (updatedTimer) {
+        console.log("Updating timer:");
+        console.log(updatedTimer);
+        socket.emit('updatetimer', updatedTimer);
+    };
     this.PushTimerDeleteToServer = function (timer) {
         console.log("Deleting timer from server:");
         console.log(timer);

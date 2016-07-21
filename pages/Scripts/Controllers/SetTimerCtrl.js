@@ -23,6 +23,7 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
     s.ShowTimerSavedFeedback = false;
 
     s.setShowWeeklyTypes = function (val) {
+        s.ShowAtleastOneWeekDayError = false;
         s.ShowWeeklyTypes = val;
     };
 
@@ -77,32 +78,8 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
 
         // if no errors, send input to server
         if (!Errors) {
-            if (s.Timer.StartContent < 2) {
-                s.Timer.StartContent = [];
-                s.Timer.StartContent.push(s.StartContent);
-            }
-            if (s.Timer.EndContent < 2 && s.EndContent != "") {
-                s.Timer.EndContent = [];
-                s.Timer.EndContent.push(s.EndContent);
-            }
-
-            // readable time
-            s.Timer.ActivationTimeReadable = s.Timer.Type === "OneTime" ?
-                ConstructReadableDateString(at) : ConstructReadableHourString(at); // used for showcase, nothing else
-
-            // convert datetimepicker time back to utc, which is the only thing the server deals in
-            var timeDiffNeg = contentService.Page.Settings.offset * -1;
-            s.Timer.ActivationTime = at.getTime() + timeDiffNeg * 60000;
-            s.Timer.OriginalActivationTime = s.Timer.ActivationTime;
-
-            if (s.Timer.Type === "Weekly") {
-                s.Timer.ActivationDaysReadable = createReadableActivationDaysString(s.Timer.ActivationDays);
-            }
-
-            s.Timer.PageName = contentService.Page.Name;
-
-            console.log("New timer sent to server:");
-            console.log(s.Timer);
+            s.Timer.calculateValues(s.StartContent, s.EndContent, at,
+                contentService.Page);
 
             // show feedback
             s.ShowTimerSavedFeedback = true;

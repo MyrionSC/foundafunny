@@ -110,9 +110,10 @@ app.controller('TimersCtrl', function($scope, $location, sidebarService, content
         t.EditIconSrc = "pages/Pics/EditIconDarkGrey.png";
     };
     s.EditIconClick = function(t) {
-        // Open dialog window to make sure deletion is intended
-        dialogService.ModifyTimerDialog(s, t, function (timer) {
-            alert(timer.ActivationTime);
+        // Open edit dialog
+        dialogService.ModifyTimerDialog(s, t, function (updatedTimer) {
+            // if edit is confirmed, push to server
+            contentService.UpdateTimer(updatedTimer);
         })
     };
 
