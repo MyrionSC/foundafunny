@@ -192,8 +192,8 @@ exports.updateTimersTimezone = function (pagename, settings, offsetDiff) {
     }
 
     // remove timers, update them and reinsert them in struct
-    for (var i = 0; i < timersToUpdate.length; i++) {
-        var t = timersToUpdate[i];
+    for (var j = 0; j < timersToUpdate.length; j++) {
+        var t = timersToUpdate[j];
 
         removeTimerFromStructById(t._id);
 
@@ -309,7 +309,13 @@ var ActivateOneTimeTimer = function (timer) {
     }
 };
 
-// should only be called on weekly timers
+/**
+ * Updates the activation time of weekly timers
+ * arg1: the timer to update
+ * arg2: whether the update should be saved to db. Should be done if the update is the only change to the timer.
+ * should only be called on weekly timers
+ * @type {exports.UpdateActivationTime}
+ */
 var UpdateActivationTime = exports.UpdateActivationTime = function (timer, saveToDb) {
     var today = new Date(Date.now()); // current date in utc
     var timerdate = new Date(timer.OriginalActivationTime);
@@ -317,7 +323,7 @@ var UpdateActivationTime = exports.UpdateActivationTime = function (timer, saveT
 
     AlignDates(timerdate, today);
 
-    // to compare at pagetime, not utc, we have to get the construct date objects at pagetime
+    // to compare at pagetime, not utc, we have to get the date objects at pagetime
     var todayPageTime = new Date(today.getTime() + timerMillisecOffset(timerOffset));
     var timerdatePageTime = new Date(timerdate.getTime() + timerMillisecOffset(timerOffset));
 

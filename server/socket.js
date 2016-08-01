@@ -3,6 +3,7 @@ var io = require('socket.io')(app.server);
 var timerStruct = require('./TimersStructure.js');
 var db = require('./mongoDB.js');
 var pages = require('./Pages.js');
+var cVal = require('./clientValidation.js');
 var console = process.console; // for logs
 var exports = {};
 
@@ -20,6 +21,11 @@ io.sockets.on('connection', function (socket) {
     });
     // if a client pushes new content, update db and other clients
     socket.on('pushcontent', function (newcontent) {
+        if (!cVal.validateContent(newcontent)) {
+            console.log("push content validation failed from page " + Page.Name);
+            return;
+        }
+        
         console.log("*");
         console.log("New content received: ");
         console.log(newcontent);
@@ -32,6 +38,11 @@ io.sockets.on('connection', function (socket) {
     });
     // if a client pushes new timer, update db, add it to timerstructure and notify clients
     socket.on('savetimer', function (timer) {
+        if (!cVal.validateTimer(timer)) {
+            console.log("push timer validation failed from page " + Page.Name);
+            return;
+        }
+        
         console.log("*");
         console.log("new timer from page " + Page.Name + " received:");
         console.log(timer);
@@ -40,30 +51,41 @@ io.sockets.on('connection', function (socket) {
             timerStruct.UpdateActivationTime(timer, false);
         }
 
-        db.UpdateTimer(Page.Name, timer, function(newtimer) {
-            console.log("Timer with id inserted into db: " + newtimer._id);
-            timerStruct.insertTimerInStruct(newtimer);
+        db.AddNewTimer(Page.Name, timer, function(newTimer) {
+            console.log("Timer with id inserted into db: " + newTimer._id);
+            timerStruct.insertTimerInStruct(newTimer);
             NotifyClients(Page, socket, "timerupdate", {}, false);
         });
     });
-    // if a client pushes new timer, update db, add it to timerstructure and notify clients
-    socket.on('updatetimer', function (updatedTimer) {
+    // if a client requests timer update, update timer in db, update timerstructure and notify clients
+    socket.on('updatetimer', function (timer) {
+        if (!cVal.validateTimer(timer)) {
+            console.log("timer update validation failed from page " + Page.Name);
+            return;
+        }
+
         console.log("*");
         console.log("Timer update from page " + Page.Name + " requested:");
-        console.log(updatedTimer);
+        console.log(timer);
 
-        // if (updatedTimer.Type === "Weekly") { // weekly timers activation starts near the epoke, it needs to be updated
-        //     timerStruct.UpdateActivationTime(updatedTimer, false);
-        // }
+        if (timer.Type === "Weekly") { // weekly timers activation starts near the epoke, it needs to be updated
+            timerStruct.UpdateActivationTime(timer, false);
+        }
 
-        db.AddNewTimer(Page.Name, timer, function(newtimer) {
-            console.log("Timer with id inserted into db: " + newtimer._id);
-            // timerStruct.insertTimerInStruct(newtimer);
-            // NotifyClients(Page, socket, "timerupdate", {}, false);
+        db.UpdateTimer(Page.Name, timer, function(updatedTimer) {
+            console.log("Timer with id updated in db: " + updatedTimer._id);
+            timerStruct.removeTimerFromStructById(updatedTimer._id);
+            timerStruct.insertTimerInStruct(updatedTimer);
+            NotifyClients(Page, socket, "timerupdate", {}, true);
         });
     });
     // if a client pushes a timer delete, update db and delete it from timerstructure
     socket.on('deletetimer', function (timer) {
+        if (!cVal.validateId(timer._id)) {
+            console.log("timer delete validation failed from page " + Page.Name);
+            return;
+        }
+
         console.log("*");
         console.log("Timer deletion requested from page: " + timer.PageName);
         console.log(timer);
@@ -77,6 +99,11 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on('favoritecontent', function (content) {
+        if (!cVal.validateContent(content)) {
+            console.log("favorite content validation failed from page " + Page.Name);
+            return;
+        }
+
         console.log("*");
         console.log("Favorite request received on content " + content + " from page " + Page.Name);
 
@@ -89,6 +116,11 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on('unfavoritecontent', function (content) {
+        if (!cVal.validateContent(content)) {
+            console.log("unfavorite content validation failed from page " + Page.Name);
+            return;
+        }
+
         console.log("*");
         console.log("Unfavorite request received on content " + content + " from page " + Page.Name);
 
@@ -101,6 +133,11 @@ io.sockets.on('connection', function (socket) {
         });
     });
     socket.on('savesettings', function(settings) {
+        if (!cVal.validateSettings(settings)) {
+            console.log("save settings validation failed from page " + Page.Name);
+            return;
+        }
+
         console.log("*");
         console.log("Save Settings request received from page " + Page.Name);
 
@@ -117,11 +154,13 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function () {
-        console.log("*");
-        online--;
-        Page.ConnectedSockets.splice(Page.ConnectedSockets.indexOf(socket), 1);
-        console.log("Client disconnected from page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
-        ". Overall online: " + online);
+        if (Page.ConnectedSockets) {
+            console.log("*");
+            online--;
+            Page.ConnectedSockets.splice(Page.ConnectedSockets.indexOf(socket), 1);
+            console.log("Client disconnected from page " + Page.Name + ". Now online in page: " + Page.ConnectedSockets.length +
+                ". Overall online: " + online);
+        }
     });
 
     var clientInit = function(pagename) {
@@ -172,6 +211,15 @@ exports.PushTimerPackage = function (pagename, content) {
     }
 };
 
+/**
+ * Notifies clients of an update
+ * @param page The page to be notified
+ * @param socket The socket the notification originates from
+ * @param updateType The type of notification
+ * @param updateObj An notification object that is sent to clients
+ * @param updateSender Whether the original sender should be updated
+ * @constructor
+ */
 var NotifyClients = function (page, socket, updateType, updateObj, updateSender) {
     if (updateSender) {
         for (var i = 0; i < page.ConnectedSockets.length; i++) {

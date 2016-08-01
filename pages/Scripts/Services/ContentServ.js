@@ -189,6 +189,7 @@ app.service('contentService', function ($http, $rootScope, $location, $window) {
         }
     };
 
+
     // ---------------- |
     // HELPER FUNCTIONS |
     // ---------------- |

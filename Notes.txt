@@ -1,23 +1,11 @@
 ----- DOING -----
 
-- Refactor AddContentDialog into service so it can be used in Timers to change timers
--
-
-- Make properties of timers able to be changed
-    - frontend
-        - Create array to store copy of gotten timers. When timers are changed they are changed in the shown timer
-            array, not in the copy. When a timer is changed, show "save changes" and "revert changes" buttons.
-            If "save changes" is pushed, push changes to server, copy shown timer array into copy timer array and hide buttons.
-            If "revert changes" is pushed, copy copy timer array to shown timer array and hide buttons.
-        - Reuse date dialogs, multiple content dialog etc. to update timers
-        - Make GUI for changing timers (clickable textboxes etc.)
-        - Send array of changed timers, to server. Find array by comparing every shown timer array to its equivalent
-            copy timer array, looking for changes.
-    - backend
-        - receive array of changed timers and pagename
-        - foreach received timer
-            - find equivalent timer in db and update it
-            - with db callback, take out and insert timer in timerstructure (if activation time should be changed)
+- See if it is possible to determine what kind of resource something is with a http call before deciding what to do
+    - 1: Use regex to check whether http | https call.
+        1.1: check whether it is one of the embeded (youtube, twitch)
+        1.2: Check whether it is media (mp4, png, jpg etc.)
+        1.3: If non of these, just enter the content in an iframe
+    - 2: input as text
 
 ----- TO DO -----
 
@@ -26,10 +14,6 @@ todo userpage:
 - Do something about showing a lot of timers (limit gotten amount or slider)
 - communicate error messages to client when db operations fail etc.
 - enable / disable timer option
-- See if it is possible to determine what kind of resource something is with a http call before deciding what to do
-    - Regex is not too good, because it is impossible to catch everything
-    - Try to use iframe for everything
-    - evt. implement some kind of CFG approach
 - Name favorites (this involves a change of how favorites are handled on backend)
 - handle window resize. This might be via a watch in the controller, but a directive would be more fancy!
     - history
@@ -125,3 +109,7 @@ Seems that you normally inject javascript into the header of a statically served
 html page to achieve that dynamic nature of a statically served page. I just look at
 the last part of the page url, as that is the only thing i need. But that might not
 be following conventions. If I ever need more, I will probably look into doing it the right way.
+
+Server startup
+The server startup code and the dependencies is a fragmented mess. Should try to make it more clear
+at some point.

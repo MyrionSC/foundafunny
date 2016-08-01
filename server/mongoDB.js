@@ -2,6 +2,7 @@
  * In here all the database communication logic for sdm resides
  */
 var mongoose = require ("mongoose");
+var model = require ("./dbModel");
 var pages = require ("./Pages.js");
 var console = process.console; // for logs
 var db = module.exports = {};
@@ -21,38 +22,8 @@ mongoose.connect(uristring, function (err, res) {
 });
 
 // model
-var timerSchema = new mongoose.Schema({
-    Name: String,
-    PageName: String,
-    StartContent: Array,
-    Type: String,
-    ActivationDays: Array,
-    ActivationDaysReadable: String,
-    ActivationTime: Number,
-    OriginalActivationTime: Number,
-    ActivationTimeReadable: String,
-    ActivationLength: Number,
-    EndContent: Array,
-    Active: Boolean
-});
-var pageSchema = new mongoose.Schema({
-    Name: String,
-    CurrentContent: String,
-    ContentArray: Array,
-    Favorites: Array,
-    Settings: { // TODO: add some youtube settings and such later
-        bgColor: String,
-        timezoneReadable: String,
-        timezoneVal: String,
-        offset: Number, // difference from localtime to utc in minutes
-        theme: String,
-        fontColor: String
-    },
-    Timers: [timerSchema]
-});
-var FaFPage = mongoose.model("fafpage", pageSchema);
-var FaFTimer = mongoose.model("faftimer", timerSchema);
-
+var FaFPage = mongoose.model("fafpage", model.pageSchema);
+var FaFTimer = mongoose.model("faftimer", model.timerSchema);
 
 // db methods
 db.SetContentFavorite = function (Name, content, callback) {
@@ -186,10 +157,13 @@ db.UpdatePageTimerActivationTime = function (Name, timerid, actitime) {
     FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
-        var timer = page.Timers.id(timerid);
-
-        timer.ActivationTime = actitime;
-
+        try {
+            var timer = page.Timers.id(timerid);
+            timer.ActivationTime = actitime;
+        } catch (err) {
+            console.log(err);
+            return;
+        }
         page.save(function(err, obj) {
             if (err) {
                 console.error("UpdatePageTimerActivation operation failed with error:");
@@ -204,7 +178,6 @@ db.SaveContent = function (Name, content, callback) {
         if (err) return console.error(err);
 
         var contentpackage = CreateContentPackage(page, content);
-
         page.ContentArray.unshift(contentpackage);
 
         page.save(function(err, obj) {
@@ -226,7 +199,8 @@ db.GetInitPage = function(Name, callback) {
                 return console.error(err);
             }
             callback(page);
-        });
+        }
+    );
 };
 db.AddNewTimer = function(Name, timer, callback) {
     var newtimer = new FaFTimer({
@@ -262,15 +236,19 @@ db.UpdateTimer = function(Name, timer, callback) {
     FaFPage.findOne({'Name': Name}, function(err, page) {
         if (err) return console.log(err);
 
-        var index = findById(page.Timers, timer._id);
-        page.Timers[index] = timer;
+        var dbtimer = page.Timers.id(timer._id);
+        if (dbtimer === null) {
+            console.log("Timer with id: " + timer._id + " not found in database");
+            return;
+        }
+        model.updateTimer(dbtimer, timer);
 
         page.save(function(err, obj) {
             if (err) {
-                console.error("UpdatePageSettings operation failed with error:");
+                console.error("UpdateTimer operation failed with error:");
                 return console.error(err);
             }
-            callback();
+            callback(timer);
         });
     });
 };
@@ -298,27 +276,22 @@ db.UpdatePageSettings = function (Name, settings, offsetDiff, callback) {
     });
 };
 
-db.CreateNewPage = function(NewPagePackage, callback) {
-    var NewPage = new FaFPage({
-        Name: NewPagePackage.pagename
+db.CreateNewPage = function(newPagePackage, callback) {
+    var newPage = new FaFPage({
+        Name: newPagePackage.pagename
     });
-    NewPage.Settings.bgColor = NewPagePackage.bgColor;
-    NewPage.Settings.timezoneVal = NewPagePackage.timezoneVal;
-    NewPage.Settings.timezoneReadable = NewPagePackage.timezoneReadable;
-    NewPage.Settings.offset = NewPagePackage.offset;
-    NewPage.Settings.theme = NewPagePackage.theme;
-    NewPage.Settings.fontColor = NewPagePackage.fontColor;
+    model.setSettings(newPage.Settings, newPagePackage);
 
     // add the first content
-    var d = new Date(Date.now() + NewPagePackage.offset * 60000);
+    var d = new Date(Date.now() + newPagePackage.offset * 60000);
     var firstContent = {
         content: "Hello World",
         date: ConstructReadableDateString(d),
         favorite: false
     };
-    NewPage.ContentArray.push(firstContent);
+    newPage.ContentArray.push(firstContent);
 
-    NewPage.save(function (err) {
+    newPage.save(function (err) {
         if (err) {
             console.error("CreateNewPage operation failed with error obj:");
             return console.error(err);

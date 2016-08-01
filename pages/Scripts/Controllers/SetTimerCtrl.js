@@ -129,7 +129,6 @@ app.controller('SetTimerCtrl', function($scope, TimerObj, sidebarService, conten
             function (contentArray) {
                 timer.EndContent = contentArray.slice();
 
-                console.log(timer.EndContent);
                 if (contentArray.length > 0) {
                     s.EndContentDisabled = true;
                     s.EndContent = contentArray.length + " content in list";
