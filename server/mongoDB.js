@@ -7,7 +7,8 @@ var pages = require ("./Pages.js");
 var console = process.console; // for logs
 var db = module.exports = {};
 
-var uristring = process.env.MONGOLAB_URI;
+var uristring = "mongodb://localhost:27017/foundafunny";
+// var uristring = process.env.MONGOLAB_URI;
 
 // connect to mongolab
 mongoose.connect(uristring, function (err, res) {
