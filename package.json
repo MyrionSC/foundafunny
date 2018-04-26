@@ -18,11 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/foundafunny"
+    "url": "https://github.com/myrionsc/foundafunny"
   },
   "keywords": [
     "node",
-    "heroku",
     "express"
   ],
   "license": "MIT"
