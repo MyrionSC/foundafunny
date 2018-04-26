@@ -3,6 +3,6 @@ app.controller('FrontPageCtrl', function ($scope, $window, $location) {
     var l = $location;
 
     s.click = function() {
-        $('html,body').animate({scrollTop:$window.innerHeight}, 350);
+        $('html,body').animate({scrollTop:10000}, 1500); // scroll all the fucking way down
     };
 });

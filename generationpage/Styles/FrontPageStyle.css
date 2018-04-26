@@ -1,3 +1,18 @@
+#welcomePage {
+    width: 40em;
+    margin: auto;
+    padding-top: 150px;
+    text-align: center;
+}
+
+#welcomePage p {
+    font-size: 20px;
+    /*margin-bottom: 2em;*/
+}
+#welcomePage p:first-child {
+    /*margin-top: 10em;*/
+}
+
 #fpCreatePageButton {
     /*-webkit-border-radius: 5px;*/
     /*-moz-border-radius: 5px;*/
@@ -10,23 +25,23 @@
     /*display: inline-block;*/
     /*margin: auto;*/
 }
-#fpExplanationContainer {
-    width: 300px;
-    text-align: center;
-}
-#fpImageContainer {
-    width: 300px;
-    height: 300px;
-    /*background: #500;*/
-}
-#fpContentDiv {
-    display: flex;
+/*#fpExplanationContainer {*/
+    /*width: 300px;*/
+    /*text-align: center;*/
+/*}*/
+/*#fpImageContainer {*/
+    /*width: 300px;*/
+    /*height: 300px;*/
+    /*!*background: #500;*!*/
+/*}*/
+/*#fpContentDiv {*/
+    /*display: flex;*/
 
-    width: 650px;
-    margin: auto;
-}
-#fpSeparator {
-    height: 300px;
-    width: 2px;
-    margin: 0 10px;
-}
+    /*width: 650px;*/
+    /*margin: auto;*/
+/*}*/
+/*#fpSeparator {*/
+    /*height: 300px;*/
+    /*width: 2px;*/
+    /*margin: 0 10px;*/
+/*}*/

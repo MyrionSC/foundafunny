@@ -19,10 +19,6 @@
     <script src="generationpage/Libs/timezones.js"></script>
 
     <!-- Style files -->
-    <!--<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
-    <!--<link href="generationpage/Styles/jquerysctipttop.css" rel="stylesheet" type="text/css">-->
-
-    <!-- Style files -->
     <link rel="stylesheet" type="text/css" href="generationpage/Styles/MainPageStyle.css">
     <link rel="stylesheet" type="text/css" href="generationpage/Styles/CreatePageStyle.css">
     <link rel="stylesheet" type="text/css" href="generationpage/Styles/FrontPageStyle.css">
@@ -35,37 +31,27 @@
 
 
 <!-- Welcome page-->
-<div ng-controller="FrontPageCtrl" windowresize ng-style="{'height': bgHeight, 'background': 'lightblue'}" ng-controller="FrontPageCtrl">
-    <div class="topfiller" ng-style="{'height': topFillerHeight}" topfillerresize></div>
-    <div id="fpContentDiv">
-        <div id="fpExplanationContainer" class="container">
-            <p>Welcome to Found A Funny!</p>
-            <p>At Found A Funny you can generate your own real time updating internet resource sharer page</p>
-            <p>Once generated, share your page url with someone. They will be able to see the currently shared resource, as
-                well as share resources of their own</p>
-            <p>Have Fun! :)</p>
-            <button id="fpCreatePageButton" ng-click="click()">Generate New Page Now!</button>
-        </div>
-        <div id="fpSeparator"></div>
-        <div id="fpImageContainer" class="container">
-            <!-- FaF gallery -->
-            <div style="margin: 10px;">FaF gallery here</div>
-        </div>
-    </div>
+<div id="welcomePage" ng-controller="FrontPageCtrl" windowresize ng-style="{'height': bgHeight, 'background': 'white'}"
+     ng-controller="FrontPageCtrl">
+    <p>Welcome to Found A Funny!</p>
+    <p>At Found A Funny you can generate your own real time updating internet resource sharer page</p>
+    <p>Once generated, share your page url with someone. They will be able to see the currently shared resource, as
+        well as share resources of their own</p>
+    <p>Have Fun! :)</p>
+    <button id="fpCreatePageButton" ng-click="click()">Generate New Page Now!</button>
 </div>
 
 
 <!-- Create page -->
-<div ng-controller="CreatePageCtrl" windowresize ng-style="{'height': bgHeight, 'background': 'lightgreen'}" ng-controller="CreatePageCtrl">
-    <div class="topfiller" ng-style="{'height': topFillerHeight}" topfillerresize></div>
-    <div id="cpContentDiv" class="container">
+<div id="createPage" ng-controller="CreatePageCtrl" windowresize ng-controller="CreatePageCtrl">
+    <div id="cpContentDiv" ng-style="{'height': bgHeight}">
         <p>Pick a name for your page</p>
-        <input id="cpNameInput" type="text" ng-model="Pagename">
+        <p><input id="cpNameInput" type="text" ng-model="Pagename"></p>
         <p ng-show="ShowIllegalPagename" class="cpErrorMessage">Only letters, numbers, dash and underscore allowed in name</p>
         <p ng-show="ShowPagenameAlreadyTaken" class="cpErrorMessage">Name already taken</p>
 
         <p>Pick the timezone your page should use</p>
-        <select id="cpTimeZoneSelect" class="form-control">
+        <p><select id="cpTimeZoneSelect" class="form-control">
             <option data-offset="-11:00" value="Pacific/Midway">(UTC-11:00) Midway Island, American Samoa</option>
             <option data-offset="-10:00" value="Pacific/Honolulu">(UTC-10:00) Hawaii</option>
             <option data-offset="-08:00" value="America/Anchorage">(UTC-08:00) Alaska</option>
@@ -168,14 +154,14 @@
             <option data-offset="+12:00" value="Pacific/Fiji">(UTC+12:00) Fiji Islands, Kamchatka, Marshall Islands</option>
             <option data-offset="+13:00" value="Pacific/Tongatapu">(UTC+13:00) Nuku'alofa</option>
             <option data-offset="+13:00" value="Pacific/Apia">(UTC+13:00) Samoa</option>
-        </select>
+        </select></p>
 
-        <button id="cpCreatePageBtn" ng-click="CreatePage()">Finish Generating Page!</button>
+        <p><button id="cpCreatePageBtn" ng-click="CreatePage()">Generate Page!</button></p>
 
         <p ng-show="ShowGeneratingPage">Generating Page. Please wait...</p>
-        <div id="cpShowPageUrl" ng-show="ShowPageUrl">
+        <div ng-show="ShowPageUrl">
             <p class="cpSuccessMessage">Page generation successful! The url of your new page is:</p>
-            <input id="cpNewPageUrlBox" type="text" ng-model="NewPageUrl" readonly="readonly"/>
+            <input id="cpShowPageUrl" type="text" ng-model="NewPageUrl" readonly="readonly"/>
         </div>
     </div>
 </div>

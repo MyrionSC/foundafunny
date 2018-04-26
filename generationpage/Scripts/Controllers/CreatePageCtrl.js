@@ -45,7 +45,7 @@ app.controller('CreatePageCtrl', function ($scope, $window, HTTPService) {
                 s.ShowPagenameAlreadyTaken = true;
             }
             else {
-                s.NewPageUrl = "foundafunny.com/" + s.Pagename;
+                s.NewPageUrl = "foundafunny.marand.dk/" + s.Pagename;
                 s.ShowPageUrl = true;
                 console.log(res);
             }

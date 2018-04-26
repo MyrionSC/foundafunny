@@ -1,13 +1,41 @@
+#createPage {
+    width: 100%;
+    background: #000;
+    font-size: 20px;
+    color: white;
+}
+
+#cpContentDiv {
+    width: 40em;
+    margin: auto;
+    padding-top: 150px;
+    text-align: center;
+    display: block;
+}
+
+#cpNameInput {
+    margin-bottom: 30px;
+    width: 330px;
+    font-size: 20px;
+    line-height: 26px;
+    padding: 8px;
+}
+
+#cpTimeZoneSelect {
+    margin-bottom: 40px;
+    /*width: 330px;*/
+    font-size: 20px;
+    padding: 4px;
+}
+
 #cpNewPageUrlBox {
     width: 300px;
 }
+
 #cpCreatePageBtn {
-    font-size: 18px;
+    font-size: 20px;
     margin-bottom: 20px;
-}
-#cpContentDiv {
-    width: 350px;
-    margin: auto;
+    padding: 4px;
 }
 .cpErrorMessage {
     color: red;
@@ -19,13 +47,6 @@
 }
 #cpShowPageUrl {
     margin-bottom: 10px;
-}
-#cpNameInput {
-    margin-bottom: 20px;
-    width: 330px;
-    font-size: 16px;
-}
-#cpTimeZoneSelect {
-    margin-bottom: 40px;
-    width: 330px;
+    font-size: 20px;
+    padding: 4px;
 }
