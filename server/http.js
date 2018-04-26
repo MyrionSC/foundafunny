@@ -5,7 +5,7 @@
 var db = require("./mongoDB.js");
 var app = require('./../app.js').app;
 var pages = require('./Pages.js');
-var console = process.console; // for logs
+// var console = process.console; // for logs
 
 // todo: at some point, the page name should be sent along with the request.
 app.get('/get/history', function (request, response) { // params: skip, limit

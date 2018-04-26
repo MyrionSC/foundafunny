@@ -4,11 +4,16 @@
 var mongoose = require ("mongoose");
 var model = require ("./dbModel");
 var pages = require ("./Pages.js");
-var console = process.console; // for logs
+var os = require('os');
+// var console = process.console; // for logs
 var db = module.exports = {};
 
-var uristring = "mongodb://localhost:27017/foundafunny";
-// var uristring = process.env.MONGOLAB_URI;
+var uristring;
+if (os.hostname() === "marand-nuc") {
+    uristring = "mongodb://localhost:27018/foundafunny";
+} else {
+    uristring = "mongodb://localhost:27017/foundafunny";
+}
 
 // connect to mongolab
 mongoose.connect(uristring, function (err, res) {

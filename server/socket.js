@@ -4,7 +4,7 @@ var timerStruct = require('./TimersStructure.js');
 var db = require('./mongoDB.js');
 var pages = require('./Pages.js');
 var cVal = require('./clientValidation.js');
-var console = process.console; // for logs
+// var console = process.console; // for logs
 var exports = {};
 
 // ----------|

@@ -2,7 +2,7 @@
  * This object/export is an encapsulation of the list of active timers in sdm
  */
 
-var console = process.console; // for logs
+// var console = process.console; // for logs
 var exports = module.exports = {};
 var io, db; // are filled after handshake from socket.js
 var timers = [];
