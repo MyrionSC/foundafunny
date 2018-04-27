@@ -54,7 +54,7 @@ app.controller('CreatePageCtrl', function ($scope, $window, HTTPService) {
     var NameCheck = function(str) {
         str = str.trim();
         if (str === "") return false;
-        if (str.match(/[^a-z0-9_-]+/) === null) return true;
+        if (str.match(/[^A-Za-z0-9_-]+/) === null) return true;
         return false;
     };
 });
