@@ -2,7 +2,7 @@ app.service('HTTPService', function ($http) {
     var that = this;
     console.log(document.location.hostname);
     var url = document.location.hostname == "localhost" ? 'http://localhost:5000' :
-        'http://foundafunny.marand.dk';
+        'https://foundafunny.marand.dk';
     // var url = "http://localhost:5000";
 
     this.CreateNewPage = function(NewPagePackage, callback) {

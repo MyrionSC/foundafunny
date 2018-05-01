@@ -1,7 +1,7 @@
 app.service('contentService', function ($http, $rootScope, $location, $window) {
     var that = this;
     var url = document.location.hostname == "localhost" ? 'http://localhost:5000' :
-        'http://foundafunny.marand.dk';
+        'https://foundafunny.marand.dk';
     // var url = "http://localhost:5000";
     var httplock = true;
 
