@@ -16,16 +16,23 @@ if (os.hostname() === "marand-nuc") {
 }
 
 // connect to mongolab
-mongoose.connect(uristring, function (err, res) {
-    if (err) {
-        console.log ('ERROR connecting to: ' + uristring);
-        console.log (err);
-    } else {
-        console.log ('Succeeded connected to: ' + uristring);
+var dbConnect = function () {
+	mongoose.connect(uristring, function (err, res) {
+	    if (err) {
+		console.log ('ERROR connecting to: ' + uristring);
+		console.log (err);
+		console.log('trying again in two seconds');
+		setTimeout(function() {
+			dbConnect();
+		}, 2000);
+	    } else {
+		console.log ('Succeeded connected to: ' + uristring);
 
-        InitPagesInRAM();
-    }
-});
+		InitPagesInRAM();
+	    }
+	});
+}
+dbConnect();
 
 // model
 var FaFPage = mongoose.model("fafpage", model.pageSchema);

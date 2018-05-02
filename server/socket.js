@@ -154,7 +154,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('disconnect', function () {
-        if (Page.ConnectedSockets) {
+        if (Page && Page.ConnectedSockets) {
             console.log("*");
             online--;
             Page.ConnectedSockets.splice(Page.ConnectedSockets.indexOf(socket), 1);
@@ -166,21 +166,23 @@ io.sockets.on('connection', function (socket) {
     var clientInit = function(pagename) {
         if (pages.initDone) {
             Page = pages.getPage(pagename);
-            Page.ConnectedSockets.push(socket);
-            online++;
-            console.log("*");
-            console.log("client connected to page " + Page.Name + ". Online in page: " + Page.ConnectedSockets.length +
-                ". Overall online: " + online );
+	    if (Page) {
+		    Page.ConnectedSockets.push(socket);
+		    online++;
+		    console.log("*");
+		    console.log("client connected to page " + Page.Name + ". Online in page: " + Page.ConnectedSockets.length +
+			". Overall online: " + online );
 
-            // sends the PageObj info to new client on init
-            // we don't have to check if it exists, it was done before this
-            db.GetInitPage(pagename, function(page) {
-                page.Favorites = Page.Favorites;
+		    // sends the PageObj info to new client on init
+		    // we don't have to check if it exists, it was done before this
+		    db.GetInitPage(pagename, function(page) {
+			page.Favorites = Page.Favorites;
 
-                console.log("sent init content to client:");
-                console.log(page);
-                socket.emit('pageinit', page);
-            });
+			console.log("sent init content to client:");
+			console.log(page);
+			socket.emit('pageinit', page);
+		    });
+	    }
         }
         else {
             // wait 50 seconds for db call to get through and try again
